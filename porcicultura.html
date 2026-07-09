@@ -56,8 +56,8 @@
   .badge.maintenance { background:rgba(0,114,198,0.08); color:var(--secondary); }
   .badge.asimetrix { background:rgba(192,6,43,0.08); color:var(--error); }
 
-  .cases-row { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:16px; }
-  .cases-row .card { margin-bottom:0; }
+  .cases-row { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:16px; align-items:start; }
+  .cases-row .card { margin-bottom:0; display:flex; flex-direction:column; }
 
   .cases-row .step { padding:8px 12px; margin-bottom:6px; }
   .cases-row .step-num { width:24px; height:24px; font-size:9pt; }
@@ -178,7 +178,7 @@
   <!-- CASO 3: Solo LED de ON -->
   <div class="card fade-up">
     <div class="card-header">
-      <span class="emoji">🔵</span>
+      <span class="emoji">🟡</span>
       <span class="title">Caso 3 — Solo LED ON</span>
     </div>
     <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Apagar cámara del botón ON</div></div></div>
