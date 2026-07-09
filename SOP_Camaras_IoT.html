@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP — Revisión PigVision</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #0B2D5C;
+    --secondary: #0072C6;
+    --accent: #2A8FDF;
+    --white: #FFFFFF;
+    --bg-light: #F5F8FC;
+    --gray: #6B7280;
+    --error: #C0062B;
+    --glass: rgba(255,255,255,0.7);
+    --glass-border: rgba(255,255,255,0.3);
+    --shadow-sm: 0 2px 8px rgba(11,45,92,0.06);
+    --shadow-md: 0 8px 30px rgba(11,45,92,0.1);
+    --shadow-lg: 0 16px 50px rgba(11,45,92,0.14);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', 'Montserrat', sans-serif;
+    font-size: 11pt;
+    color: var(--primary);
+    background: var(--white);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  .content-wrap { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+
+  /* ===== PORTADA ===== */
+  .cover {
+    width: 100%; height: 100vh; min-height: 650px;
+    background: var(--white);
+    position: relative; overflow: hidden;
+    display: flex; align-items: center;
+  }
+  .cover-left {
+    position: relative; z-index: 2;
+    padding: 80px 60px;
+    width: 50%;
+  }
+  .cover .logo { display: block; width: 280px; margin-bottom: 80px; }
+  .cover h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(38px, 5vw, 62px);
+    font-weight: 800; color: var(--primary);
+    line-height: 1.05; margin-bottom: 14px;
+  }
+  .cover h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(20px, 3vw, 32px);
+    color: var(--secondary); font-weight: 400;
+    margin-bottom: 20px;
+  }
+  .cover hr { width: 240px; border: 2px solid var(--secondary); margin: 0; }
+  .cover-footer {
+    position: absolute; bottom: 30px; left: 60px;
+    color: var(--gray); font-size: 15px; z-index: 2;
+    font-weight: 500;
+  }
+  .cover-right {
+    position: absolute; right: 0; top: 0;
+    width: 55%; height: 100%; z-index: 1;
+    background: linear-gradient(135deg, #E8F4FD 0%, #D0E8F7 50%, #B8DCF3 100%);
+    clip-path: polygon(18% 0, 100% 0, 100% 100%, 0% 100%);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .cover-illustration {
+    width: 100%; height: 100%;
+    position: relative; overflow: hidden;
+  }
+  .farm-scene {
+    position: absolute; bottom: 0; right: 0;
+    width: 100%; height: 80%;
+  }
+  /* Nodos decorativos */
+  .node { position: absolute; border-radius: 50%; background: rgba(0,114,198,0.15); }
+  .node.n1 { width: 12px; height: 12px; top: 20%; left: 30%; }
+  .node.n2 { width: 8px; height: 8px; top: 35%; left: 55%; }
+  .node.n3 { width: 16px; height: 16px; top: 50%; left: 25%; }
+  .node.n4 { width: 10px; height: 10px; top: 15%; left: 70%; }
+  .node.n5 { width: 14px; height: 14px; top: 60%; left: 60%; }
+  .node.n6 { width: 6px; height: 6px; top: 40%; left: 40%; }
+  .node-line { position: absolute; background: rgba(0,114,198,0.1); height: 1px; transform-origin: left center; }
+  .node-line.l1 { top: 22%; left: 31%; width: 24%; transform: rotate(18deg); }
+  .node-line.l2 { top: 36%; left: 56%; width: 20%; transform: rotate(45deg); }
+  .node-line.l3 { top: 52%; left: 26%; width: 34%; transform: rotate(-8deg); }
+
+  .scroll-hint {
+    position: absolute; bottom: 50px; left: 50%;
+    transform: translateX(-50%); z-index: 3;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 6px; color: var(--gray); font-size: 10pt;
+    animation: float 2.5s ease-in-out infinite;
+  }
+  .scroll-hint svg { width: 22px; height: 22px; stroke: var(--gray); }
+  @keyframes float {
+    0%,100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-10px); }
+  }
+
+  /* ===== SECCIONES ===== */
+  section { padding: 70px 0; }
+  section:nth-child(even) { background: var(--bg-light); }
+
+  .section-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 8pt; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 3px;
+    color: var(--secondary); margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 28pt; font-weight: 800;
+    color: var(--primary); margin-bottom: 16px;
+    line-height: 1.15;
+  }
+  .section-subtitle {
+    font-size: 11pt; color: var(--gray);
+    max-width: 600px; margin-bottom: 36px;
+  }
+
+  /* ===== TARJETAS OBJETIVO ===== */
+  .objective-card {
+    background: linear-gradient(135deg, var(--primary) 0%, #0D3A6E 100%);
+    border-radius: 20px; padding: 50px;
+    color: white; position: relative; overflow: hidden;
+    box-shadow: var(--shadow-lg);
+  }
+  .objective-card::before {
+    content: ''; position: absolute; top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(42,143,223,0.2) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .objective-card h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 22pt; font-weight: 700;
+    margin-bottom: 16px;
+  }
+  .objective-card p {
+    font-size: 11.5pt; line-height: 1.8;
+    color: rgba(255,255,255,0.85);
+    max-width: 700px; position: relative; z-index: 1;
+  }
+
+  /* ===== TARJETAS ROLES ===== */
+  .roles-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .role-card {
+    background: var(--white);
+    border: 1px solid #E5EAF2;
+    border-radius: 18px; padding: 30px 26px;
+    transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+    position: relative; overflow: hidden;
+    cursor: pointer;
+  }
+  .role-card:hover { border-color: var(--secondary); }
+  .role-card::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 100%; height: 4px;
+    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    transform: scaleX(0); transform-origin: left;
+  }
+  .role-card:nth-child(1)::before { background: var(--secondary); }
+  .role-card:nth-child(2)::before { background: var(--primary); }
+  .role-card:nth-child(3)::before { background: var(--accent); }
+  .role-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-md); }
+  .role-card:hover::before { transform: scaleX(1); }
+
+  .role-icon {
+    width: 56px; height: 56px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; margin-bottom: 16px;
+  }
+  .role-card:nth-child(1) .role-icon { background: rgba(0,114,198,0.08); }
+  .role-card:nth-child(2) .role-icon { background: rgba(11,45,92,0.08); }
+  .role-card:nth-child(3) .role-icon { background: rgba(42,143,223,0.08); }
+
+  .role-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14pt; font-weight: 700;
+    color: var(--primary); margin-bottom: 4px;
+  }
+  .role-level {
+    font-size: 8.5pt; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 14px; display: inline-block;
+    padding: 3px 10px; border-radius: 20px;
+  }
+  .role-card:nth-child(1) .role-level { background: rgba(0,114,198,0.08); color: var(--secondary); }
+  .role-card:nth-child(2) .role-level { background: rgba(11,45,92,0.08); color: var(--primary); }
+  .role-card:nth-child(3) .role-level { background: rgba(42,143,223,0.08); color: var(--accent); }
+
+  .role-list { list-style: none; margin: 14px 0 18px 0; }
+  .role-list li {
+    font-size: 9.5pt; color: var(--gray);
+    padding: 5px 0; padding-left: 18px;
+    position: relative; line-height: 1.4;
+  }
+  .role-list li::before {
+    content: ''; position: absolute; left: 0; top: 12px;
+    width: 6px; height: 6px; border-radius: 50%;
+  }
+  .role-card:nth-child(1) .role-list li::before { background: var(--secondary); }
+  .role-card:nth-child(2) .role-list li::before { background: var(--primary); }
+  .role-card:nth-child(3) .role-list li::before { background: var(--accent); }
+
+  .role-escalation {
+    font-size: 8.5pt; font-weight: 600;
+    padding: 8px 14px; border-radius: 10px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .role-card:nth-child(1) .role-escalation { background: rgba(0,114,198,0.06); color: var(--secondary); }
+  .role-card:nth-child(2) .role-escalation { background: rgba(11,45,92,0.06); color: var(--primary); }
+  .role-card:nth-child(3) .role-escalation { background: rgba(42,143,223,0.06); color: var(--accent); }
+
+  /* ===== FLUJO GENERAL ===== */
+  .flow-horizontal {
+    display: flex; align-items: center; justify-content: center;
+    gap: 0; flex-wrap: wrap;
+  }
+  .flow-step {
+    background: var(--white); border: 2px solid #E5EAF2;
+    border-radius: 16px; padding: 22px 20px;
+    text-align: center; width: 170px;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+  }
+  .flow-step:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--secondary); }
+  .flow-step-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: rgba(0,114,198,0.08); color: var(--secondary);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 10px; font-size: 20px;
+  }
+  .flow-step-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10pt; font-weight: 700;
+    color: var(--primary); margin-bottom: 2px;
+  }
+  .flow-step-desc { font-size: 8pt; color: var(--gray); }
+  .flow-arrow {
+    font-size: 22px; color: var(--secondary);
+    font-weight: 300; padding: 0 6px;
+  }
+
+  /* ===== REVISIÓN INICIAL - TARJETAS ===== */
+  .review-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  .review-card {
+    background: var(--white); border: 1px solid #E5EAF2;
+    border-radius: 16px; padding: 24px 18px;
+    text-align: center;
+    transition: all 0.35s cubic-bezier(0.16,1,0.3,1);
+  }
+  .review-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+  .review-icon {
+    width: 50px; height: 50px; border-radius: 14px;
+    background: rgba(0,114,198,0.08); color: var(--secondary);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 12px; font-size: 22px;
+  }
+  .review-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10.5pt; font-weight: 700;
+    color: var(--primary); margin-bottom: 6px;
+  }
+  .review-desc { font-size: 9pt; color: var(--gray); line-height: 1.5; }
+
+  .note-banner {
+    background: rgba(0,114,198,0.05); border: 1px solid rgba(0,114,198,0.15);
+    border-radius: 12px; padding: 16px 24px;
+    margin-top: 24px; text-align: center;
+    font-size: 10pt; color: var(--gray);
+  }
+  .note-banner strong { color: var(--primary); }
+
+  /* ===== DIAGNÓSTICO LED - TARJETAS GRANDES ===== */
+  .diag-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .diag-card {
+    border-radius: 20px; padding: 30px 26px;
+    position: relative; overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+  .diag-card.case1 { background: linear-gradient(180deg, #FFF5F5 0%, #FFE8E8 100%); border: 1px solid #FFD4D4; }
+  .diag-card.case2 { background: linear-gradient(180deg, #FFF5F0 0%, #FFE8DD 100%); border: 1px solid #FFD4C4; }
+  .diag-card.case3 { background: linear-gradient(180deg, #F0F7FF 0%, #E0EEFF 100%); border: 1px solid #C8DEFF; }
+
+  .diag-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 12px; border-radius: 20px;
+    font-size: 8pt; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    margin-bottom: 14px;
+  }
+  .case1 .diag-badge { background: rgba(192,6,43,0.1); color: var(--error); }
+  .case2 .diag-badge { background: rgba(200,80,20,0.12); color: #C85014; }
+  .case3 .diag-badge { background: rgba(0,114,198,0.1); color: var(--secondary); }
+
+  .diag-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13pt; font-weight: 700;
+    color: var(--primary); margin-bottom: 16px;
+  }
+
+  .mini-flow {
+    display: flex; flex-direction: column;
+    gap: 0; margin-top: 10px;
+  }
+  .mini-flow-step {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 12px; font-size: 9pt;
+    border-radius: 8px; position: relative;
+  }
+  .mini-flow-step:nth-child(odd) { background: rgba(255,255,255,0.6); }
+  .mini-flow-dot {
+    width: 20px; height: 20px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700; color: white; flex-shrink: 0;
+  }
+  .case1 .mini-flow-dot { background: var(--error); }
+  .case2 .mini-flow-dot { background: #C85014; }
+  .case3 .mini-flow-dot { background: var(--secondary); }
+
+  .mini-flow-connector {
+    width: 2px; height: 10px; background: rgba(0,0,0,0.1);
+    margin-left: 9px;
+  }
+
+  .mini-decision {
+    background: rgba(255,255,255,0.8); border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 10px; padding: 10px 14px;
+    margin-top: 10px; font-size: 9pt;
+  }
+  .mini-decision .q { font-weight: 700; color: var(--primary); margin-bottom: 6px; }
+  .mini-decision .a { display: flex; gap: 12px; }
+  .mini-decision .a span {
+    padding: 4px 10px; border-radius: 8px;
+    font-weight: 600; font-size: 8.5pt;
+  }
+  .mini-decision .a .yes { background: rgba(34,197,94,0.1); color: #16A34A; }
+  .mini-decision .a .no { background: rgba(192,6,43,0.08); color: var(--error); }
+
+  /* ===== DIAGNÓSTICO ELÉCTRICO - TIMELINE ===== */
+  .timeline-vertical {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 0; padding: 20px 0;
+  }
+  .timeline-item {
+    display: flex; align-items: center; gap: 20px;
+    width: 100%; max-width: 500px;
+  }
+  .timeline-icon {
+    width: 52px; height: 52px; border-radius: 14px;
+    background: var(--white); border: 2px solid #E5EAF2;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+  }
+  .timeline-item:hover .timeline-icon {
+    border-color: var(--secondary); box-shadow: var(--shadow-md);
+    transform: scale(1.05);
+  }
+  .timeline-text h4 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11pt; font-weight: 700; color: var(--primary);
+  }
+  .timeline-text p { font-size: 9pt; color: var(--gray); }
+  .timeline-connector {
+    width: 2px; height: 28px; background: linear-gradient(180deg, var(--secondary), rgba(0,114,198,0.2));
+    margin-left: 25px;
+  }
+
+  /* ===== ÁRBOL DECISIONES ROUTER ===== */
+  .decision-tree {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 0;
+  }
+  .dt-node {
+    background: var(--white); border: 2px solid #E5EAF2;
+    border-radius: 14px; padding: 16px 28px;
+    text-align: center; font-size: 10pt;
+    font-weight: 600; color: var(--primary);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+    position: relative;
+  }
+  .dt-node:hover { border-color: var(--secondary); box-shadow: var(--shadow-md); }
+  .dt-node.question { background: rgba(0,114,198,0.05); border-color: var(--secondary); }
+  .dt-node.action { background: rgba(34,197,94,0.06); border-color: #22C55E; color: #16A34A; }
+  .dt-node.escalate { background: rgba(192,6,43,0.05); border-color: var(--error); color: var(--error); }
+
+  .dt-connector {
+    width: 2px; height: 20px; background: #D1D5DB;
+  }
+  .dt-branches {
+    display: flex; gap: 40px; align-items: flex-start;
+    position: relative;
+  }
+  .dt-branches::before {
+    content: ''; position: absolute; top: 0;
+    left: 25%; right: 25%; height: 2px; background: #D1D5DB;
+  }
+  .dt-branch {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 0; min-width: 180px;
+  }
+  .dt-branch-label {
+    font-size: 8pt; font-weight: 700;
+    padding: 3px 10px; border-radius: 10px;
+    margin-bottom: 6px;
+  }
+  .dt-branch-label.yes { background: rgba(34,197,94,0.1); color: #16A34A; }
+  .dt-branch-label.no { background: rgba(192,6,43,0.08); color: var(--error); }
+
+  /* ===== ESCALAMIENTO INFOGRAFÍA ===== */
+  .escalation-flow {
+    display: flex; align-items: center;
+    justify-content: center; gap: 16px;
+    margin-bottom: 30px; flex-wrap: wrap;
+  }
+  .esc-node {
+    background: var(--white); border: 2px solid #E5EAF2;
+    border-radius: 14px; padding: 18px 24px;
+    text-align: center; min-width: 160px;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+  }
+  .esc-node:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+  .esc-node-icon { font-size: 28px; margin-bottom: 6px; }
+  .esc-node-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10pt; font-weight: 700; color: var(--primary);
+  }
+  .esc-arrow { font-size: 24px; color: var(--secondary); }
+
+  .warning-box {
+    background: rgba(192,6,43,0.05); border: 1px solid rgba(192,6,43,0.15);
+    border-radius: 12px; padding: 18px 24px;
+    display: flex; align-items: center; gap: 14px;
+    max-width: 500px; margin: 0 auto;
+  }
+  .warning-box svg { width: 24px; height: 24px; stroke: var(--error); flex-shrink: 0; }
+  .warning-box p { font-size: 10pt; color: var(--error); font-weight: 500; }
+
+  /* ===== RESUMEN ===== */
+  .summary-timeline {
+    display: flex; align-items: center;
+    justify-content: center; gap: 0;
+    margin-bottom: 40px; flex-wrap: wrap;
+  }
+  .st-step {
+    text-align: center; position: relative;
+  }
+  .st-circle {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--secondary), var(--accent));
+    color: white; display: flex; align-items: center; justify-content: center;
+    font-size: 22px; margin: 0 auto 8px;
+    box-shadow: 0 4px 15px rgba(0,114,198,0.3);
+  }
+  .st-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 9pt; font-weight: 700; color: var(--primary);
+  }
+  .st-arrow { font-size: 20px; color: var(--secondary); padding: 0 8px; margin-top: -20px; }
+
+  .summary-card {
+    background: linear-gradient(135deg, var(--primary) 0%, #0D3A6E 100%);
+    border-radius: 18px; padding: 36px 44px;
+    color: white; text-align: center;
+    box-shadow: var(--shadow-lg);
+    position: relative; overflow: hidden;
+  }
+  .summary-card::before {
+    content: ''; position: absolute; bottom: -40px; left: -40px;
+    width: 160px; height: 160px;
+    background: radial-gradient(circle, rgba(42,143,223,0.2) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .summary-card p {
+    font-size: 12pt; line-height: 1.8;
+    color: rgba(255,255,255,0.9); position: relative; z-index: 1;
+  }
+
+  /* ===== ANIMACIONES ===== */
+  .fade-up {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16,1,0.3,1);
+  }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+  .fade-up.d1 { transition-delay: 0.1s; }
+  .fade-up.d2 { transition-delay: 0.2s; }
+  .fade-up.d3 { transition-delay: 0.3s; }
+  .fade-up.d4 { transition-delay: 0.4s; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 900px) {
+    .roles-grid, .diag-grid { grid-template-columns: 1fr; }
+    .review-grid { grid-template-columns: repeat(2, 1fr); }
+    .flow-horizontal { flex-direction: column; }
+    .flow-arrow { transform: rotate(90deg); }
+    .cover-left { width: 100%; padding: 60px 30px; }
+    .cover-right { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- PORTADA -->
+<div class="cover">
+  <div class="cover-left">
+    <img class="logo" src="Logo-Asimetrix.webp" alt="Asimetrix">
+    <h1>Procedimiento Operativo</h1>
+    <h2>Revisión PigVision</h2>
+    <hr>
+  </div>
+  <div class="cover-right">
+    <div class="cover-illustration">
+      <div class="node n1"></div><div class="node n2"></div><div class="node n3"></div>
+      <div class="node n4"></div><div class="node n5"></div><div class="node n6"></div>
+      <div class="node-line l1"></div><div class="node-line l2"></div><div class="node-line l3"></div>
+      <svg class="farm-scene" viewBox="0 0 600 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Granja base -->
+        <rect x="100" y="250" width="400" height="120" rx="8" fill="rgba(0,114,198,0.08)" stroke="rgba(0,114,198,0.15)" stroke-width="1.5"/>
+        <rect x="120" y="200" width="80" height="60" rx="4" fill="rgba(0,114,198,0.12)" stroke="rgba(0,114,198,0.2)" stroke-width="1"/>
+        <rect x="260" y="210" width="80" height="50" rx="4" fill="rgba(0,114,198,0.1)" stroke="rgba(0,114,198,0.18)" stroke-width="1"/>
+        <rect x="400" y="200" width="80" height="60" rx="4" fill="rgba(0,114,198,0.12)" stroke="rgba(0,114,198,0.2)" stroke-width="1"/>
+        <!-- Cámaras -->
+        <circle cx="160" cy="185" r="10" fill="rgba(0,114,198,0.25)" stroke="#0072C6" stroke-width="2"/>
+        <circle cx="300" cy="195" r="10" fill="rgba(0,114,198,0.25)" stroke="#0072C6" stroke-width="2"/>
+        <circle cx="440" cy="185" r="10" fill="rgba(0,114,198,0.25)" stroke="#0072C6" stroke-width="2"/>
+        <!-- Líneas de conexión -->
+        <line x1="170" y1="185" x2="290" y2="195" stroke="rgba(0,114,198,0.2)" stroke-width="1" stroke-dasharray="4 4"/>
+        <line x1="310" y1="195" x2="430" y2="185" stroke="rgba(0,114,198,0.2)" stroke-width="1" stroke-dasharray="4 4"/>
+        <!-- Nodos de datos -->
+        <circle cx="230" cy="170" r="5" fill="rgba(42,143,223,0.3)"/>
+        <circle cx="370" cy="170" r="5" fill="rgba(42,143,223,0.3)"/>
+        <line x1="165" y1="180" x2="228" y2="172" stroke="rgba(42,143,223,0.2)" stroke-width="1"/>
+        <line x1="305" y1="190" x2="368" y2="172" stroke="rgba(42,143,223,0.2)" stroke-width="1"/>
+        <!-- WiFi/Holográfico -->
+        <path d="M295 140 Q300 130 305 140" stroke="rgba(0,114,198,0.3)" stroke-width="1.5" fill="none"/>
+        <path d="M288 134 Q300 118 312 134" stroke="rgba(0,114,198,0.2)" stroke-width="1.5" fill="none"/>
+        <path d="M281 128 Q300 106 319 128" stroke="rgba(0,114,198,0.15)" stroke-width="1.5" fill="none"/>
+      </svg>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+    Explorar
+  </div>
+  <div class="cover-footer">Asimetrix • Procedimiento Operativo</div>
+</div>
+
+<!-- 1. ROLES Y RESPONSABILIDADES -->
+<section>
+  <div class="content-wrap">
+    <div class="fade-up">
+      <div class="section-label">02</div>
+      <div class="section-title">Roles y Responsabilidades</div>
+      <div class="section-subtitle">Cada equipo tiene un rol definido. Si no puede resolver, escala al siguiente nivel.</div>
+    </div>
+    <div class="roles-grid">
+      <a href="porcicultura.html" class="role-card fade-up d1" style="text-decoration:none; color:inherit; cursor:pointer;">
+        <div class="role-icon">🐷</div>
+        <div class="role-title">Equipo de Porcicultura</div>
+        <span class="role-level">Nivel 1</span>
+        <ul class="role-list">
+          <li>Limpieza de cámaras</li>
+          <li>Inspección visual</li>
+          <li>Revisión de LEDs</li>
+          <li>Reinicio básico</li>
+          <li>Registro de novedades</li>
+        </ul>
+        <div class="role-escalation">→ Escala a Mantenimiento</div>
+      </a>
+      <a href="mantenimiento.html" class="role-card fade-up d2" style="text-decoration:none; color:inherit; cursor:pointer;">
+        <div class="role-icon">🔧</div>
+        <div class="role-title">Equipo de Mantenimiento</div>
+        <span class="role-level">Nivel 2</span>
+        <ul class="role-list">
+          <li>Alimentación eléctrica</li>
+          <li>UPS</li>
+          <li>Breakers</li>
+          <li>Router</li>
+          <li>Cableado</li>
+        </ul>
+        <div class="role-escalation">→ Escala a Tecnología</div>
+      </a>
+      <a href="tecnologia.html" class="role-card fade-up d3" style="text-decoration:none; color:inherit; cursor:pointer;">
+        <div class="role-icon">💻</div>
+        <div class="role-title">Equipo de Tecnología</div>
+        <span class="role-level">Nivel 3</span>
+        <ul class="role-list">
+          <li>Diagnóstico avanzado</li>
+          <li>Internet</li>
+          <li>Redes</li>
+          <li>Conectividad</li>
+          <li>Incidentes especializados</li>
+        </ul>
+        <div class="role-escalation">→ Escala a Asimetrix</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- 2. ESCALAMIENTO -->
+<section>
+  <div class="content-wrap">
+    <div class="fade-up">
+      <div class="section-label">02</div>
+      <div class="section-title">Escalamiento</div>
+      <div class="section-subtitle">Flujo de escalamiento entre equipos.</div>
+    </div>
+    <div class="escalation-flow fade-up">
+      <div class="esc-node"><div class="esc-node-icon">🐷</div><div class="esc-node-title">Porcicultura</div></div>
+      <div class="esc-arrow">→</div>
+      <div class="esc-node"><div class="esc-node-icon">🔧</div><div class="esc-node-title">Mantenimiento</div></div>
+      <div class="esc-arrow">→</div>
+      <div class="esc-node"><div class="esc-node-icon">💻</div><div class="esc-node-title">Tecnología</div></div>
+    </div>
+    <div class="warning-box fade-up">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <p><strong>Nunca saltar niveles de escalamiento.</strong> Cada equipo resuelve lo que le corresponde antes de escalar.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 4. SOPORTE -->
+<section style="padding-bottom:80px;">
+  <div class="content-wrap">
+    <div class="fade-up">
+      <div class="section-label">03</div>
+      <div class="section-title">Soporte Asimetrix</div>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; max-width:600px;" class="fade-up">
+      <div style="background:var(--white); border:1px solid #E5EAF2; border-radius:14px; padding:24px; box-shadow:var(--shadow-sm);">
+        <div style="font-size:28px; margin-bottom:10px;">👨‍💼</div>
+        <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:11pt; color:var(--primary); margin-bottom:4px;">Damián García</div>
+        <div style="font-size:9pt; color:var(--gray); margin-bottom:2px;">damian.garcia@asimetrix.co</div>
+        <div style="font-size:9pt; color:var(--gray);">+57 311 2078988</div>
+      </div>
+      <div style="background:var(--white); border:1px solid #E5EAF2; border-radius:14px; padding:24px; box-shadow:var(--shadow-sm);">
+        <div style="font-size:28px; margin-bottom:10px;">👩‍💼</div>
+        <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:11pt; color:var(--primary); margin-bottom:4px;">Manuela Chavarría</div>
+        <div style="font-size:9pt; color:var(--gray); margin-bottom:2px;">manuela.chavarria@asimetrix.co</div>
+        <div style="font-size:9pt; color:var(--gray);">+57 318 2202707</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+// Animaciones al scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
