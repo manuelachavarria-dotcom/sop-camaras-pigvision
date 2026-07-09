@@ -1,0 +1,1479 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EggVision — by Asimetrix</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: oklch(12.5% 0.051 258);
+  --secondary: oklch(36% 0.07 238);
+  --accent: oklch(62% 0.15 248);
+  --aqua-electric: oklch(72% 0.19 204);
+  --aqua-gray: oklch(73% 0.08 214);
+  --success: #4BA2FF;
+  --error: #C0062B;
+  --warning: #FFD600;
+  --dark-bg: oklch(10% 0.042 258);
+  --light-bg: oklch(97% 0.005 258);
+  --dark-text: oklch(97% 0.005 258);
+  --light-text: oklch(12.5% 0.051 258);
+  --font: 'Roboto', sans-serif;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font);
+  overflow: hidden;
+  background: var(--dark-bg);
+  color: var(--dark-text);
+}
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+  opacity: 0.028;
+  pointer-events: none;
+  z-index: 1000;
+  mix-blend-mode: overlay;
+}
+#progress {
+  position: fixed;
+  top: 0; left: 0;
+  height: 3px;
+  background: var(--accent);
+  width: 0%;
+  z-index: 999;
+  transition: width 0.6s var(--ease-out);
+  box-shadow: 0 0 8px oklch(62% 0.15 248 / 0.4);
+}
+#fullscreen-btn {
+  position: fixed;
+  top: 16px; right: 16px;
+  z-index: 998;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  transition: background 0.3s;
+}
+#fullscreen-btn:hover { background: oklch(0% 0 0 / 0.08); }
+#fullscreen-btn svg { display: block; }
+#nav {
+  position: fixed;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 997;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.nav-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid var(--dark-text);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.4s var(--ease-out);
+}
+.nav-dot.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  transform: scale(1.3);
+}
+.slide {
+  width: 100vw;
+  height: 100vh;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 60px 80px;
+}
+.slide.active { display: flex; }
+.slide[data-theme="dark"] { background: var(--dark-bg); color: var(--dark-text); }
+.slide[data-theme="light"] { background: var(--light-bg); color: var(--light-text); }
+.slide-inner {
+  max-width: 1100px;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+.logo {
+  position: fixed;
+  bottom: 24px;
+  right: 32px;
+  height: 28px;
+  z-index: 996;
+  transition: filter 0.4s;
+  filter: brightness(0) invert(1);
+}
+.logo.light-logo { filter: brightness(0); }
+
+.animate { opacity: 0; transform: translateY(30px); transition: all 0.7s var(--ease-out); }
+.animate.visible { opacity: 1; transform: translateY(0); }
+.animate-delay-1 { transition-delay: 0.1s; }
+.animate-delay-2 { transition-delay: 0.2s; }
+.animate-delay-3 { transition-delay: 0.3s; }
+.animate-delay-4 { transition-delay: 0.45s; }
+.animate-delay-5 { transition-delay: 0.6s; }
+.animate-delay-6 { transition-delay: 0.75s; }
+
+h1 { font-size: clamp(48px, 5.5vw, 72px); font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; }
+h2 { font-size: clamp(36px, 4vw, 52px); font-weight: 700; line-height: 1.15; letter-spacing: -0.015em; }
+h3 { font-size: clamp(24px, 2.5vw, 34px); font-weight: 500; line-height: 1.2; }
+.body-lg { font-size: clamp(18px, 1.5vw, 22px); line-height: 1.5; font-weight: 400; }
+.body-sm { font-size: clamp(14px, 1vw, 16px); line-height: 1.5; }
+.accent { color: var(--accent); }
+.aqua { color: var(--aqua-electric); }
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+
+.card {
+  background: oklch(0% 0 0 / 0.06);
+  border-radius: 16px;
+  padding: 28px 24px;
+  transition: all 0.3s var(--ease-out);
+  border: 1px solid oklch(100% 0 0 / 0.04);
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 36px oklch(0% 0 0 / 0.15);
+  border-color: var(--accent);
+}
+.slide[data-theme="light"] .card {
+  background: oklch(100% 0 0 / 0.6);
+  border-color: oklch(0% 0 0 / 0.06);
+}
+.slide[data-theme="light"] .card:hover {
+  box-shadow: 0 12px 36px oklch(0% 0 0 / 0.08);
+}
+.card-icon { margin-bottom: 14px; }
+.card-icon svg { width: 36px; height: 36px; stroke: var(--accent); }
+.card h4 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+.card .value { font-size: 32px; font-weight: 700; color: var(--accent); margin: 8px 0 4px; }
+.card .sub { font-size: 14px; opacity: 0.7; }
+
+.portada {
+  text-align: center;
+  flex-direction: column;
+}
+.portada .logo-big {
+  margin-bottom: 16px;
+}
+.portada .logo-big svg { width: clamp(100px, 12vw, 160px); height: auto; }
+.portada h1 {
+  font-size: clamp(56px, 7vw, 96px);
+  margin-bottom: 12px;
+  color: var(--dark-text);
+}
+.portada .subtitle {
+  font-size: clamp(18px, 2vw, 28px);
+  opacity: 0.85;
+  font-weight: 400;
+  margin-bottom: 24px;
+}
+.portada .by-line {
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0.5;
+}
+.portada .scroll-hint {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  opacity: 0.5;
+  animation: bounceHint 2s infinite;
+}
+@keyframes bounceHint {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+
+.spec-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px; }
+.spec-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px 12px;
+  border-radius: 12px;
+  gap: 8px;
+}
+.spec-item svg { width: 32px; height: 32px; stroke: var(--accent); }
+.spec-item .label { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.6; }
+.spec-item .spec-value { font-size: 18px; font-weight: 700; }
+
+.size-table { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-top: 24px; }
+.size-card {
+  text-align: center;
+  padding: 24px 12px;
+  border-radius: 16px;
+  position: relative;
+  border: 1px solid oklch(100% 0 0 / 0.08);
+  transition: all 0.3s var(--ease-out);
+}
+.size-card:hover { transform: translateY(-4px); border-color: var(--accent); }
+.size-card .cat { font-size: 36px; font-weight: 700; color: var(--accent); }
+.size-card .range { font-size: 15px; opacity: 0.8; margin-top: 6px; }
+.size-card .bar {
+  height: 4px;
+  border-radius: 2px;
+  margin: 12px auto 0;
+  max-width: 60px;
+  background: var(--accent);
+}
+
+.camera-feed {
+  background: oklch(6% 0.03 258);
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  border: 2px solid oklch(62% 0.15 248 / 0.25);
+  box-shadow: 0 0 40px oklch(0% 0 0 / 0.4);
+}
+.camera-feed svg { width: 100%; height: auto; display: block; }
+
+.install-scene { width: 100%; max-width: 900px; margin: 12px auto 0; }
+.install-scene svg { width: 100%; height: auto; }
+
+.diagram { width: 100%; max-width: 900px; margin: 0 auto; }
+.diagram svg { width: 100%; height: auto; }
+
+.arch-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.arch-card {
+  padding: 20px;
+  border-radius: 14px;
+  border: 1px solid oklch(100% 0 0 / 0.06);
+  text-align: center;
+}
+.arch-card svg { width: 28px; height: 28px; stroke: var(--accent); margin-bottom: 10px; }
+.arch-card h4 { font-size: 16px; font-weight: 700; }
+.arch-card p { font-size: 13px; opacity: 0.7; margin-top: 4px; }
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.galpon-card {
+  padding: 20px;
+  border-radius: 14px;
+  border: 1px solid oklch(0% 0 0 / 0.08);
+}
+.galpon-card h4 { font-size: 18px; font-weight: 700; margin-bottom: 12px; color: var(--accent); }
+.galpon-card .size-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: 14px;
+  border-bottom: 1px solid oklch(0% 0 0 / 0.04);
+}
+.galpon-card .total {
+  margin-top: 10px;
+  font-weight: 700;
+  font-size: 16px;
+  text-align: right;
+}
+.chart-placeholder {
+  grid-column: 1 / -1;
+  padding: 20px;
+  border-radius: 14px;
+  border: 1px solid oklch(0% 0 0 / 0.08);
+  text-align: center;
+}
+.chart-placeholder svg { width: 100%; max-height: 100px; }
+
+.software-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.soft-card {
+  padding: 24px;
+  border-radius: 14px;
+  border: 1px solid oklch(100% 0 0 / 0.06);
+  text-align: center;
+}
+.soft-card svg { width: 32px; height: 32px; stroke: var(--accent); margin-bottom: 12px; }
+.soft-card h4 { font-size: 17px; font-weight: 700; }
+
+.cierre {
+  text-align: center;
+  flex-direction: column;
+}
+.cierre h1 {
+  font-size: clamp(48px, 5vw, 72px);
+  color: var(--light-text);
+  margin-bottom: 12px;
+}
+.cierre .subtitle {
+  font-size: clamp(20px, 2vw, 28px);
+  font-weight: 400;
+  margin-bottom: 32px;
+}
+
+/* Matrix transition overlay */
+#matrix-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1001;
+  background: oklch(6% 0.03 258);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+#matrix-overlay.active { display: flex; }
+#matrix-overlay.show { opacity: 1; }
+#matrix-mascota {
+  position: absolute;
+  z-index: 1002;
+  transform: scale(0.6);
+  opacity: 0;
+  max-height: 50vh;
+  transition: none;
+}
+#matrix-mascota img { max-height: 50vh; width: auto; }
+#scan-lines {
+  position: absolute;
+  inset: 0;
+  z-index: 1003;
+  pointer-events: none;
+  overflow: hidden;
+}
+#scan-lines::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 200%;
+  background: repeating-linear-gradient(180deg,
+    oklch(75% 0.22 145 / 0.0) 0px,
+    oklch(75% 0.22 145 / 0.12) 1px,
+    oklch(75% 0.22 145 / 0.0) 3px,
+    oklch(75% 0.22 145 / 0.0) 6px);
+  animation: scanSweep 0.8s var(--ease-out) forwards;
+}
+@keyframes scanSweep { from { top: -100%; } to { top: 100%; } }
+#scan-glow {
+  position: absolute;
+  left: 0; width: 100%;
+  height: 2px;
+  z-index: 1004;
+  background: oklch(80% 0.25 145);
+  box-shadow: 0 0 30px 10px oklch(70% 0.22 145 / 0.5),
+              0 0 80px 20px oklch(60% 0.18 145 / 0.25);
+  animation: glowSweep 0.8s var(--ease-out) forwards;
+}
+@keyframes glowSweep { from { top: -2%; } to { top: 102%; } }
+.matrix-col {
+  position: absolute;
+  top: 0;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  color: oklch(75% 0.22 145);
+  text-shadow: 0 0 8px oklch(65% 0.2 145 / 0.8);
+  writing-mode: vertical-lr;
+  text-orientation: upright;
+  letter-spacing: 2px;
+  line-height: 1;
+  pointer-events: none;
+  z-index: 1005;
+}
+</style>
+</head>
+<body>
+
+<!-- SVG Sprite definitions -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+  <symbol id="icon-camera" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>
+  </symbol>
+  <symbol id="icon-led" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="2"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M4.93 19.07l1.41-1.41m11.32-11.32l1.41-1.41"/>
+  </symbol>
+  <symbol id="icon-plug" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 2v4m0 12v4M6 8h12v4a6 6 0 0 1-12 0V8z"/>
+  </symbol>
+  <symbol id="icon-thermometer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/>
+  </symbol>
+  <symbol id="icon-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+  </symbol>
+  <symbol id="icon-weight" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="5" r="3"/><path d="M3 21h18l-3-12H6L3 21z"/>
+  </symbol>
+  <symbol id="icon-egg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 2C8 2 5 7 5 12c0 5.5 3 10 7 10s7-4.5 7-10C19 7 16 2 12 2z"/>
+  </symbol>
+  <symbol id="icon-cloud" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+  </symbol>
+  <symbol id="icon-database" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+  </symbol>
+  <symbol id="icon-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+  </symbol>
+  <symbol id="icon-report" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+  </symbol>
+  <symbol id="icon-export" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+  </symbol>
+  <symbol id="icon-history" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+  </symbol>
+  <symbol id="icon-network" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="22" y1="12" x2="2" y2="12"/><path d="M5 3H2v3m0 12v3h3M19 3h3v3m0 12v3h-3"/><circle cx="12" cy="12" r="2"/>
+  </symbol>
+  <symbol id="icon-box" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+  </symbol>
+  <symbol id="icon-satellite" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+  </symbol>
+  <symbol id="icon-chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="6 9 12 15 18 9"/>
+  </symbol>
+  <symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="20 6 9 17 4 12"/>
+  </symbol>
+  <symbol id="icon-fullscreen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+  </symbol>
+  <symbol id="icon-factory" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 21h18M5 21V7l4 3V7l4 3V7l4 3V3l2 2v16"/>
+  </symbol>
+  <symbol id="icon-belt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2" y="10" width="20" height="4" rx="2"/><circle cx="6" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="18" cy="12" r="1" fill="currentColor"/>
+  </symbol>
+</svg>
+
+<!-- Progress bar -->
+<div id="progress"></div>
+
+<!-- Fullscreen button -->
+<button id="fullscreen-btn" onclick="document.documentElement.requestFullscreen()" aria-label="Pantalla completa">
+  <svg width="20" height="20"><use href="#icon-fullscreen"/></svg>
+</button>
+
+<!-- Navigation dots -->
+<nav id="nav"></nav>
+
+<!-- Logo Asimetrix fixed -->
+<div class="logo" id="logo-ax-fixed">
+  <img src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=460&height=132&name=logo-AX-Asimetrix-unlocking-the-power-of-data.webp" alt="Asimetrix" height="28">
+</div>
+
+<!-- Matrix transition overlay -->
+<div id="matrix-overlay">
+  <div id="matrix-mascota"><img src="https://asimetrix.co/hubfs/AX%20-%20Pv%20con%20cerdo.png" alt="AX"></div>
+  <div id="scan-lines"></div>
+  <div id="scan-glow"></div>
+</div>
+
+<!-- ==================== SLIDE 1: PORTADA ==================== -->
+<section class="slide portada active" data-theme="dark" data-index="0">
+  <div class="slide-inner">
+    <div class="logo-big animate">
+      <img src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=460&height=132&name=logo-AX-Asimetrix-unlocking-the-power-of-data.webp" alt="Asimetrix" height="80" style="filter:brightness(0) invert(1);">
+    </div>
+    <h1 class="animate animate-delay-1">EggVision</h1>
+    <p class="subtitle animate animate-delay-2">Visión artificial para granjas de ponedoras</p>
+    <p class="by-line animate animate-delay-3">Una solución de <img src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=460&height=132&name=logo-AX-Asimetrix-unlocking-the-power-of-data.webp" alt="Asimetrix" height="18" style="vertical-align:middle;margin-left:4px;filter:brightness(0) invert(1);"></p>
+    <div class="scroll-hint">
+      <svg width="20" height="20"><use href="#icon-chevron-down"/></svg>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 2: PROBLEMA ==================== -->
+<section class="slide" data-theme="light" data-index="1">
+  <div class="slide-inner">
+    <h2 class="animate">El desafío</h2>
+    <p class="body-lg animate animate-delay-1" style="margin-top:16px;max-width:800px;">
+      En las granjas de ponedoras, los huevos se cuentan únicamente en la clasificadora central.
+      No existe forma de diferenciar la producción por galpón ni conocer la distribución por tamaño
+      a nivel de cada lote.
+    </p>
+    <div class="grid-3" style="margin-top:40px;">
+      <div class="card animate animate-delay-2">
+        <div class="card-icon"><svg><use href="#icon-egg"/></svg></div>
+        <h4>Sin trazabilidad</h4>
+        <p class="body-sm" style="margin-top:6px;opacity:0.7;">No se sabe qué galpón produjo cada huevo</p>
+      </div>
+      <div class="card animate animate-delay-3">
+        <div class="card-icon"><svg><use href="#icon-chart"/></svg></div>
+        <h4>Clasificación tardía</h4>
+        <p class="body-sm" style="margin-top:6px;opacity:0.7;">Ocurre al final de la línea, sin datos por origen</p>
+      </div>
+      <div class="card animate animate-delay-4">
+        <div class="card-icon"><svg><use href="#icon-history"/></svg></div>
+        <h4>Datos perdidos</h4>
+        <p class="body-sm" style="margin-top:6px;opacity:0.7;">La información productiva se diluye en el total general</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 3: SOLUCIÓN ==================== -->
+<section class="slide" data-theme="dark" data-index="2">
+  <div class="slide-inner">
+    <h2 class="animate">EggVision</h2>
+    <p class="body-lg animate animate-delay-1" style="margin-top:12px;max-width:750px;">
+      Sistema de visión artificial que identifica, cuenta y clasifica huevos por tamaño
+      en cada galpón, generando un reporte diario con los datos del día anterior.
+    </p>
+    <div class="grid-3" style="margin-top:36px;">
+      <div class="card animate animate-delay-2" style="text-align:center;">
+        <div class="card-icon"><svg><use href="#icon-camera"/></svg></div>
+        <h4>Conteo automático</h4>
+        <p class="body-sm" style="margin-top:6px;opacity:0.7;">Cada huevo se registra al pasar por la cámara</p>
+      </div>
+      <div class="card animate animate-delay-3" style="text-align:center;">
+        <div class="card-icon"><svg><use href="#icon-weight"/></svg></div>
+        <h4>Clasificación por tamaño</h4>
+        <p class="body-sm" style="margin-top:6px;opacity:0.7;">A, AA, AAA, B y C con precisión de IA</p>
+      </div>
+      <div class="card animate animate-delay-4" style="text-align:center;">
+        <div class="card-icon"><svg><use href="#icon-report"/></svg></div>
+        <h4>Reporte diario</h4>
+        <p class="body-sm" style="margin-top:6px;opacity:0.7;">Datos consolidados del día anterior por galpón</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 4: CÁMARA ==================== -->
+<section class="slide" data-theme="light" data-index="3">
+  <div class="slide-inner">
+    <div style="display:flex;align-items:center;gap:40px;flex-wrap:wrap;">
+      <div style="flex:1;min-width:280px;">
+        <h2 class="animate">EggVision Cam</h2>
+        <p class="body-lg animate animate-delay-1" style="margin-top:8px;">
+          Cámara inteligente con procesamiento embebido para conteo en tiempo real durante la operación.
+        </p>
+      </div>
+      <div class="animate animate-delay-2" style="flex-shrink:0;background:var(--dark-bg);border-radius:20px;padding:30px 40px;text-align:center;min-width:200px;">
+        <svg width="80" height="80" stroke="var(--accent)" fill="none" stroke-width="1.5">
+          <use href="#icon-camera"/>
+        </svg>
+        <p style="font-size:12px;letter-spacing:2px;text-transform:uppercase;opacity:0.5;margin-top:8px;">8 MP &middot; IA embebida</p>
+      </div>
+    </div>
+    <div class="spec-grid animate animate-delay-3">
+      <div class="spec-item card">
+        <svg><use href="#icon-camera"/></svg>
+        <span class="spec-value">8 MP</span>
+        <span class="label">Resolución</span>
+      </div>
+      <div class="spec-item card">
+        <svg><use href="#icon-led"/></svg>
+        <span class="spec-value">LED blanco</span>
+        <span class="label">Iluminación integrada</span>
+      </div>
+      <div class="spec-item card">
+        <svg><use href="#icon-plug"/></svg>
+        <span class="spec-value">PoE / 24V DC</span>
+        <span class="label">Alimentación</span>
+      </div>
+      <div class="spec-item card">
+        <svg><use href="#icon-thermometer"/></svg>
+        <span class="spec-value">-20&deg;C a 60&deg;C</span>
+        <span class="label">Temperatura</span>
+      </div>
+      <div class="spec-item card">
+        <svg><use href="#icon-shield"/></svg>
+        <span class="spec-value">IP65 / IP67</span>
+        <span class="label">Protección</span>
+      </div>
+      <div class="spec-item card">
+        <svg><use href="#icon-weight"/></svg>
+        <span class="spec-value">650 g</span>
+        <span class="label">Peso</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 5: CLASIFICACIÓN ==================== -->
+<section class="slide" data-theme="dark" data-index="4">
+  <div class="slide-inner">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start;">
+      <div>
+        <h2 class="animate">Clasificación por tamaño</h2>
+        <p class="body-sm animate animate-delay-1" style="margin-top:8px;opacity:0.8;">
+          La IA clasifica cada huevo en una de cinco categorías según su peso estimado por visión artificial.
+        </p>
+        <div class="size-table animate animate-delay-2" style="grid-template-columns:repeat(3,1fr);">
+          <div class="size-card">
+            <div class="cat">A</div>
+            <div class="range">&lt; 53 g</div>
+            <div class="bar" style="width:30%;"></div>
+          </div>
+          <div class="size-card">
+            <div class="cat">AA</div>
+            <div class="range">53 &ndash; 57 g</div>
+            <div class="bar" style="width:45%;"></div>
+          </div>
+          <div class="size-card">
+            <div class="cat">AAA</div>
+            <div class="range">58 &ndash; 63 g</div>
+            <div class="bar" style="width:70%;"></div>
+          </div>
+          <div class="size-card">
+            <div class="cat">B</div>
+            <div class="range">64 &ndash; 67 g</div>
+            <div class="bar" style="width:55%;"></div>
+          </div>
+          <div class="size-card">
+            <div class="cat">C</div>
+            <div class="range">&gt; 67 g</div>
+            <div class="bar" style="width:35%;"></div>
+          </div>
+        </div>
+        <p class="body-sm animate animate-delay-3" style="margin-top:16px;opacity:0.4;">
+          Solo se clasifican huevos completos, con margen de error controlado
+        </p>
+      </div>
+      <div class="camera-feed animate animate-delay-2">
+        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <filter id="glow"><feGaussianBlur stdDeviation="1.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            <linearGradient id="beltGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="oklch(30% 0.02 258)"/>
+              <stop offset="50%" stop-color="oklch(40% 0.03 258)"/>
+              <stop offset="100%" stop-color="oklch(30% 0.02 258)"/>
+            </linearGradient>
+            <linearGradient id="scanGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="oklch(62% 0.15 248 / 0)"/>
+              <stop offset="50%" stop-color="oklch(62% 0.15 248 / 0.08)"/>
+              <stop offset="100%" stop-color="oklch(62% 0.15 248 / 0)"/>
+            </linearGradient>
+          </defs>
+          <!-- Background -->
+          <rect width="400" height="300" fill="oklch(8% 0.03 258)"/>
+          <!-- Grid overlay -->
+          <g stroke="oklch(62% 0.15 248 / 0.06)" stroke-width="0.5">
+            <line x1="50" y1="0" x2="50" y2="300"/><line x1="100" y1="0" x2="100" y2="300"/>
+            <line x1="150" y1="0" x2="150" y2="300"/><line x1="200" y1="0" x2="200" y2="300"/>
+            <line x1="250" y1="0" x2="250" y2="300"/><line x1="300" y1="0" x2="300" y2="300"/>
+            <line x1="350" y1="0" x2="350" y2="300"/>
+            <line x1="0" y1="40" x2="400" y2="40"/><line x1="0" y1="80" x2="400" y2="80"/>
+            <line x1="0" y1="120" x2="400" y2="120"/><line x1="0" y1="160" x2="400" y2="160"/>
+            <line x1="0" y1="200" x2="400" y2="200"/><line x1="0" y1="240" x2="400" y2="240"/>
+          </g>
+          <!-- Crosshair -->
+          <g stroke="oklch(62% 0.15 248 / 0.15)" stroke-width="1">
+            <line x1="200" y1="0" x2="200" y2="300"/>
+            <line x1="0" y1="150" x2="400" y2="150"/>
+            <circle cx="200" cy="150" r="10" fill="none" stroke-dasharray="3,3"/>
+          </g>
+          <!-- Conveyor belt -->
+          <rect x="0" y="130" width="400" height="40" fill="url(#beltGrad)"/>
+          <line x1="0" y1="130" x2="400" y2="130" stroke="oklch(50% 0.04 258)" stroke-width="1"/>
+          <line x1="0" y1="170" x2="400" y2="170" stroke="oklch(50% 0.04 258)" stroke-width="1"/>
+          <!-- Belt texture lines -->
+          <g stroke="oklch(50% 0.02 258 / 0.3)" stroke-width="0.5">
+            <line x1="10" y1="130" x2="10" y2="170"/><line x1="26" y1="130" x2="26" y2="170"/>
+            <line x1="42" y1="130" x2="42" y2="170"/><line x1="58" y1="130" x2="58" y2="170"/>
+            <line x1="74" y1="130" x2="74" y2="170"/><line x1="90" y1="130" x2="90" y2="170"/>
+            <line x1="106" y1="130" x2="106" y2="170"/><line x1="122" y1="130" x2="122" y2="170"/>
+            <line x1="138" y1="130" x2="138" y2="170"/><line x1="154" y1="130" x2="154" y2="170"/>
+            <line x1="170" y1="130" x2="170" y2="170"/><line x1="186" y1="130" x2="186" y2="170"/>
+            <line x1="202" y1="130" x2="202" y2="170"/><line x1="218" y1="130" x2="218" y2="170"/>
+            <line x1="234" y1="130" x2="234" y2="170"/><line x1="250" y1="130" x2="250" y2="170"/>
+            <line x1="266" y1="130" x2="266" y2="170"/><line x1="282" y1="130" x2="282" y2="170"/>
+            <line x1="298" y1="130" x2="298" y2="170"/><line x1="314" y1="130" x2="314" y2="170"/>
+            <line x1="330" y1="130" x2="330" y2="170"/><line x1="346" y1="130" x2="346" y2="170"/>
+            <line x1="362" y1="130" x2="362" y2="170"/><line x1="378" y1="130" x2="378" y2="170"/>
+            <line x1="394" y1="130" x2="394" y2="170"/>
+          </g>
+          <!-- Eggs on belt -->
+          <!-- Egg A (small) -->
+          <g transform="translate(60,140)">
+            <ellipse cx="10" cy="10" rx="10" ry="14" fill="oklch(90% 0.03 90)" opacity="0.9"/>
+            <rect x="-14" y="-18" width="48" height="56" rx="3" fill="none" stroke="oklch(65% 0.2 145)" stroke-width="1.5" filter="url(#glow)"/>
+            <text x="10" y="55" text-anchor="middle" font-size="9" fill="oklch(65% 0.2 145)" font-weight="700" filter="url(#glow)">A</text>
+          </g>
+          <!-- Egg AA (medium) -->
+          <g transform="translate(140,138)">
+            <ellipse cx="12" cy="12" rx="12" ry="16" fill="oklch(88% 0.02 90)" opacity="0.9"/>
+            <rect x="-16" y="-20" width="56" height="64" rx="3" fill="none" stroke="oklch(62% 0.15 248)" stroke-width="1.5" filter="url(#glow)"/>
+            <text x="12" y="62" text-anchor="middle" font-size="9" fill="oklch(62% 0.15 248)" font-weight="700" filter="url(#glow)">AA</text>
+          </g>
+          <!-- Egg AAA (large) -->
+          <g transform="translate(250,136)">
+            <ellipse cx="14" cy="14" rx="14" ry="18" fill="oklch(86% 0.02 90)" opacity="0.9"/>
+            <rect x="-18" y="-22" width="64" height="72" rx="3" fill="none" stroke="var(--aqua-electric)" stroke-width="1.5" filter="url(#glow)"/>
+            <text x="14" y="69" text-anchor="middle" font-size="9" fill="var(--aqua-electric)" font-weight="700" filter="url(#glow)">AAA</text>
+          </g>
+          <!-- Egg B (extra large) -->
+          <g transform="translate(330,134)">
+            <ellipse cx="16" cy="16" rx="16" ry="20" fill="oklch(84% 0.02 90)" opacity="0.9"/>
+            <rect x="-20" y="-24" width="72" height="80" rx="3" fill="none" stroke="#FFD600" stroke-width="1.5" filter="url(#glow)"/>
+            <text x="16" y="75" text-anchor="middle" font-size="9" fill="#FFD600" font-weight="700" filter="url(#glow)">B</text>
+          </g>
+          <!-- Egg C (jumbo) -->
+          <g transform="translate(370,132)">
+            <ellipse cx="18" cy="18" rx="18" ry="22" fill="oklch(82% 0.02 90)" opacity="0.9"/>
+          </g>
+          <!-- Scan line -->
+          <rect x="0" y="110" width="400" height="3" fill="url(#scanGrad)" opacity="0.5">
+            <animate attributeName="y" from="0" to="300" dur="3s" repeatCount="indefinite"/>
+          </rect>
+          <!-- HUD overlay -->
+          <g font-family="monospace" font-size="11" fill="oklch(62% 0.15 248 / 0.7)" filter="url(#glow)">
+            <text x="10" y="18">CAM 01 &middot; GALPÓN 1</text>
+            <text x="10" y="34">FPS: 30 &middot; COUNT: 127</text>
+            <text x="320" y="18" text-anchor="end">LIVE</text>
+            <circle cx="394" cy="14" r="4" fill="oklch(65% 0.2 145)">
+              <animate attributeName="opacity" values="1;0.2;1" dur="1.5s" repeatCount="indefinite"/>
+            </circle>
+            <text x="320" y="34" text-anchor="end">RES: 8MP</text>
+          </g>
+          <!-- Corner brackets -->
+          <g stroke="oklch(62% 0.15 248 / 0.3)" stroke-width="2" fill="none">
+            <path d="M8 8 L8 2 L14 2"/>
+            <path d="M392 8 L392 2 L386 2"/>
+            <path d="M8 292 L8 298 L14 298"/>
+            <path d="M392 292 L392 298 L386 298"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 6: INSTALACIÓN ==================== -->
+<section class="slide" data-theme="light" data-index="5">
+  <div class="slide-inner">
+    <h2 class="animate">Instalación en granja</h2>
+    <p class="body-lg animate animate-delay-1" style="margin-top:8px;max-width:680px;">
+      Una cámara EggVision al final de cada galpón sobre la banda principal que recorre todos los galpones hasta la clasificadora.
+    </p>
+    <div class="install-scene animate animate-delay-2">
+      <svg viewBox="0 0 820 360" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+            <path d="M0,0 L10,5 L0,10" fill="oklch(62% 0.15 248)"/>
+          </marker>
+          <marker id="arr-sm" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto">
+            <path d="M0,0 L10,5 L0,10" fill="oklch(50% 0.02 258)"/>
+          </marker>
+        </defs>
+        <!-- Background -->
+        <rect width="820" height="360" rx="14" fill="oklch(92% 0.01 258)"/>
+        <!-- Title label -->
+        <text x="410" y="24" text-anchor="middle" font-size="11" fill="oklch(50% 0.02 258)" font-weight="600" letter-spacing="1">VISTA SUPERIOR — SISTEMA DE INSTALACIÓN</text>
+        <!-- Main building outline (all galpones connected) -->
+        <rect x="30" y="55" width="580" height="240" rx="4" fill="none" stroke="oklch(70% 0.02 258)" stroke-width="1.5" stroke-dasharray="6,3"/>
+        <!-- Galpón dividers -->
+        <line x1="223" y1="55" x2="223" y2="295" stroke="oklch(70% 0.02 258)" stroke-width="1" stroke-dasharray="4,4"/>
+        <line x1="416" y1="55" x2="416" y2="295" stroke="oklch(70% 0.02 258)" stroke-width="1" stroke-dasharray="4,4"/>
+        <!-- Galpón labels -->
+        <text x="126" y="72" text-anchor="middle" font-size="12" font-weight="700" fill="oklch(35% 0.03 258)">GALPÓN 1</text>
+        <text x="320" y="72" text-anchor="middle" font-size="12" font-weight="700" fill="oklch(35% 0.03 258)">GALPÓN 2</text>
+        <text x="513" y="72" text-anchor="middle" font-size="12" font-weight="700" fill="oklch(35% 0.03 258)">GALPÓN 3</text>
+        <!-- Main belt (runs through all galpones) -->
+        <rect x="30" y="162" width="610" height="26" rx="13" fill="oklch(40% 0.03 258)" stroke="oklch(50% 0.03 258)" stroke-width="1"/>
+        <!-- Belt direction arrow -->
+        <polygon points="620,175 605,168 605,182" fill="oklch(62% 0.15 248)"/>
+        <text x="640" y="179" font-size="10" fill="oklch(50% 0.02 258)">A la clasificadora</text>
+        <!-- CAGE ROWS - Galpón 1 (left of main belt) -->
+        <g transform="translate(50,80)">
+          <rect x="0" y="0" width="40" height="72" rx="3" fill="oklch(70% 0.02 258 / 0.4)" stroke="oklch(60% 0.02 258 / 0.5)" stroke-width="0.8"/>
+          <line x1="0" y1="24" x2="40" y2="24" stroke="oklch(60% 0.02 258 / 0.3)" stroke-width="0.5"/>
+          <line x1="0" y1="48" x2="40" y2="48" stroke="oklch(60% 0.02 258 / 0.3)" stroke-width="0.5"/>
+          <g fill="oklch(85% 0.02 90)" opacity="0.7">
+            <circle cx="12" cy="10" r="3.5"/><circle cx="28" cy="8" r="3.5"/>
+            <circle cx="10" cy="34" r="3.5"/><circle cx="26" cy="36" r="3.5"/>
+            <circle cx="14" cy="58" r="3.5"/><circle cx="30" cy="56" r="3.5"/>
+          </g>
+          <!-- Belt from cages to main -->
+          <rect x="40" y="32" width="30" height="8" rx="2" fill="oklch(50% 0.03 258 / 0.5)"/>
+          <polygon points="70,36 65,32 65,40" fill="oklch(50% 0.02 258)"/>
+        </g>
+        <g transform="translate(100,80)">
+          <rect x="0" y="0" width="40" height="72" rx="3" fill="oklch(70% 0.02 258 / 0.4)" stroke="oklch(60% 0.02 258 / 0.5)" stroke-width="0.8"/>
+          <line x1="0" y1="24" x2="40" y2="24" stroke="oklch(60% 0.02 258 / 0.3)" stroke-width="0.5"/>
+          <line x1="0" y1="48" x2="40" y2="48" stroke="oklch(60% 0.02 258 / 0.3)" stroke-width="0.5"/>
+          <g fill="oklch(85% 0.02 90)" opacity="0.7">
+            <circle cx="12" cy="10" r="3.5"/><circle cx="28" cy="8" r="3.5"/>
+            <circle cx="10" cy="34" r="3.5"/><circle cx="26" cy="36" r="3.5"/>
+            <circle cx="14" cy="58" r="3.5"/><circle cx="30" cy="56" r="3.5"/>
+          </g>
+          <rect x="40" y="32" width="30" height="8" rx="2" fill="oklch(50% 0.03 258 / 0.5)"/>
+          <polygon points="70,36 65,32 65,40" fill="oklch(50% 0.02 258)"/>
+        </g>
+        <g transform="translate(150,80)">
+          <rect x="0" y="0" width="40" height="72" rx="3" fill="oklch(70% 0.02 258 / 0.4)" stroke="oklch(60% 0.02 258 / 0.5)" stroke-width="0.8"/>
+          <line x1="0" y1="24" x2="40" y2="24" stroke="oklch(60% 0.02 258 / 0.3)" stroke-width="0.5"/>
+          <line x1="0" y1="48" x2="40" y2="48" stroke="oklch(60% 0.02 258 / 0.3)" stroke-width="0.5"/>
+          <g fill="oklch(85% 0.02 90)" opacity="0.7">
+            <circle cx="12" cy="10" r="3.5"/><circle cx="28" cy="8" r="3.5"/>
+            <circle cx="10" cy="34" r="3.5"/><circle cx="26" cy="36" r="3.5"/>
+            <circle cx="14" cy="58" r="3.5"/><circle cx="30" cy="56" r="3.5"/>
+          </g>
+          <rect x="40" y="32" width="30" height="8" rx="2" fill="oklch(50% 0.03 258 / 0.5)"/>
+          <polygon points="70,36 65,32 65,40" fill="oklch(50% 0.02 258)"/>
+        </g>
+        <!-- CAGE ROWS - Galpón 1 (right of main belt) -->
+        <g transform="translate(50,198)">
+          <rect x="0" y="0" width="40" height="72" rx="3" fill="oklch(70% 0.02 258 / 0.4)" stroke="oklch(60% 0.02 258 / 0.5)" stroke-width="0.8"/>
+          <line x1="0" y1="24" x2="40" y2="24" stroke="oklch(60% 0.02 258 / 0.3)" stroke-width="0.5"/>
+          <line x1="0" y1="48" x2="40" y2="48" stroke="oklch(60% 0.02 258 / 0.3)" stroke-width="0.5"/>
+          <g fill="oklch(85% 0.02 90)" opacity="0.7">
+            <circle cx="12" cy="10" r="3.5"/><circle cx="28" cy="8" r="3.5"/>
+            <circle cx="10" cy="34" r="3.5"/><circle cx="26" cy="36" r="3.5"/>
+            <circle cx="14" cy="58" r="3.5"/><circle cx="30" cy="56" r="3.5"/>
+          </g>
+          <rect x="40" y="32" width="30" height="8" rx="2" fill="oklch(50% 0.03 258 / 0.5)"/>
+          <polygon points="70,36 65,32 65,40" fill="oklch(50% 0.02 258)"/>
+        </g>
+        <!-- CAGE ROWS - Galpón 2 -->
+        <g transform="translate(245,80)">
+          <rect x="0" y="0" width="40" height="72" rx="3" fill="oklch(70% 0.02 258 / 0.4)" stroke="oklch(60% 0.02 258 / 0.5)" stroke-width="0.8"/>
+          <line x1="0" y1="24" x2="40" y2="24" stroke="oklch(60% 0.02 258 / 0.3)" stroke-width="0.5"/>
+          <line x1="0" y1="48" x2="40" y2="48" stroke="oklch(60% 0.02 258 / 0.3)" stroke-width="0.5"/>
+          <g fill="oklch(85% 0.02 90)" opacity="0.7">
+            <circle cx="12" cy="10" r="3.5"/><circle cx="28" cy="8" r="3.5"/>
+            <circle cx="10" cy="34" r="3.5"/><circle cx="26" cy="36" r="3.5"/>
+            <circle cx="14" cy="58" r="3.5"/><circle cx="30" cy="56" r="3.5"/>
+          </g>
+          <rect x="40" y="32" width="30" height="8" rx="2" fill="oklch(50% 0.03 258 / 0.5)"/>
+          <polygon points="70,36 65,32 65,40" fill="oklch(50% 0.02 258)"/>
+        </g>
+        <g transform="translate(295,80)">
+          <rect x="0" y="0" width="40" height="72" rx="3" fill="oklch(70% 0.02 258 / 0.4)" stroke="oklch(60% 0.02 258 / 0.5)" stroke-width="0.8"/>
+          <line x1="0" y1="24" x2="40" y2="24" stroke="oklch(60% 0.02 258 / 0.3)" stroke-width="0.5"/>
+          <line x1="0" y1="48" x2="40" y2="48" stroke="oklch(60% 0.02 258 / 0.3)" stroke-width="0.5"/>
+          <g fill="oklch(85% 0.02 90)" opacity="0.7">
+            <circle cx="12" cy="10" r="3.5"/><circle cx="28" cy="8" r="3.5"/>
+            <circle cx="10" cy="34" r="3.5"/><circle cx="26" cy="36" r="3.5"/>
+            <circle cx="14" cy="58" r="3.5"/><circle cx="30" cy="56" r="3.5"/>
+          </g>
+          <rect x="40" y="32" width="30" height="8" rx="2" fill="oklch(50% 0.03 258 / 0.5)"/>
+          <polygon points="70,36 65,32 65,40" fill="oklch(50% 0.02 258)"/>
+        </g>
+        <g transform="translate(345,80)">
+          <rect x="0" y="0" width="40" height="72" rx="3" fill="oklch(70% 0.02 258 / 0.4)" stroke="oklch(60% 0.02 258 / 0.5)" stroke-width="0.8"/>
+          <line x1="0" y1="24" x2="40" y2="24" stroke="oklch(60% 0.02 258 / 0.3)" stroke-width="0.5"/>
+          <line x1="0" y1="48" x2="40" y2="48" stroke="oklch(60% 0.02 258 / 0.3)" stroke-width="0.5"/>
+          <g fill="oklch(85% 0.02 90)" opacity="0.7">
+            <circle cx="12" cy="10" r="3.5"/><circle cx="28" cy="8" r="3.5"/>
+            <circle cx="10" cy="34" r="3.5"/><circle cx="26" cy="36" r="3.5"/>
+            <circle cx="14" cy="58" r="3.5"/><circle cx="30" cy="56" r="3.5"/>
+          </g>
+          <rect x="40" y="32" width="30" height="8" rx="2" fill="oklch(50% 0.03 258 / 0.5)"/>
+          <polygon points="70,36 65,32 65,40" fill="oklch(50% 0.02 258)"/>
+        </g>
+        <g transform="translate(245,198)">
+          <rect x="0" y="0" width="40" height="72" rx="3" fill="oklch(70% 0.02 258 / 0.4)" stroke="oklch(60% 0.02 258 / 0.5)" stroke-width="0.8"/>
+          <line x1="0" y1="24" x2="40" y2="24" stroke="oklch(60% 0.02 258 / 0.3)" stroke-width="0.5"/>
+          <line x1="0" y1="48" x2="40" y2="48" stroke="oklch(60% 0.02 258 / 0.3)" stroke-width="0.5"/>
+          <g fill="oklch(85% 0.02 90)" opacity="0.7">
+            <circle cx="12" cy="10" r="3.5"/><circle cx="28" cy="8" r="3.5"/>
+            <circle cx="10" cy="34" r="3.5"/><circle cx="26" cy="36" r="3.5"/>
+            <circle cx="14" cy="58" r="3.5"/><circle cx="30" cy="56" r="3.5"/>
+          </g>
+          <rect x="40" y="32" width="30" height="8" rx="2" fill="oklch(50% 0.03 258 / 0.5)"/>
+          <polygon points="70,36 65,32 65,40" fill="oklch(50% 0.02 258)"/>
+        </g>
+        <!-- CAGE ROWS - Galpón 3 -->
+        <g transform="translate(438,80)">
+          <rect x="0" y="0" width="40" height="72" rx="3" fill="oklch(70% 0.02 258 / 0.4)" stroke="oklch(60% 0.02 258 / 0.5)" stroke-width="0.8"/>
+          <line x1="0" y1="24" x2="40" y2="24" stroke="oklch(60% 0.02 258 / 0.3)" stroke-width="0.5"/>
+          <line x1="0" y1="48" x2="40" y2="48" stroke="oklch(60% 0.02 258 / 0.3)" stroke-width="0.5"/>
+          <g fill="oklch(85% 0.02 90)" opacity="0.7">
+            <circle cx="12" cy="10" r="3.5"/><circle cx="28" cy="8" r="3.5"/>
+            <circle cx="10" cy="34" r="3.5"/><circle cx="26" cy="36" r="3.5"/>
+            <circle cx="14" cy="58" r="3.5"/><circle cx="30" cy="56" r="3.5"/>
+          </g>
+          <rect x="40" y="32" width="30" height="8" rx="2" fill="oklch(50% 0.03 258 / 0.5)"/>
+          <polygon points="70,36 65,32 65,40" fill="oklch(50% 0.02 258)"/>
+        </g>
+        <g transform="translate(488,80)">
+          <rect x="0" y="0" width="40" height="72" rx="3" fill="oklch(70% 0.02 258 / 0.4)" stroke="oklch(60% 0.02 258 / 0.5)" stroke-width="0.8"/>
+          <line x1="0" y1="24" x2="40" y2="24" stroke="oklch(60% 0.02 258 / 0.3)" stroke-width="0.5"/>
+          <line x1="0" y1="48" x2="40" y2="48" stroke="oklch(60% 0.02 258 / 0.3)" stroke-width="0.5"/>
+          <g fill="oklch(85% 0.02 90)" opacity="0.7">
+            <circle cx="12" cy="10" r="3.5"/><circle cx="28" cy="8" r="3.5"/>
+            <circle cx="10" cy="34" r="3.5"/><circle cx="26" cy="36" r="3.5"/>
+            <circle cx="14" cy="58" r="3.5"/><circle cx="30" cy="56" r="3.5"/>
+          </g>
+          <rect x="40" y="32" width="30" height="8" rx="2" fill="oklch(50% 0.03 258 / 0.5)"/>
+          <polygon points="70,36 65,32 65,40" fill="oklch(50% 0.02 258)"/>
+        </g>
+        <g transform="translate(538,80)">
+          <rect x="0" y="0" width="40" height="72" rx="3" fill="oklch(70% 0.02 258 / 0.4)" stroke="oklch(60% 0.02 258 / 0.5)" stroke-width="0.8"/>
+          <line x1="0" y1="24" x2="40" y2="24" stroke="oklch(60% 0.02 258 / 0.3)" stroke-width="0.5"/>
+          <line x1="0" y1="48" x2="40" y2="48" stroke="oklch(60% 0.02 258 / 0.3)" stroke-width="0.5"/>
+          <g fill="oklch(85% 0.02 90)" opacity="0.7">
+            <circle cx="12" cy="10" r="3.5"/><circle cx="28" cy="8" r="3.5"/>
+            <circle cx="10" cy="34" r="3.5"/><circle cx="26" cy="36" r="3.5"/>
+            <circle cx="14" cy="58" r="3.5"/><circle cx="30" cy="56" r="3.5"/>
+          </g>
+          <rect x="40" y="32" width="30" height="8" rx="2" fill="oklch(50% 0.03 258 / 0.5)"/>
+          <polygon points="70,36 65,32 65,40" fill="oklch(50% 0.02 258)"/>
+        </g>
+        <g transform="translate(438,198)">
+          <rect x="0" y="0" width="40" height="72" rx="3" fill="oklch(70% 0.02 258 / 0.4)" stroke="oklch(60% 0.02 258 / 0.5)" stroke-width="0.8"/>
+          <line x1="0" y1="24" x2="40" y2="24" stroke="oklch(60% 0.02 258 / 0.3)" stroke-width="0.5"/>
+          <line x1="0" y1="48" x2="40" y2="48" stroke="oklch(60% 0.02 258 / 0.3)" stroke-width="0.5"/>
+          <g fill="oklch(85% 0.02 90)" opacity="0.7">
+            <circle cx="12" cy="10" r="3.5"/><circle cx="28" cy="8" r="3.5"/>
+            <circle cx="10" cy="34" r="3.5"/><circle cx="26" cy="36" r="3.5"/>
+            <circle cx="14" cy="58" r="3.5"/><circle cx="30" cy="56" r="3.5"/>
+          </g>
+          <rect x="40" y="32" width="30" height="8" rx="2" fill="oklch(50% 0.03 258 / 0.5)"/>
+          <polygon points="70,36 65,32 65,40" fill="oklch(50% 0.02 258)"/>
+        </g>
+        <!-- CAMERAS - at the end of each galpón -->
+        <!-- Cam 1 - at end of Galpón 1 (x=223) -->
+        <g transform="translate(206,148)">
+          <rect x="0" y="0" width="34" height="24" rx="5" fill="oklch(15% 0.03 258)" stroke="var(--accent)" stroke-width="1.5"/>
+          <circle cx="12" cy="12" r="5" fill="none" stroke="oklch(60% 0.02 258)" stroke-width="1"/>
+          <circle cx="12" cy="12" r="2" fill="var(--accent)"/>
+          <circle cx="28" cy="6" r="2.5" fill="oklch(65% 0.2 145)">
+            <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
+          </circle>
+          <text x="17" y="34" text-anchor="middle" font-size="8" fill="var(--accent)" font-weight="700">CAM 1</text>
+        </g>
+        <!-- Cam 2 - at end of Galpón 2 (x=416) -->
+        <g transform="translate(399,148)">
+          <rect x="0" y="0" width="34" height="24" rx="5" fill="oklch(15% 0.03 258)" stroke="var(--accent)" stroke-width="1.5"/>
+          <circle cx="12" cy="12" r="5" fill="none" stroke="oklch(60% 0.02 258)" stroke-width="1"/>
+          <circle cx="12" cy="12" r="2" fill="var(--accent)"/>
+          <circle cx="28" cy="6" r="2.5" fill="oklch(65% 0.2 145)">
+            <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
+          </circle>
+          <text x="17" y="34" text-anchor="middle" font-size="8" fill="var(--accent)" font-weight="700">CAM 2</text>
+        </g>
+        <!-- Cam 3 - at end of Galpón 3 (x=610) -->
+        <g transform="translate(593,148)">
+          <rect x="0" y="0" width="34" height="24" rx="5" fill="oklch(15% 0.03 258)" stroke="var(--accent)" stroke-width="1.5"/>
+          <circle cx="12" cy="12" r="5" fill="none" stroke="oklch(60% 0.02 258)" stroke-width="1"/>
+          <circle cx="12" cy="12" r="2" fill="var(--accent)"/>
+          <circle cx="28" cy="6" r="2.5" fill="oklch(65% 0.2 145)">
+            <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
+          </circle>
+          <text x="17" y="34" text-anchor="middle" font-size="8" fill="var(--accent)" font-weight="700">CAM 3</text>
+        </g>
+        <!-- Field of view cones for cameras -->
+        <polygon points="220,160 200,188 240,188" fill="oklch(62% 0.15 248 / 0.05)" stroke="oklch(62% 0.15 248 / 0.12)" stroke-width="0.8" stroke-dasharray="3,2"/>
+        <polygon points="413,160 393,188 433,188" fill="oklch(62% 0.15 248 / 0.05)" stroke="oklch(62% 0.15 248 / 0.12)" stroke-width="0.8" stroke-dasharray="3,2"/>
+        <polygon points="607,160 587,188 627,188" fill="oklch(62% 0.15 248 / 0.05)" stroke="oklch(62% 0.15 248 / 0.12)" stroke-width="0.8" stroke-dasharray="3,2"/>
+        <!-- Classifier building -->
+        <g transform="translate(650,130)">
+          <rect x="0" y="0" width="100" height="90" rx="6" fill="oklch(85% 0.02 258)" stroke="var(--accent)" stroke-width="1.5"/>
+          <rect x="20" y="20" width="24" height="24" rx="3" fill="oklch(62% 0.15 248 / 0.1)" stroke="var(--accent)" stroke-width="0.8"/>
+          <rect x="56" y="20" width="24" height="24" rx="3" fill="oklch(62% 0.15 248 / 0.1)" stroke="var(--accent)" stroke-width="0.8"/>
+          <!-- Belt entering classifier -->
+          <rect x="0" y="40" width="20" height="10" rx="3" fill="oklch(40% 0.03 258)" stroke="oklch(50% 0.03 258)" stroke-width="0.5"/>
+          <text x="50" y="75" text-anchor="middle" font-size="9" fill="var(--accent)" font-weight="700">Clasificadora</text>
+        </g>
+        <!-- Starlink -->
+        <g transform="translate(320,305)">
+          <path d="M0 18 Q18 -5 36 18" fill="none" stroke="var(--accent)" stroke-width="2"/>
+          <line x1="18" y1="5" x2="18" y2="35" stroke="oklch(50% 0.02 258)" stroke-width="1.5"/>
+          <rect x="11" y="35" width="14" height="6" rx="1" fill="oklch(60% 0.02 258)" stroke="oklch(50% 0.02 258)" stroke-width="0.5"/>
+          <text x="18" y="52" text-anchor="middle" font-size="9" fill="var(--accent)" font-weight="600">Starlink</text>
+        </g>
+        <!-- Starlink beams -->
+        <line x1="338" y1="300" x2="400" y2="280" stroke="oklch(62% 0.15 248 / 0.1)" stroke-width="1" stroke-dasharray="3,4"/>
+        <line x1="355" y1="290" x2="410" y2="275" stroke="oklch(62% 0.15 248 / 0.15)" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <line x1="350" y1="295" x2="500" y2="275" stroke="oklch(62% 0.15 248 / 0.08)" stroke-width="1" stroke-dasharray="3,4"/>
+        <!-- Cloud icon -->
+        <g transform="translate(520,270)">
+          <path d="M10 20 A8 8 0 0 1 18 13 A10 10 0 0 1 35 13 A8 8 0 0 1 43 20 Z" fill="oklch(100% 0 0 / 0.6)" stroke="var(--accent)" stroke-width="1"/>
+          <text x="26" y="34" text-anchor="middle" font-size="8" fill="var(--accent)" font-weight="700">Nube</text>
+        </g>
+        <!-- Arrow Starlink to cloud -->
+        <line x1="345" y1="295" x2="510" y2="285" stroke="var(--accent)" stroke-width="1" stroke-dasharray="3,3" marker-end="url(#arr)"/>
+        <!-- EggVision Cam label -->
+        <text x="410" y="348" text-anchor="middle" font-size="10" fill="oklch(50% 0.02 258)" letter-spacing="0.5">
+          <tspan font-weight="700" fill="var(--accent)">EggVision Cam</tspan> — 8 MP &middot; IA embebida &middot; PoE &middot; IP65
+        </text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 7: FLUJO ==================== -->
+<section class="slide" data-theme="dark" data-index="6">
+  <div class="slide-inner">
+    <h2 class="animate">Flujo del sistema</h2>
+    <p class="body-lg animate animate-delay-1" style="margin-top:8px;max-width:600px;">
+      Desde la recolección hasta el reporte diario, cada etapa está automatizada.
+    </p>
+    <div class="diagram animate animate-delay-2" style="margin-top:20px;">
+      <svg viewBox="0 0 800 220" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arrow2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M0,0 L10,5 L0,10" fill="oklch(62% 0.15 248)"/>
+          </marker>
+        </defs>
+        <!-- Huevos -->
+        <g transform="translate(20,70)">
+          <ellipse cx="30" cy="20" rx="18" ry="24" fill="oklch(62% 0.15 248 / 0.15)" stroke="var(--accent)" stroke-width="1.5"/>
+          <ellipse cx="30" cy="20" rx="18" ry="24" fill="none" stroke="var(--accent)" stroke-width="1.5"/>
+          <text x="30" y="60" text-anchor="middle" font-size="11" fill="currentColor">Huevos</text>
+        </g>
+        <path d="M70 90 L130 90" stroke="var(--accent)" stroke-width="2" marker-end="url(#arrow2)"/>
+        <!-- Banda -->
+        <g transform="translate(140,70)">
+          <rect x="0" y="0" width="100" height="40" rx="8" fill="oklch(0% 0 0 / 0.2)" stroke="var(--accent)" stroke-width="1.5"/>
+          <text x="50" y="25" text-anchor="middle" font-size="12" fill="currentColor" font-weight="500">Banda principal</text>
+        </g>
+        <path d="M240 90 L300 90" stroke="var(--accent)" stroke-width="2" marker-end="url(#arrow2)"/>
+        <!-- Galpones column -->
+        <g transform="translate(310,10)">
+          <rect x="0" y="0" width="100" height="32" rx="6" fill="oklch(62% 0.15 248 / 0.2)" stroke="var(--accent)" stroke-width="1"/>
+          <text x="50" y="21" text-anchor="middle" font-size="11" fill="currentColor">Galpón 1</text>
+          <rect x="0" y="42" width="100" height="32" rx="6" fill="oklch(62% 0.15 248 / 0.2)" stroke="var(--accent)" stroke-width="1"/>
+          <text x="50" y="63" text-anchor="middle" font-size="11" fill="currentColor">Galpón 2</text>
+          <rect x="0" y="84" width="100" height="32" rx="6" fill="oklch(62% 0.15 248 / 0.2)" stroke="var(--accent)" stroke-width="1"/>
+          <text x="50" y="105" text-anchor="middle" font-size="11" fill="currentColor">Galpón 3</text>
+        </g>
+        <path d="M410 90 L460 90" stroke="var(--accent)" stroke-width="2" marker-end="url(#arrow2)"/>
+        <!-- Cámara IA -->
+        <g transform="translate(470,65)">
+          <rect x="0" y="0" width="120" height="50" rx="10" fill="oklch(62% 0.15 248 / 0.15)" stroke="var(--accent)" stroke-width="1.5"/>
+          <rect x="40" y="8" width="32" height="24" rx="4" fill="none" stroke="var(--accent)" stroke-width="1.5"/>
+          <circle cx="56" cy="20" r="5" fill="none" stroke="var(--accent)" stroke-width="1.5"/>
+          <text x="60" y="46" text-anchor="middle" font-size="11" fill="currentColor">Cámara IA</text>
+        </g>
+        <path d="M590 90 L640 90" stroke="var(--accent)" stroke-width="2" marker-end="url(#arrow2)"/>
+        <!-- Software EggVision -->
+        <g transform="translate(650,55)">
+          <rect x="0" y="0" width="130" height="70" rx="12" fill="oklch(0% 0 0 / 0.25)" stroke="var(--accent)" stroke-width="2"/>
+          <text x="65" y="32" text-anchor="middle" font-size="13" fill="var(--accent)" font-weight="700">EggVision</text>
+          <text x="65" y="50" text-anchor="middle" font-size="10" opacity="0.7" fill="currentColor">Software</text>
+          <text x="65" y="62" text-anchor="middle" font-size="9" opacity="0.5" fill="currentColor">Conteo + clasificación</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 8: ARQUITECTURA ==================== -->
+<section class="slide" data-theme="light" data-index="7">
+  <div class="slide-inner">
+    <h2 class="animate">Arquitectura cloud</h2>
+    <p class="body-lg animate animate-delay-1" style="margin-top:8px;max-width:650px;">
+      Infraestructura serverless para procesamiento batch nocturno y almacenamiento de datos.
+    </p>
+    <div class="arch-grid animate animate-delay-2" style="margin-top:28px;">
+      <div class="arch-card card">
+        <svg><use href="#icon-box"/></svg>
+        <h4>S3</h4>
+        <p>Almacenamiento de frames enviados desde las cámaras</p>
+      </div>
+      <div class="arch-card card">
+        <svg><use href="#icon-database"/></svg>
+        <h4>SQS</h4>
+        <p>Cola de mensajes para encolar fotos pendientes de procesar</p>
+      </div>
+      <div class="arch-card card">
+        <svg><use href="#icon-cloud"/></svg>
+        <h4>Lambda</h4>
+        <p>Función serverless de predicción y clasificación por IA</p>
+      </div>
+      <div class="arch-card card">
+        <svg><use href="#icon-database"/></svg>
+        <h4>Ubidots</h4>
+        <p>Almacenamiento y visualización de datos productivos</p>
+      </div>
+      <div class="arch-card card">
+        <svg><use href="#icon-report"/></svg>
+        <h4>Cerberus</h4>
+        <p>Gestión de configuraciones y parámetros del sistema</p>
+      </div>
+      <div class="arch-card card">
+        <svg><use href="#icon-network"/></svg>
+        <h4>Balena</h4>
+        <p>Actualizaciones OTA, firmware y monitoreo de conectividad</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 9: PROCESAMIENTO ==================== -->
+<section class="slide" data-theme="dark" data-index="8">
+  <div class="slide-inner">
+    <h2 class="animate">Procesamiento diario</h2>
+    <div style="display:flex;gap:40px;margin-top:24px;flex-wrap:wrap;">
+      <div style="flex:1;min-width:260px;">
+        <div class="card animate animate-delay-1" style="text-align:center;padding:32px 24px;">
+          <svg width="40" height="40" stroke="var(--accent)" fill="none" stroke-width="1.5"><use href="#icon-camera"/></svg>
+          <h4 style="margin-top:12px;">Durante el día</h4>
+          <p class="body-sm" style="margin-top:8px;opacity:0.7;">
+            Conteo local en el edge de la cámara. Cada huevo se registra y los frames se almacenan para procesamiento nocturno.
+          </p>
+        </div>
+      </div>
+      <div style="flex:1;min-width:260px;">
+        <div class="card animate animate-delay-3" style="text-align:center;padding:32px 24px;">
+          <svg width="40" height="40" stroke="var(--accent)" fill="none" stroke-width="1.5"><use href="#icon-cloud"/></svg>
+          <h4 style="margin-top:12px;">Al cierre del día</h4>
+          <p class="body-sm" style="margin-top:8px;opacity:0.7;">
+            Los frames se envían a la nube (S3) y se encolan (SQS) para clasificación batch mediante Lambda.
+          </p>
+        </div>
+      </div>
+      <div style="flex:1;min-width:260px;">
+        <div class="card animate animate-delay-5" style="text-align:center;padding:32px 24px;">
+          <svg width="40" height="40" stroke="var(--accent)" fill="none" stroke-width="1.5"><use href="#icon-report"/></svg>
+          <h4 style="margin-top:12px;">Día siguiente</h4>
+          <p class="body-sm" style="margin-top:8px;opacity:0.7;">
+            Dashboard actualizado con los resultados del día anterior: conteo y clasificación por galpón.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 10: DASHBOARD ==================== -->
+<section class="slide" data-theme="light" data-index="9">
+  <div class="slide-inner">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;">
+      <h2 class="animate">Dashboard</h2>
+      <p class="body-sm animate animate-delay-1" style="opacity:0.5;">Producción de ayer &mdash; 01 jul 2026</p>
+    </div>
+    <div class="dashboard-grid animate animate-delay-2" style="margin-top:16px;">
+      <div class="galpon-card card">
+        <h4>Galpón 1</h4>
+        <div class="size-row"><span>A</span><span>1,230</span></div>
+        <div class="size-row"><span>AA</span><span>2,450</span></div>
+        <div class="size-row"><span>AAA</span><span>3,100</span></div>
+        <div class="size-row"><span>B</span><span>890</span></div>
+        <div class="size-row"><span>C</span><span>420</span></div>
+        <div class="total">Total: 8,090</div>
+      </div>
+      <div class="galpon-card card">
+        <h4>Galpón 2</h4>
+        <div class="size-row"><span>A</span><span>980</span></div>
+        <div class="size-row"><span>AA</span><span>2,120</span></div>
+        <div class="size-row"><span>AAA</span><span>2,870</span></div>
+        <div class="size-row"><span>B</span><span>760</span></div>
+        <div class="size-row"><span>C</span><span>350</span></div>
+        <div class="total">Total: 7,080</div>
+      </div>
+      <div class="galpon-card card">
+        <h4>Galpón 3</h4>
+        <div class="size-row"><span>A</span><span>1,450</span></div>
+        <div class="size-row"><span>AA</span><span>2,680</span></div>
+        <div class="size-row"><span>AAA</span><span>3,420</span></div>
+        <div class="size-row"><span>B</span><span>1,020</span></div>
+        <div class="size-row"><span>C</span><span>510</span></div>
+        <div class="total">Total: 9,080</div>
+      </div>
+      <div class="chart-placeholder card">
+        <p class="body-sm" style="margin-bottom:8px;opacity:0.5;">Producción diaria &mdash; últimos 7 días</p>
+        <svg viewBox="0 0 600 100" xmlns="http://www.w3.org/2000/svg">
+          <rect x="15" y="60" width="60" height="35" rx="3" fill="oklch(62% 0.15 248 / 0.35)"/>
+          <rect x="95" y="40" width="60" height="55" rx="3" fill="oklch(62% 0.15 248 / 0.45)"/>
+          <rect x="175" y="50" width="60" height="45" rx="3" fill="oklch(62% 0.15 248 / 0.4)"/>
+          <rect x="255" y="30" width="60" height="65" rx="3" fill="oklch(62% 0.15 248 / 0.55)"/>
+          <rect x="335" y="45" width="60" height="50" rx="3" fill="oklch(62% 0.15 248 / 0.45)"/>
+          <rect x="415" y="20" width="60" height="75" rx="3" fill="oklch(62% 0.15 248 / 0.6)"/>
+          <rect x="495" y="10" width="60" height="85" rx="3" fill="var(--accent)"/>
+        </svg>
+        <div style="display:flex;justify-content:space-between;font-size:10px;opacity:0.5;">
+          <span>lun</span><span>mar</span><span>mié</span><span>jue</span><span>vie</span><span>sáb</span><span>dom</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 11: SOFTWARE ==================== -->
+<section class="slide" data-theme="dark" data-index="10">
+  <div class="slide-inner">
+    <h2 class="animate">Software EggVision</h2>
+    <p class="body-lg animate animate-delay-1" style="margin-top:8px;max-width:600px;">
+      Plataforma completa para gestión de la producción de huevos por galpón.
+    </p>
+    <div class="software-grid animate animate-delay-2" style="margin-top:32px;">
+      <div class="soft-card card">
+        <svg><use href="#icon-camera"/></svg>
+        <h4>Conteo automático</h4>
+        <p class="body-sm" style="margin-top:6px;opacity:0.7;">Registro de cada huevo en tiempo real durante la operación</p>
+      </div>
+      <div class="soft-card card">
+        <svg><use href="#icon-weight"/></svg>
+        <h4>Clasificación por tamaño</h4>
+        <p class="body-sm" style="margin-top:6px;opacity:0.7;">Categorización precisa A, AA, AAA, B, C mediante IA</p>
+      </div>
+      <div class="soft-card card">
+        <svg><use href="#icon-chart"/></svg>
+        <h4>Estadísticas por galpón</h4>
+        <p class="body-sm" style="margin-top:6px;opacity:0.7;">Métricas detalladas de productividad por lote</p>
+      </div>
+      <div class="soft-card card">
+        <svg><use href="#icon-report"/></svg>
+        <h4>Reportes diarios</h4>
+        <p class="body-sm" style="margin-top:6px;opacity:0.7;">Informes automáticos con datos del día anterior</p>
+      </div>
+      <div class="soft-card card">
+        <svg><use href="#icon-export"/></svg>
+        <h4>Exportación de datos</h4>
+        <p class="body-sm" style="margin-top:6px;opacity:0.7;">Descarga en CSV y Excel para análisis externo</p>
+      </div>
+      <div class="soft-card card">
+        <svg><use href="#icon-history"/></svg>
+        <h4>Historial de producción</h4>
+        <p class="body-sm" style="margin-top:6px;opacity:0.7;">Tendencia histórica por galpón y por tamaño</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 12: CIERRE ==================== -->
+<section class="slide cierre" data-theme="light" data-index="11">
+  <div class="slide-inner">
+    <div class="animate">
+      <img src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=460&height=132&name=logo-AX-Asimetrix-unlocking-the-power-of-data.webp" alt="Asimetrix" height="60">
+    </div>
+    <h1 class="animate animate-delay-1" style="margin-top:16px;">EggVision</h1>
+    <p class="subtitle animate animate-delay-2">Trazabilidad inteligente en la postura</p>
+    <div style="display:flex;justify-content:center;gap:40px;flex-wrap:wrap;margin-top:40px;">
+      <div class="card animate animate-delay-3" style="padding:20px 32px;min-width:160px;text-align:center;">
+        <svg width="28" height="28" stroke="var(--accent)" fill="none" stroke-width="1.5"><use href="#icon-check"/></svg>
+        <p class="body-sm" style="margin-top:8px;font-weight:500;">+15% trazabilidad</p>
+      </div>
+      <div class="card animate animate-delay-4" style="padding:20px 32px;min-width:160px;text-align:center;">
+        <svg width="28" height="28" stroke="var(--accent)" fill="none" stroke-width="1.5"><use href="#icon-check"/></svg>
+        <p class="body-sm" style="margin-top:8px;font-weight:500;">Reporte diario</p>
+      </div>
+      <div class="card animate animate-delay-5" style="padding:20px 32px;min-width:160px;text-align:center;">
+        <svg width="28" height="28" stroke="var(--accent)" fill="none" stroke-width="1.5"><use href="#icon-check"/></svg>
+        <p class="body-sm" style="margin-top:8px;font-weight:500;">Datos por galpón</p>
+      </div>
+    </div>
+    <p class="body-sm animate animate-delay-6" style="margin-top:48px;opacity:0.4;letter-spacing:2px;text-transform:uppercase;">
+      Una solución de <img src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=460&height=132&name=logo-AX-Asimetrix-unlocking-the-power-of-data.webp" alt="Asimetrix" height="18" style="vertical-align:middle;margin-left:4px;filter:brightness(0);">
+    </p>
+  </div>
+</section>
+
+<script>
+(function(){
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.getElementById('nav');
+  const progress = document.getElementById('progress');
+  const logo = document.getElementById('logo-ax-fixed');
+  const fullBtn = document.getElementById('fullscreen-btn');
+  let current = 0;
+  const total = slides.length;
+
+  // Build navigation dots
+  for (let i = 0; i < total; i++) {
+    const dot = document.createElement('button');
+    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', 'Ir a diapositiva ' + (i + 1));
+    dot.addEventListener('click', () => goTo(i));
+    dots.appendChild(dot);
+  }
+
+  function updateFullscreenBtn(dark) {
+    fullBtn.style.color = dark ? '#fff' : '#050B49';
+  }
+
+  function goTo(index) {
+    if (index < 0) index = 0;
+    if (index >= total) index = total - 1;
+    if (index === current) return;
+
+    // Matrix transition from slide 0 to 1
+    if (current === 0 && index === 1) {
+      triggerMatrixTransition(() => {
+        doGoTo(index);
+      });
+      return;
+    }
+    if (current === 1 && index === 0) {
+      doGoTo(index);
+      return;
+    }
+
+    doGoTo(index);
+  }
+
+  function doGoTo(index) {
+    slides.forEach((s, i) => {
+      s.classList.toggle('active', i === index);
+    });
+
+    document.querySelectorAll('.nav-dot').forEach((d, i) => {
+      d.classList.toggle('active', i === index);
+    });
+
+    progress.style.width = ((index + 1) / total * 100) + '%';
+
+    const theme = slides[index].dataset.theme;
+    logo.className = 'logo' + (theme === 'light' ? ' light-logo' : '');
+    updateFullscreenBtn(theme === 'dark');
+
+    current = index;
+
+    // Animate elements in the current slide
+    const anims = slides[index].querySelectorAll('.animate');
+    anims.forEach(el => el.classList.remove('visible'));
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        anims.forEach(el => el.classList.add('visible'));
+      });
+    });
+  }
+
+  function triggerMatrixTransition(callback) {
+    const overlay = document.getElementById('matrix-overlay');
+    const mascota = document.getElementById('matrix-mascota');
+    const scanGlow = document.getElementById('scan-glow');
+    const scanLines = document.getElementById('scan-lines');
+
+    // Clean previous
+    document.querySelectorAll('.matrix-col').forEach(el => el.remove());
+    mascota.style.transition = 'none';
+    mascota.style.transform = 'scale(0.6)';
+    mascota.style.opacity = '0';
+    scanGlow.style.animation = 'none';
+    scanLines.querySelector('::before') && scanLines.querySelector('::before').style.animation;
+
+    // Show overlay
+    overlay.style.display = 'flex';
+    requestAnimationFrame(() => {
+      overlay.classList.add('show');
+      overlay.classList.add('active');
+    });
+
+    // Step 1: show mascota (0ms)
+    setTimeout(() => {
+      mascota.style.transition = 'transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s';
+      mascota.style.transform = 'scale(1.1)';
+      mascota.style.opacity = '1';
+    }, 50);
+
+    // Step 2: scan + glow + matrix rain (650ms)
+    setTimeout(() => {
+      // Reset animations
+      scanGlow.style.animation = 'none';
+      void scanGlow.offsetWidth;
+      scanGlow.style.animation = 'glowSweep 0.8s cubic-bezier(0.25, 0, 0.3, 1) forwards';
+
+      // Spawn matrix rain
+      spawnMatrixRain(overlay);
+    }, 650);
+
+    // Step 3: dissolve (1350ms)
+    setTimeout(() => {
+      mascota.style.transition = 'transform 0.55s ease-out, opacity 0.55s ease-out';
+      mascota.style.transform = 'scale(1.6)';
+      mascota.style.opacity = '0';
+    }, 1350);
+
+    // Step 4: switch slide under overlay, then reveal (1900ms)
+    setTimeout(() => {
+      document.querySelectorAll('.matrix-col').forEach(el => el.remove());
+      callback();
+      overlay.classList.remove('show');
+      overlay.classList.remove('active');
+      overlay.style.display = 'none';
+      mascota.style.transform = 'scale(0.6)';
+      mascota.style.opacity = '0';
+    }, 1950);
+  }
+
+  function spawnMatrixRain(container) {
+    const cols = Math.floor(window.innerWidth / 18);
+    const chars = 'アイウエオカキクケコサシスセソタチツテト0123456789ABCDEF';
+    for (let i = 0; i < cols; i++) {
+      const col = document.createElement('div');
+      col.className = 'matrix-col';
+      col.style.left = (i * 18) + 'px';
+      col.style.opacity = (0.15 + Math.random() * 0.35).toString();
+      let text = '';
+      for (let j = 0; j < 60; j++) text += chars[Math.floor(Math.random() * chars.length)];
+      col.textContent = text;
+      container.appendChild(col);
+    }
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
+      e.preventDefault();
+      goTo(current + 1);
+    } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+      e.preventDefault();
+      goTo(current - 1);
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      goTo(0);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      goTo(total - 1);
+    }
+  });
+
+  // Scroll navigation
+  let scrollLock = false;
+  document.addEventListener('wheel', (e) => {
+    if (scrollLock) return;
+    scrollLock = true;
+    setTimeout(() => { scrollLock = false; }, 800);
+
+    if (e.deltaY > 0) goTo(current + 1);
+    else goTo(current - 1);
+  }, { passive: true });
+
+  // Touch support
+  let touchStartY = 0;
+  document.addEventListener('touchstart', (e) => {
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  document.addEventListener('touchend', (e) => {
+    const diff = touchStartY - e.changedTouches[0].clientY;
+    if (Math.abs(diff) > 30) {
+      if (diff > 0) goTo(current + 1);
+      else goTo(current - 1);
+    }
+  }, { passive: true });
+
+  // Fullscreen button adaptation
+  function adaptFullscreenBtn() {
+    const theme = slides[current].dataset.theme;
+    updateFullscreenBtn(theme === 'dark');
+  }
+  adaptFullscreenBtn();
+
+  // Init
+  goTo(0);
+
+  // Fix for fullscreen button color on initial load
+  window.addEventListener('load', () => {
+    setTimeout(() => adaptFullscreenBtn(), 100);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taller de configuración PigVision — Asimetrix</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --primary: oklch(16% 0.045 258);
+  --secondary: oklch(32% 0.065 240);
+  --accent: oklch(58% 0.175 258);
+  --aqua: oklch(75% 0.145 195);
+  --aqua-muted: oklch(70% 0.08 210);
+  --success: var(--accent);
+  --error: oklch(48% 0.23 25);
+  --warning: oklch(88% 0.175 95);
+  --light-bg: oklch(97% 0.005 258);
+  --dark-bg: oklch(12% 0.04 258);
+  --text-dark: oklch(16% 0.04 258);
+  --text-light: oklch(92% 0.01 258);
+  --font: 'Roboto', sans-serif;
+  --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font);
+  background: var(--dark-bg);
+  color: var(--text-dark);
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+}
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 1000;
+  mix-blend-mode: overlay;
+}
+#progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 3px;
+  background: var(--accent);
+  width: 0%;
+  z-index: 999;
+  transition: width 0.6s var(--ease-smooth);
+  box-shadow: 0 0 8px oklch(58% 0.175 258 / 0.4);
+}
+#fullscreen-btn {
+  position: fixed;
+  top: 16px; right: 16px;
+  z-index: 998;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: background 0.3s;
+  color: var(--text-dark);
+}
+#fullscreen-btn:hover { background: oklch(0% 0 0 / 0.06); }
+#fullscreen-btn svg { width: 24px; height: 24px; display: block; }
+#fullscreen-btn.light { color: var(--text-dark); }
+#fullscreen-btn.dark { color: var(--text-light); }
+#nav-bullets {
+  position: fixed;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 997;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.nav-bullet {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid var(--accent);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.4s var(--ease-smooth);
+}
+.nav-bullet.active {
+  background: var(--accent);
+  box-shadow: 0 0 8px oklch(58% 0.175 258 / 0.6);
+  transform: scale(1.3);
+}
+.nav-bullet.light { border-color: oklch(58% 0.175 258 / 0.4); }
+.nav-bullet.dark { border-color: oklch(92% 0.01 258 / 0.4); }
+.nav-bullet.dark.active { border-color: var(--accent); }
+.slide {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 80px;
+  overflow: hidden;
+}
+.slide.active { display: flex; }
+.slide.dark {
+  background: var(--dark-bg);
+  color: var(--text-light);
+}
+.slide.light {
+  background: var(--light-bg);
+  color: var(--text-dark);
+}
+.slide-content {
+  max-width: 1100px;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+.logo-corner {
+  position: absolute;
+  bottom: 32px;
+  right: 40px;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.logo-corner img { height: 22px; }
+.logo-corner .dark-logo { display: none; }
+.logo-corner .light-logo { display: block; }
+.slide.dark .logo-corner .dark-logo { display: block; }
+.slide.dark .logo-corner .light-logo { display: none; }
+.slide.light .logo-corner .dark-logo { display: none; }
+.slide.light .logo-corner .light-logo { display: block; filter: brightness(0); }
+.slide.light .logo-corner .light-logo.pv-logo { filter: brightness(0) saturate(1); }
+.animate {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.7s var(--ease-smooth);
+}
+.slide.active .animate {
+  opacity: 1;
+  transform: translateY(0);
+}
+.animate-delay-1 { transition-delay: 0.1s; }
+.animate-delay-2 { transition-delay: 0.2s; }
+.animate-delay-3 { transition-delay: 0.3s; }
+.animate-delay-4 { transition-delay: 0.4s; }
+.animate-delay-5 { transition-delay: 0.5s; }
+.animate-delay-6 { transition-delay: 0.6s; }
+.animate-delay-7 { transition-delay: 0.7s; }
+.animate-delay-8 { transition-delay: 0.8s; }
+
+h1 { font-size: 56px; font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; }
+h2 { font-size: 44px; font-weight: 700; line-height: 1.2; letter-spacing: -0.01em; }
+h3 { font-size: 32px; font-weight: 700; line-height: 1.25; }
+h4 { font-size: 22px; font-weight: 500; line-height: 1.3; }
+p, li { font-size: 18px; line-height: 1.6; font-weight: 400; }
+p.small, li.small { font-size: 16px; }
+.tag {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  padding: 6px 16px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.accent-text { color: var(--accent); }
+.aqua-text { color: var(--aqua); }
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.gap-4 { gap: 16px; }
+.gap-6 { gap: 24px; }
+.gap-8 { gap: 32px; }
+.gap-10 { gap: 40px; }
+.text-center { text-align: center; }
+.mt-4 { margin-top: 16px; }
+.mt-6 { margin-top: 24px; }
+.mt-8 { margin-top: 32px; }
+.mb-4 { margin-bottom: 16px; }
+.mb-6 { margin-bottom: 24px; }
+.w-full { width: 100%; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
+.grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 20px; }
+
+.card {
+  background: oklch(0% 0 0 / 0.04);
+  border-radius: 16px;
+  padding: 28px;
+  transition: all 0.4s var(--ease-smooth);
+  border: 1px solid oklch(0% 0 0 / 0.06);
+}
+.slide.dark .card {
+  background: oklch(100% 0 0 / 0.05);
+  border-color: oklch(100% 0 0 / 0.08);
+}
+.card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px oklch(0% 0 0 / 0.1); }
+.card-icon { width: 40px; height: 40px; margin-bottom: 16px; color: var(--accent); }
+.card-icon svg { width: 100%; height: 100%; }
+.card h4 { margin-bottom: 8px; }
+.card p { font-size: 15px; line-height: 1.5; opacity: 0.85; }
+
+/* Portada */
+#slide-0 {
+  position: relative;
+}
+#slide-0 .bg-accent-circle {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, oklch(32% 0.065 240 / 0.15), transparent 70%);
+  top: -200px;
+  right: -200px;
+  z-index: 1;
+}
+#slide-0 .bg-accent-circle-2 {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, oklch(58% 0.175 258 / 0.08), transparent 70%);
+  bottom: -100px;
+  left: -100px;
+  z-index: 1;
+}
+.logos-portada {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 40px;
+}
+.logos-portada img { height: 36px; }
+.logos-portada .divider {
+  width: 1px;
+  height: 40px;
+  background: oklch(100% 0 0 / 0.2);
+}
+.portada-date {
+  font-size: 16px;
+  opacity: 0.6;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-top: 24px;
+}
+.portada-presenters {
+  margin-top: 12px;
+  font-size: 18px;
+  opacity: 0.8;
+}
+
+/* Agenda */
+.agenda-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 16px 20px;
+  border-radius: 12px;
+  background: oklch(0% 0 0 / 0.03);
+  border: 1px solid oklch(0% 0 0 / 0.06);
+  transition: all 0.3s var(--ease-smooth);
+}
+.slide.dark .agenda-item {
+  background: oklch(100% 0 0 / 0.04);
+  border-color: oklch(100% 0 0 / 0.07);
+}
+.agenda-item:hover { transform: translateX(6px); }
+.agenda-num {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+.agenda-item h4 { font-size: 18px; margin-bottom: 2px; }
+.agenda-item p { font-size: 14px; opacity: 0.7; }
+
+/* Persona card */
+.persona-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 24px;
+}
+.persona-col {
+  background: oklch(0% 0 0 / 0.03);
+  border-radius: 16px;
+  padding: 24px;
+  border: 1px solid oklch(0% 0 0 / 0.06);
+}
+.slide.light .persona-col { background: oklch(0% 0 0 / 0.02); }
+.persona-col h4 {
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.6;
+  margin-bottom: 12px;
+}
+.persona-col ul { list-style: none; }
+.persona-col ul li {
+  font-size: 15px;
+  padding: 6px 0;
+  position: relative;
+  padding-left: 20px;
+}
+.persona-col ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 14px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.5;
+}
+
+/* Instrucciones */
+.instructions-list {
+  counter-reset: step;
+  list-style: none;
+}
+.instructions-list li {
+  counter-increment: step;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 12px 0;
+  font-size: 17px;
+  border-bottom: 1px solid oklch(0% 0 0 / 0.06);
+}
+.slide.dark .instructions-list li {
+  border-bottom-color: oklch(100% 0 0 / 0.08);
+}
+.instructions-list li::before {
+  content: counter(step);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Timer */
+.timer-container {
+  text-align: center;
+}
+.timer-display {
+  font-size: 120px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+  line-height: 1;
+  margin: 20px 0;
+}
+.slide.light .timer-display { color: var(--primary); }
+.timer-controls {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 24px;
+}
+.timer-btn {
+  padding: 12px 32px;
+  border-radius: 100px;
+  border: none;
+  font-family: var(--font);
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-smooth);
+}
+.timer-btn.primary {
+  background: var(--accent);
+  color: #fff;
+}
+.timer-btn.primary:hover { transform: scale(1.04); box-shadow: 0 8px 24px oklch(58% 0.175 258 / 0.3); }
+.timer-btn.secondary {
+  background: oklch(0% 0 0 / 0.06);
+  color: inherit;
+}
+.slide.dark .timer-btn.secondary { background: oklch(100% 0 0 / 0.1); color: var(--text-light); }
+.timer-btn.secondary:hover { background: oklch(0% 0 0 / 0.1); }
+.slide.dark .timer-btn.secondary:hover { background: oklch(100% 0 0 / 0.15); }
+.timer-label { font-size: 18px; opacity: 0.7; margin-bottom: 8px; }
+
+/* Miro card */
+.miro-card {
+  background: oklch(0% 0 0 / 0.03);
+  border-radius: 16px;
+  padding: 32px;
+  border: 1px solid oklch(0% 0 0 / 0.06);
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+.slide.dark .miro-card {
+  background: oklch(100% 0 0 / 0.04);
+  border-color: oklch(100% 0 0 / 0.07);
+}
+.miro-icon {
+  width: 56px; height: 56px;
+  flex-shrink: 0;
+  background: var(--accent);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.miro-icon svg { width: 28px; height: 28px; color: #fff; }
+.miro-card h4 { margin-bottom: 8px; }
+.miro-card ul { list-style: none; }
+.miro-card ul li {
+  font-size: 15px;
+  padding: 4px 0;
+  padding-left: 18px;
+  position: relative;
+}
+.miro-card ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 12px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+/* Hallazgos grid */
+.hallazgos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.hallazgo-card {
+  padding: 24px;
+  border-radius: 12px;
+  background: oklch(0% 0 0 / 0.03);
+  border: 1px solid oklch(0% 0 0 / 0.06);
+}
+.slide.dark .hallazgo-card {
+  background: oklch(100% 0 0 / 0.04);
+  border-color: oklch(100% 0 0 / 0.07);
+}
+.hallazgo-card h4 { font-size: 18px; margin-bottom: 6px; }
+.hallazgo-card p { font-size: 15px; opacity: 0.8; }
+
+/* Matrix transition overlay */
+#matrix-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1001;
+  background: oklch(6% 0.03 258);
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-smooth);
+}
+#matrix-overlay.show { display: flex; opacity: 1; }
+#matrix-overlay .mascot {
+  width: 200px;
+  height: auto;
+  transform: scale(0.6);
+  transition: all 0.65s var(--ease-smooth);
+  z-index: 2;
+  position: relative;
+}
+#matrix-overlay .mascot.scale { transform: scale(1.1); }
+#matrix-overlay .mascot.fade-out {
+  transform: scale(1.6);
+  opacity: 0;
+}
+#scan-lines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+#scan-lines::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(180deg,
+    oklch(75% 0.22 145 / 0) 0px,
+    oklch(75% 0.22 145 / 0.12) 1px,
+    oklch(75% 0.22 145 / 0) 3px,
+    oklch(75% 0.22 145 / 0) 6px);
+  animation: scanSweep 0.8s var(--ease-smooth) forwards;
+  top: -100%;
+}
+#scan-glow {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: oklch(80% 0.25 145);
+  box-shadow: 0 0 30px 10px oklch(70% 0.22 145 / 0.5),
+              0 0 80px 20px oklch(60% 0.18 145 / 0.25);
+  animation: glowSweep 0.8s var(--ease-smooth) forwards;
+  top: -10px;
+  z-index: 3;
+}
+.matrix-col {
+  position: absolute;
+  top: 0;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  color: oklch(75% 0.22 145);
+  text-shadow: 0 0 8px oklch(65% 0.2 145 / 0.8);
+  writing-mode: vertical-lr;
+  text-orientation: upright;
+  z-index: 1;
+  pointer-events: none;
+  animation: matrixFall 1.5s linear forwards;
+}
+@keyframes scanSweep { from { top: -100%; } to { top: 100%; } }
+@keyframes glowSweep { from { top: -10px; } to { top: 100%; } }
+@keyframes matrixFall { from { transform: translateY(-100%); } to { transform: translateY(0); } }
+
+@media (max-width: 768px) {
+  .slide { padding: 40px 24px; }
+  h1 { font-size: 32px; }
+  h2 { font-size: 28px; }
+  h3 { font-size: 24px; }
+  p, li { font-size: 16px; }
+  .grid-2, .persona-card, .hallazgos-grid { grid-template-columns: 1fr; }
+  .grid-3 { grid-template-columns: 1fr; }
+  .grid-4 { grid-template-columns: 1fr 1fr; }
+  .timer-display { font-size: 72px; }
+  .logos-portada img { height: 24px; }
+  #nav-bullets { right: 12px; gap: 8px; }
+  .nav-bullet { width: 8px; height: 8px; }
+}
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<button id="fullscreen-btn" class="dark" onclick="toggleFullscreen()" aria-label="Pantalla completa">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/>
+  </svg>
+</button>
+<div id="nav-bullets"></div>
+
+<div id="matrix-overlay">
+  <div id="scan-lines"></div>
+  <div id="scan-glow"></div>
+  <img class="mascot" src="https://asimetrix.co/hubfs/AX%20-%20Pv%20con%20cerdo.png" alt="PigVision mascot">
+</div>
+
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="icon-camera" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+    <circle cx="12" cy="13" r="4"/>
+  </symbol>
+  <symbol id="icon-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+  </symbol>
+  <symbol id="icon-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+  </symbol>
+  <symbol id="icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+  </symbol>
+  <symbol id="icon-miro" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="3" x2="9" y2="21"/>
+  </symbol>
+  <symbol id="icon-batch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+  </symbol>
+  <symbol id="icon-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+  </symbol>
+  <symbol id="icon-lightbulb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 18h6M10 22h4M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/>
+  </symbol>
+  <symbol id="icon-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+  </symbol>
+  <symbol id="icon-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+  </symbol>
+  <symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="20 6 9 17 4 12"/>
+  </symbol>
+  <symbol id="icon-pig" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="10" r="8"/><circle cx="9" cy="8" r="1" fill="currentColor"/><circle cx="15" cy="8" r="1" fill="currentColor"/><path d="M12 14a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/><path d="M4 10c-1.5 0-3 1-2 3s2.5 1 3 0"/><path d="M20 10c1.5 0 3 1 2 3s-2.5 1-3 0"/>
+  </symbol>
+</svg>
+
+<!-- ===== SLIDE 0: PORTADA ===== -->
+<section class="slide dark active" id="slide-0" data-theme="dark" data-index="0">
+  <div class="bg-accent-circle"></div>
+  <div class="bg-accent-circle-2"></div>
+  <div class="slide-content text-center">
+    <div class="logos-portada justify-center animate">
+      <img src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=260&height=75" alt="Asimetrix" style="filter:brightness(0) invert(1);">
+      <span class="divider"></span>
+      <svg width="140" height="36" viewBox="0 0 140 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="2" width="32" height="32" rx="8" fill="oklch(75% 0.145 195)" stroke="oklch(75% 0.145 195)" stroke-width="2"/>
+        <circle cx="18" cy="18" r="6" fill="oklch(12% 0.04 258)"/>
+        <circle cx="14" cy="14" r="1.5" fill="oklch(92% 0.01 258)"/>
+        <circle cx="22" cy="14" r="1.5" fill="oklch(92% 0.01 258)"/>
+        <ellipse cx="18" cy="21" rx="4" ry="2" fill="oklch(12% 0.04 258)"/>
+        <path d="M42 20h12v2H42z" fill="oklch(92% 0.01 258)"/>
+        <path d="M42 14h10v2H42z" fill="oklch(75% 0.145 195)"/>
+        <path d="M42 26h8v2H42z" fill="oklch(92% 0.01 258 / 0.6)"/>
+        <text x="56" y="22" font-family="Roboto, sans-serif" font-weight="700" font-size="18" fill="oklch(92% 0.01 258)" letter-spacing="0.04">PigVision</text>
+      </svg>
+    </div>
+    <h1 class="animate animate-delay-1">Taller de configuración<br>de dispositivos PigVision</h1>
+    <p class="animate animate-delay-2 mt-6" style="font-size: 20px; opacity: 0.8; max-width: 700px; margin-left: auto; margin-right: auto;">
+      Probemos juntos el configurador de cámaras inteligentes<br>y descubramos cómo mejorar la experiencia del galponero.
+    </p>
+    <div class="portada-date animate animate-delay-3">18 de junio, 2026</div>
+    <div class="portada-presenters animate animate-delay-3">Ana Jaramillo &middot; Manuela Chavarría</div>
+  </div>
+  <div class="logo-corner">
+    <img class="dark-logo" src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=260&height=75" alt="Asimetrix">
+    <img class="light-logo" src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=260&height=75" alt="Asimetrix">
+  </div>
+</section>
+
+<!-- ===== SLIDE 1: AGENDA ===== -->
+<section class="slide light" id="slide-1" data-theme="light" data-index="1">
+  <div class="slide-content">
+    <span class="tag animate">Bloque 1</span>
+    <h2 class="animate animate-delay-1">Agenda del taller</h2>
+    <p class="animate animate-delay-2 mt-4" style="opacity:0.7;">Un recorrido de 5 bloques para explorar, configurar y mejorar PigVision.</p>
+    <div class="flex flex-col gap-4 mt-8">
+      <div class="agenda-item animate animate-delay-2">
+        <span class="agenda-num">1</span>
+        <div>
+          <h4>Abrir el espacio</h4>
+          <p>Contexto, objetivos y agenda del taller</p>
+        </div>
+      </div>
+      <div class="agenda-item animate animate-delay-3">
+        <span class="agenda-num">2</span>
+        <div>
+          <h4>Taller de configuración de cámara</h4>
+          <p>User persona, instrucciones, ejercicio con cronómetro y Miro</p>
+        </div>
+      </div>
+      <div class="agenda-item animate animate-delay-4">
+        <span class="agenda-num">3</span>
+        <div>
+          <h4>Configuración de lote</h4>
+          <p>Ejercicio práctico de configuración por lotes</p>
+        </div>
+      </div>
+      <div class="agenda-item animate animate-delay-5">
+        <span class="agenda-num">4</span>
+        <div>
+          <h4>Hallazgos colectivos</h4>
+          <p>Puesta en común, insights y patrones del equipo</p>
+        </div>
+      </div>
+      <div class="agenda-item animate animate-delay-6">
+        <span class="agenda-num">5</span>
+        <div>
+          <h4>Cierre y próximos pasos</h4>
+          <p>Conclusiones, roadmap y agradecimiento</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="logo-corner">
+    <img class="dark-logo" src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=260&height=75" alt="Asimetrix">
+    <img class="light-logo" src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=260&height=75" alt="Asimetrix">
+    <img class="dark-logo pv-logo" src="https://asimetrix.co/hubfs/AX%20-%20Pv%20con%20cerdo.png" alt="PigVision" style="height:28px;">
+    <img class="light-logo pv-logo" src="https://asimetrix.co/hubfs/AX%20-%20Pv%20con%20cerdo.png" alt="PigVision" style="height:28px;">
+  </div>
+</section>
+
+<!-- ===== SLIDE 2: CONTEXTO ===== -->
+<section class="slide dark" id="slide-2" data-theme="dark" data-index="2">
+  <div class="slide-content">
+    <span class="tag animate">Bloque 1</span>
+    <h2 class="animate animate-delay-1">¿Qué es PigVision?</h2>
+    <p class="animate animate-delay-2 mt-4" style="font-size: 20px; max-width: 800px;">
+      PigVision es un sistema de visión artificial que mide el peso de cerdos de engorde en tiempo real usando cámaras inteligentes con IA. Sin estrés para el animal, sin pesaje manual.
+    </p>
+    <div class="grid-3 mt-8">
+      <div class="card animate animate-delay-3 text-center">
+        <div class="card-icon" style="margin:0 auto 12px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <h4>+73.000 cerdos monitoreados</h4>
+        <p>Datos reales de peso y crecimiento en más de 7 países</p>
+      </div>
+      <div class="card animate animate-delay-4 text-center">
+        <div class="card-icon" style="margin:0 auto 12px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <h4>+3.500 granjas conectadas</h4>
+        <p>Presencia en toda América con datos 24/7</p>
+      </div>
+      <div class="card animate animate-delay-5 text-center">
+        <div class="card-icon" style="margin:0 auto 12px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <h4>De 30 kg a 150 kg</h4>
+        <p>Cobertura completa del ciclo de engorde con precisión</p>
+      </div>
+    </div>
+    <p class="animate animate-delay-6 mt-8" style="opacity:0.6; font-size:15px; text-align:center;">
+      Hoy vamos a probar el configurador de estos dispositivos para asegurarnos de que la experiencia del galponero sea simple, rápida y sin fricción.
+    </p>
+  </div>
+  <div class="logo-corner">
+    <img class="dark-logo" src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=260&height=75" alt="Asimetrix">
+    <img class="light-logo" src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=260&height=75" alt="Asimetrix">
+    <img class="dark-logo pv-logo" src="https://asimetrix.co/hubfs/AX%20-%20Pv%20con%20cerdo.png" alt="PigVision" style="height:28px;">
+    <img class="light-logo pv-logo" src="https://asimetrix.co/hubfs/AX%20-%20Pv%20con%20cerdo.png" alt="PigVision" style="height:28px;">
+  </div>
+</section>
+
+<!-- ===== SLIDE 3: USER PERSONA ===== -->
+<section class="slide light" id="slide-3" data-theme="light" data-index="3">
+  <div class="slide-content">
+    <span class="tag animate">Bloque 2</span>
+    <h2 class="animate animate-delay-1">User persona: el galponero</h2>
+    <p class="animate animate-delay-2 mt-4" style="opacity:0.7; max-width:700px;">
+      Ponernos en sus zapatos es el primer paso para diseñar una experiencia que realmente funcione.
+    </p>
+    <div class="persona-card mt-8">
+      <div class="persona-col animate animate-delay-3">
+        <h4>quién es</h4>
+        <ul>
+          <li>Trabaja en la granja 10-12 horas al día</li>
+          <li>Conoce a sus animales, no la tecnología</li>
+          <li>Prioriza rapidez y simplicidad</li>
+          <li>No habla inglés, usa jerga local</li>
+          <li>Su celular es herramienta de trabajo</li>
+        </ul>
+      </div>
+      <div class="persona-col animate animate-delay-4">
+        <h4>qué necesita</h4>
+        <ul>
+          <li>Configurar la cámara en menos de 5 minutos</li>
+          <li>Instrucciones claras, sin tecnicismos</li>
+          <li>Saber si la cámara quedó bien instalada</li>
+          <li>Que funcione sin depender de internet</li>
+          <li>Alertas útiles, no ruido</li>
+        </ul>
+      </div>
+      <div class="persona-col animate animate-delay-5">
+        <h4>qué lo frustra</h4>
+        <ul>
+          <li>Pasos confusos o redundantes</li>
+          <li>Tener que repetir configuraciones</li>
+          <li>Mensajes de error sin sentido</li>
+          <li>Esperar soporte técnico</li>
+          <li>Perder tiempo en vez de ahorrarlo</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="logo-corner">
+    <img class="dark-logo" src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=260&height=75" alt="Asimetrix">
+    <img class="light-logo" src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=260&height=75" alt="Asimetrix">
+    <img class="dark-logo pv-logo" src="https://asimetrix.co/hubfs/AX%20-%20Pv%20con%20cerdo.png" alt="PigVision" style="height:28px;">
+    <img class="light-logo pv-logo" src="https://asimetrix.co/hubfs/AX%20-%20Pv%20con%20cerdo.png" alt="PigVision" style="height:28px;">
+  </div>
+</section>
+
+<!-- ===== SLIDE 4: INSTRUCCIONES CÁMARA ===== -->
+<section class="slide dark" id="slide-4" data-theme="dark" data-index="4">
+  <div class="slide-content">
+    <span class="tag animate">Bloque 2</span>
+    <h2 class="animate animate-delay-1">Instrucciones: configuración de cámara</h2>
+    <p class="animate animate-delay-2 mt-4" style="opacity:0.7; max-width:700px;">
+      Sigue estos pasos para configurar una cámara PigVision. Tómate el tiempo necesario y registra cualquier dificultad.
+    </p>
+    <div class="grid-2 mt-8" style="align-items:start;">
+      <div>
+        <ol class="instructions-list">
+          <li class="animate animate-delay-3">Enciende la cámara y espera a que el LED se ponga azul fijo</li>
+          <li class="animate animate-delay-3">Abre la app PigVision en tu celular</li>
+          <li class="animate animate-delay-4">Selecciona "Agregar dispositivo" y escanea el código QR de la cámara</li>
+          <li class="animate animate-delay-4">Conecta la cámara a la red WiFi de la granja</li>
+          <li class="animate animate-delay-5">Asigna la cámara a un corral específico</li>
+          <li class="animate animate-delay-5">Configura la altura de instalación y el ángulo de visión</li>
+          <li class="animate animate-delay-6">Verifica que la imagen sea clara y el encuadre correcto</li>
+          <li class="animate animate-delay-6">Confirma la instalación y pasa a la siguiente cámara</li>
+        </ol>
+      </div>
+      <div class="card animate animate-delay-4" style="background: oklch(100% 0 0 / 0.04); border-color: oklch(100% 0 0 / 0.08);">
+        <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--aqua)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <h4 style="color:var(--aqua);">Tips para el ejercicio</h4>
+        </div>
+        <ul style="list-style:none;">
+          <li style="font-size:14px;padding:4px 0;opacity:0.85;">&bullet; Imagina que eres el galponero, no un ingeniero</li>
+          <li style="font-size:14px;padding:4px 0;opacity:0.85;">&bullet; Lee cada mensaje en voz alta para evaluar claridad</li>
+          <li style="font-size:14px;padding:4px 0;opacity:0.85;">&bullet; Si algo no es intuitivo, anótalo</li>
+          <li style="font-size:14px;padding:4px 0;opacity:0.85;">&bullet; No hay respuestas incorrectas, solo aprendizajes</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="logo-corner">
+    <img class="dark-logo" src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=260&height=75" alt="Asimetrix">
+    <img class="light-logo" src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=260&height=75" alt="Asimetrix">
+    <img class="dark-logo pv-logo" src="https://asimetrix.co/hubfs/AX%20-%20Pv%20con%20cerdo.png" alt="PigVision" style="height:28px;">
+    <img class="light-logo pv-logo" src="https://asimetrix.co/hubfs/AX%20-%20Pv%20con%20cerdo.png" alt="PigVision" style="height:28px;">
+  </div>
+</section>
+
+<!-- ===== SLIDE 5: CRONÓMETRO 5 MIN ===== -->
+<section class="slide light" id="slide-5" data-theme="light" data-index="5">
+  <div class="slide-content text-center">
+    <span class="tag animate">Bloque 2</span>
+    <h2 class="animate animate-delay-1">Ejercicio: configuración de cámara</h2>
+    <p class="animate animate-delay-2 mt-4" style="opacity:0.7;">Tiempo límite: 5 minutos. ¡Manos a la obra!</p>
+    <div class="timer-container mt-8 animate animate-delay-3">
+      <div class="timer-label">Tiempo restante</div>
+      <div class="timer-display" id="timer1-display">05:00</div>
+      <div class="timer-controls">
+        <button class="timer-btn primary" id="timer1-start" onclick="startTimer(1)">Iniciar</button>
+        <button class="timer-btn secondary" id="timer1-pause" onclick="pauseTimer(1)" disabled>Pausa</button>
+        <button class="timer-btn secondary" id="timer1-reset" onclick="resetTimer(1)">Reiniciar</button>
+      </div>
+    </div>
+    <p class="animate animate-delay-4 mt-8" style="opacity:0.5; font-size:14px;">
+      Usa Miro para registrar hallazgos, dudas y observaciones durante el ejercicio.
+    </p>
+  </div>
+  <div class="logo-corner">
+    <img class="dark-logo" src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=260&height=75" alt="Asimetrix">
+    <img class="light-logo" src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=260&height=75" alt="Asimetrix">
+    <img class="dark-logo pv-logo" src="https://asimetrix.co/hubfs/AX%20-%20Pv%20con%20cerdo.png" alt="PigVision" style="height:28px;">
+    <img class="light-logo pv-logo" src="https://asimetrix.co/hubfs/AX%20-%20Pv%20con%20cerdo.png" alt="PigVision" style="height:28px;">
+  </div>
+</section>
+
+<!-- ===== SLIDE 6: CONSIGNA MIRO ===== -->
+<section class="slide dark" id="slide-6" data-theme="dark" data-index="6">
+  <div class="slide-content">
+    <span class="tag animate">Bloque 2</span>
+    <h2 class="animate animate-delay-1">Consigna para Miro</h2>
+    <p class="animate animate-delay-2 mt-4" style="opacity:0.7; max-width:700px;">
+      Mientras configuras la cámara, registra en el tablero de Miro todo lo que observas.
+    </p>
+    <div class="grid-2 mt-8">
+      <div class="miro-card animate animate-delay-3">
+        <div class="miro-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <div>
+          <h4>¿Qué observar?</h4>
+          <ul>
+            <li>Claridad de las instrucciones paso a paso</li>
+            <li>Mensajes de error o confirmación</li>
+            <li>Tiempo real que tomó cada paso</li>
+            <li>Momentos de confusión o duda</li>
+          </ul>
+        </div>
+      </div>
+      <div class="miro-card animate animate-delay-4">
+        <div class="miro-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        </div>
+        <div>
+          <h4>¿Qué registrar?</h4>
+          <ul>
+            <li>Todo lo que funcionó bien (para celebrar)</li>
+            <li>Todo lo que no funcionó (para mejorar)</li>
+            <li>Ideas que surjan durante el proceso</li>
+            <li>Capturas de pantalla si aplica</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="logo-corner">
+    <img class="dark-logo" src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=260&height=75" alt="Asimetrix">
+    <img class="light-logo" src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=260&height=75" alt="Asimetrix">
+    <img class="dark-logo pv-logo" src="https://asimetrix.co/hubfs/AX%20-%20Pv%20con%20cerdo.png" alt="PigVision" style="height:28px;">
+    <img class="light-logo pv-logo" src="https://asimetrix.co/hubfs/AX%20-%20Pv%20con%20cerdo.png" alt="PigVision" style="height:28px;">
+  </div>
+</section>
+
+<!-- ===== SLIDE 7: CRONÓMETRO 10 MIN ===== -->
+<section class="slide light" id="slide-7" data-theme="light" data-index="7">
+  <div class="slide-content text-center">
+    <span class="tag animate">Bloque 2</span>
+    <h2 class="animate animate-delay-1">Segunda ronda: profundiza</h2>
+    <p class="animate animate-delay-2 mt-4" style="opacity:0.7;">Ahora con 10 minutos. Configura otra cámara y explora funciones adicionales.</p>
+    <div class="timer-container mt-8 animate animate-delay-3">
+      <div class="timer-label">Tiempo restante</div>
+      <div class="timer-display" id="timer2-display">10:00</div>
+      <div class="timer-controls">
+        <button class="timer-btn primary" id="timer2-start" onclick="startTimer(2)">Iniciar</button>
+        <button class="timer-btn secondary" id="timer2-pause" onclick="pauseTimer(2)" disabled>Pausa</button>
+        <button class="timer-btn secondary" id="timer2-reset" onclick="resetTimer(2)">Reiniciar</button>
+      </div>
+    </div>
+    <div class="grid-2 mt-8" style="max-width: 600px; margin: 32px auto 0; text-align:left;">
+      <div class="card animate animate-delay-4">
+        <h4 style="font-size:16px;">En esta ronda</h4>
+        <p style="font-size:14px;">Prueba la configuración avanzada: ajuste de sensibilidad, zona de captura y programación de alertas.</p>
+      </div>
+      <div class="card animate animate-delay-5">
+        <h4 style="font-size:16px;">Sigue registrando</h4>
+        <p style="font-size:14px;">No olvides documentar todo en Miro. Cada detalle cuenta para mejorar el producto.</p>
+      </div>
+    </div>
+  </div>
+  <div class="logo-corner">
+    <img class="dark-logo" src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=260&height=75" alt="Asimetrix">
+    <img class="light-logo" src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=260&height=75" alt="Asimetrix">
+    <img class="dark-logo pv-logo" src="https://asimetrix.co/hubfs/AX%20-%20Pv%20con%20cerdo.png" alt="PigVision" style="height:28px;">
+    <img class="light-logo pv-logo" src="https://asimetrix.co/hubfs/AX%20-%20Pv%20con%20cerdo.png" alt="PigVision" style="height:28px;">
+  </div>
+</section>
+
+<!-- ===== SLIDE 8: CONFIGURACIÓN DE LOTE ===== -->
+<section class="slide dark" id="slide-8" data-theme="dark" data-index="8">
+  <div class="slide-content">
+    <span class="tag animate">Bloque 3</span>
+    <h2 class="animate animate-delay-1">Configuración de lote</h2>
+    <p class="animate animate-delay-2 mt-4" style="opacity:0.7; max-width:700px;">
+      ¿Y si en vez de configurar una cámara a la vez, pudiéramos hacerlo por lotes? Una granja tiene decenas de corrales.
+    </p>
+    <div class="grid-2 mt-8" style="align-items:center;">
+      <div>
+        <div class="card animate animate-delay-3" style="margin-bottom:16px;">
+          <h4>El desafío</h4>
+          <p style="font-size:15px;">Configurar 20 cámaras una por una toma ~100 minutos. El galponero no tiene ese tiempo.</p>
+        </div>
+        <div class="card animate animate-delay-4">
+          <h4>La oportunidad</h4>
+          <p style="font-size:15px;">Configuración por lote: seleccionar múltiples cámaras, aplicar misma configuración y verificar en grupo.</p>
+        </div>
+      </div>
+      <div class="animate animate-delay-5">
+        <div style="background:oklch(100% 0 0 / 0.04); border-radius:16px; padding:32px; border:1px solid oklch(100% 0 0 / 0.08); text-align:center;">
+          <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="var(--aqua)" stroke-width="1.5" style="margin-bottom:16px;">
+            <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+          </svg>
+          <h3 class="aqua-text" style="font-size: 28px;">Lote</h3>
+          <p style="font-size:15px; opacity:0.8;">1 configuración &rarr; N cámaras</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="logo-corner">
+    <img class="dark-logo" src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=260&height=75" alt="Asimetrix">
+    <img class="light-logo" src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=260&height=75" alt="Asimetrix">
+    <img class="dark-logo pv-logo" src="https://asimetrix.co/hubfs/AX%20-%20Pv%20con%20cerdo.png" alt="PigVision" style="height:28px;">
+    <img class="light-logo pv-logo" src="https://asimetrix.co/hubfs/AX%20-%20Pv%20con%20cerdo.png" alt="PigVision" style="height:28px;">
+  </div>
+</section>
+
+<!-- ===== SLIDE 9: INSTRUCCIONES LOTE ===== -->
+<section class="slide light" id="slide-9" data-theme="light" data-index="9">
+  <div class="slide-content">
+    <span class="tag animate">Bloque 3</span>
+    <h2 class="animate animate-delay-1">Instrucciones: configuración de lote</h2>
+    <p class="animate animate-delay-2 mt-4" style="opacity:0.7;">Pongamos a prueba el flujo de configuración masiva.</p>
+    <div class="grid-2 mt-8" style="align-items:start;">
+      <div>
+        <ol class="instructions-list">
+          <li class="animate animate-delay-3">Selecciona "Configuración por lote" en el menú principal</li>
+          <li class="animate animate-delay-3">Elige las cámaras que quieres configurar (mínimo 3)</li>
+          <li class="animate animate-delay-4">Define los parámetros comunes: corral, altura, ángulo, red WiFi</li>
+          <li class="animate animate-delay-4">Revisa el resumen de la configuración antes de aplicar</li>
+          <li class="animate animate-delay-5">Ejecuta la configuración en lote</li>
+          <li class="animate animate-delay-5">Verifica el estado de cada cámara en el dashboard</li>
+        </ol>
+      </div>
+      <div class="card animate animate-delay-4" style="background: oklch(0% 0 0 / 0.02);">
+        <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <h4>Preguntas guía</h4>
+        </div>
+        <ul style="list-style:none; font-size:15px; opacity:0.85;">
+          <li style="padding:6px 0;">&bullet; ¿El flujo se siente natural o forzado?</li>
+          <li style="padding:6px 0;">&bullet; ¿Hay suficientes validaciones visuales?</li>
+          <li style="padding:6px 0;">&bullet; ¿Cómo se recupera si una cámara falla?</li>
+          <li style="padding:6px 0;">&bullet; ¿El galponero confiaría en este proceso?</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="logo-corner">
+    <img class="dark-logo" src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=260&height=75" alt="Asimetrix">
+    <img class="light-logo" src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=260&height=75" alt="Asimetrix">
+    <img class="dark-logo pv-logo" src="https://asimetrix.co/hubfs/AX%20-%20Pv%20con%20cerdo.png" alt="PigVision" style="height:28px;">
+    <img class="light-logo pv-logo" src="https://asimetrix.co/hubfs/AX%20-%20Pv%20con%20cerdo.png" alt="PigVision" style="height:28px;">
+  </div>
+</section>
+
+<!-- ===== SLIDE 10: CRONÓMETRO LOTE + MIRO ===== -->
+<section class="slide dark" id="slide-10" data-theme="dark" data-index="10">
+  <div class="slide-content text-center">
+    <span class="tag animate">Bloque 3</span>
+    <h2 class="animate animate-delay-1">Ejercicio: configuración de lote</h2>
+    <p class="animate animate-delay-2 mt-4" style="opacity:0.7;">Tiempo límite: 5 minutos. Configura un lote completo y documenta en Miro.</p>
+    <div class="timer-container mt-8 animate animate-delay-3">
+      <div class="timer-label">Tiempo restante</div>
+      <div class="timer-display" id="timer3-display" style="color: var(--aqua);">05:00</div>
+      <div class="timer-controls">
+        <button class="timer-btn primary" id="timer3-start" onclick="startTimer(3)" style="background: var(--aqua);">Iniciar</button>
+        <button class="timer-btn secondary" id="timer3-pause" onclick="pauseTimer(3)" disabled>Pausa</button>
+        <button class="timer-btn secondary" id="timer3-reset" onclick="resetTimer(3)">Reiniciar</button>
+      </div>
+    </div>
+    <div class="miro-card mt-8 animate animate-delay-4" style="text-align:left; max-width:600px; margin:32px auto 0;">
+      <div class="miro-icon" style="background:var(--aqua);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+      </div>
+      <div>
+        <h4>Registra en Miro</h4>
+        <ul>
+          <li>Comparativa: 1 a 1 vs. lote &mdash; ¿cuál ganó?</li>
+          <li>Errores o bloqueos en el flujo de lote</li>
+          <li>Ideas para mejorar la experiencia</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="logo-corner">
+    <img class="dark-logo" src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=260&height=75" alt="Asimetrix">
+    <img class="light-logo" src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=260&height=75" alt="Asimetrix">
+    <img class="dark-logo pv-logo" src="https://asimetrix.co/hubfs/AX%20-%20Pv%20con%20cerdo.png" alt="PigVision" style="height:28px;">
+    <img class="light-logo pv-logo" src="https://asimetrix.co/hubfs/AX%20-%20Pv%20con%20cerdo.png" alt="PigVision" style="height:28px;">
+  </div>
+</section>
+
+<!-- ===== SLIDE 11: PUESTA EN COMÚN ===== -->
+<section class="slide light" id="slide-11" data-theme="light" data-index="11">
+  <div class="slide-content">
+    <span class="tag animate">Bloque 4</span>
+    <h2 class="animate animate-delay-1">Puesta en común</h2>
+    <p class="animate animate-delay-2 mt-4" style="opacity:0.7; max-width:700px;">
+      Compartamos lo que cada uno encontró. No hay observaciones pequeñas.
+    </p>
+    <div class="grid-2 mt-8">
+      <div class="hallazgo-card animate animate-delay-3">
+        <h4>Comparte tu experiencia</h4>
+        <p>Cada persona tiene 3 minutos para presentar sus hallazgos clave. Usa el tablero de Miro como guía.</p>
+      </div>
+      <div class="hallazgo-card animate animate-delay-4">
+        <h4>Escucha activa</h4>
+        <p>Mientras otros comparten, anota patrones que identifiques. ¿Alguien más tuvo el mismo problema?</p>
+      </div>
+      <div class="hallazgo-card animate animate-delay-5">
+        <h4>Agrupa por categorías</h4>
+        <p>UX / UI, funcionalidad, rendimiento, contenido. Así priorizamos mejor las mejoras.</p>
+      </div>
+      <div class="hallazgo-card animate animate-delay-6">
+        <h4>Vota los más críticos</h4>
+        <p>Al final de la ronda, cada persona vota los 3 hallazgos más urgentes.</p>
+      </div>
+    </div>
+  </div>
+  <div class="logo-corner">
+    <img class="dark-logo" src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=260&height=75" alt="Asimetrix">
+    <img class="light-logo" src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=260&height=75" alt="Asimetrix">
+    <img class="dark-logo pv-logo" src="https://asimetrix.co/hubfs/AX%20-%20Pv%20con%20cerdo.png" alt="PigVision" style="height:28px;">
+    <img class="light-logo pv-logo" src="https://asimetrix.co/hubfs/AX%20-%20Pv%20con%20cerdo.png" alt="PigVision" style="height:28px;">
+  </div>
+</section>
+
+<!-- ===== SLIDE 12: QUÉ FUNCIONÓ / QUÉ MEJORAR ===== -->
+<section class="slide dark" id="slide-12" data-theme="dark" data-index="12">
+  <div class="slide-content">
+    <span class="tag animate">Bloque 4</span>
+    <h2 class="animate animate-delay-1">¿Qué funcionó? ¿Qué mejorar?</h2>
+    <p class="animate animate-delay-2 mt-4" style="opacity:0.7;">La materia prima de este taller: los hallazgos del equipo.</p>
+    <div class="hallazgos-grid mt-8">
+      <div class="hallazgo-card animate animate-delay-3" style="border-left: 4px solid oklch(58% 0.175 258);">
+        <h4 style="color: var(--accent);">Lo que funcionó</h4>
+        <p style="font-size:14px;" id="funciono-placeholder">(Los equipos completan durante la puesta en com&uacute;n)</p>
+      </div>
+      <div class="hallazgo-card animate animate-delay-4" style="border-left: 4px solid var(--warning);">
+        <h4 style="color: var(--warning);">Lo que mejorar</h4>
+        <p style="font-size:14px;" id="mejorar-placeholder">(Los equipos completan durante la puesta en com&uacute;n)</p>
+      </div>
+    </div>
+    <div class="grid-2 mt-6">
+      <div class="hallazgo-card animate animate-delay-5">
+        <h4>Patrones recurrentes</h4>
+        <p style="font-size:14px;" id="patrones-placeholder">(Registra aqu&iacute; los patrones que se repiten entre equipos)</p>
+      </div>
+      <div class="hallazgo-card animate animate-delay-6">
+        <h4>Sorpresas</h4>
+        <p style="font-size:14px;" id="sorpresas-placeholder">(Algo que nadie esperaba y que descubrimos hoy)</p>
+      </div>
+    </div>
+  </div>
+  <div class="logo-corner">
+    <img class="dark-logo" src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=260&height=75" alt="Asimetrix">
+    <img class="light-logo" src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=260&height=75" alt="Asimetrix">
+    <img class="dark-logo pv-logo" src="https://asimetrix.co/hubfs/AX%20-%20Pv%20con%20cerdo.png" alt="PigVision" style="height:28px;">
+    <img class="light-logo pv-logo" src="https://asimetrix.co/hubfs/AX%20-%20Pv%20con%20cerdo.png" alt="PigVision" style="height:28px;">
+  </div>
+</section>
+
+<!-- ===== SLIDE 13: PATRONES E INSIGHTS ===== -->
+<section class="slide light" id="slide-13" data-theme="light" data-index="13">
+  <div class="slide-content">
+    <span class="tag animate">Bloque 4</span>
+    <h2 class="animate animate-delay-1">Insights del equipo</h2>
+    <p class="animate animate-delay-2 mt-4" style="opacity:0.7;">Esto es lo que el equipo de Asimetrix descubri&oacute; hoy.</p>
+    <div class="grid-3 mt-8">
+      <div class="card animate animate-delay-3 text-center">
+        <div class="card-icon" style="margin:0 auto 12px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>
+        </div>
+        <h4>Mayor insight #1</h4>
+        <p style="font-size:14px;" id="insight1">(Registra el hallazgo m&aacute;s relevante del equipo)</p>
+      </div>
+      <div class="card animate animate-delay-4 text-center">
+        <div class="card-icon" style="margin:0 auto 12px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>
+        </div>
+        <h4>Mayor insight #2</h4>
+        <p style="font-size:14px;" id="insight2">(Registra el segundo hallazgo m&aacute;s relevante)</p>
+      </div>
+      <div class="card animate animate-delay-5 text-center">
+        <div class="card-icon" style="margin:0 auto 12px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>
+        </div>
+        <h4>Mayor insight #3</h4>
+        <p style="font-size:14px;" id="insight3">(Registra el tercer hallazgo m&aacute;s relevante)</p>
+      </div>
+    </div>
+  </div>
+  <div class="logo-corner">
+    <img class="dark-logo" src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=260&height=75" alt="Asimetrix">
+    <img class="light-logo" src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=260&height=75" alt="Asimetrix">
+    <img class="dark-logo pv-logo" src="https://asimetrix.co/hubfs/AX%20-%20Pv%20con%20cerdo.png" alt="PigVision" style="height:28px;">
+    <img class="light-logo pv-logo" src="https://asimetrix.co/hubfs/AX%20-%20Pv%20con%20cerdo.png" alt="PigVision" style="height:28px;">
+  </div>
+</section>
+
+<!-- ===== SLIDE 14: CONCLUSIONES CLAVE ===== -->
+<section class="slide dark" id="slide-14" data-theme="dark" data-index="14">
+  <div class="slide-content">
+    <span class="tag animate">Bloque 5</span>
+    <h2 class="animate animate-delay-1">Conclusiones clave</h2>
+    <p class="animate animate-delay-2 mt-4" style="opacity:0.7;">Lo que nos llevamos del taller.</p>
+    <div class="grid-3 mt-8">
+      <div class="card animate animate-delay-3 text-center">
+        <h4 style="font-size:40px; color:var(--accent); margin-bottom:8px;">01</h4>
+        <p>El galponero necesita simplicidad radical. Cada paso extra es fricci&oacute;n.</p>
+      </div>
+      <div class="card animate animate-delay-4 text-center">
+        <h4 style="font-size:40px; color:var(--accent); margin-bottom:8px;">02</h4>
+        <p>La configuraci&oacute;n por lote no es un lujo, es una necesidad para escalar.</p>
+      </div>
+      <div class="card animate animate-delay-5 text-center">
+        <h4 style="font-size:40px; color:var(--accent); margin-bottom:8px;">03</h4>
+        <p>El feedback visual inmediato genera confianza en el usuario.</p>
+      </div>
+    </div>
+    <div class="flex justify-center mt-6 animate animate-delay-6">
+      <div class="card" style="max-width:600px; text-align:center; background: oklch(58% 0.175 258 / 0.1); border-color: oklch(58% 0.175 258 / 0.2);">
+        <p style="font-size:16px;">"La tecnolog&iacute;a mejor dise&ntilde;ada es la que se siente invisible para quien la usa."</p>
+      </div>
+    </div>
+  </div>
+  <div class="logo-corner">
+    <img class="dark-logo" src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=260&height=75" alt="Asimetrix">
+    <img class="light-logo" src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=260&height=75" alt="Asimetrix">
+    <img class="dark-logo pv-logo" src="https://asimetrix.co/hubfs/AX%20-%20Pv%20con%20cerdo.png" alt="PigVision" style="height:28px;">
+    <img class="light-logo pv-logo" src="https://asimetrix.co/hubfs/AX%20-%20Pv%20con%20cerdo.png" alt="PigVision" style="height:28px;">
+  </div>
+</section>
+
+<!-- ===== SLIDE 15: CIERRE ===== -->
+<section class="slide light" id="slide-15" data-theme="light" data-index="15">
+  <div class="slide-content text-center">
+    <div class="logos-portada justify-center animate" style="margin-bottom:32px;">
+      <img src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=260&height=75" alt="Asimetrix" style="filter:brightness(0); height:28px;">
+      <span class="divider" style="background:oklch(0% 0 0 / 0.15); height:32px;"></span>
+      <svg width="120" height="28" viewBox="0 0 120 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="2" width="24" height="24" rx="6" fill="oklch(16% 0.045 258)" stroke="oklch(16% 0.045 258)" stroke-width="2"/>
+        <circle cx="14" cy="14" r="4.5" fill="oklch(75% 0.145 195)"/>
+        <circle cx="11" cy="11" r="1.2" fill="oklch(92% 0.01 258)"/>
+        <circle cx="17" cy="11" r="1.2" fill="oklch(92% 0.01 258)"/>
+        <ellipse cx="14" cy="16.5" rx="3" ry="1.5" fill="oklch(75% 0.145 195)"/>
+        <text x="32" y="19" font-family="Roboto, sans-serif" font-weight="700" font-size="14" fill="oklch(16% 0.045 258)" letter-spacing="0.04">PigVision</text>
+      </svg>
+    </div>
+    <h2 class="animate animate-delay-1">Gracias por ser parte de este taller</h2>
+    <p class="animate animate-delay-2 mt-4" style="font-size:20px; max-width:600px; margin:16px auto 0; opacity:0.8;">
+      Cada hallazgo de hoy nos acerca a una mejor experiencia para el galponero.<br>Sigamos construyendo juntos.
+    </p>
+    <div class="animate animate-delay-3 mt-8" style="display:flex; gap: 40px; justify-content:center; flex-wrap:wrap;">
+      <div>
+        <h4 style="font-size:16px; opacity:0.6; text-transform:uppercase; letter-spacing:0.04em;">Pr&oacute;ximos pasos</h4>
+        <ul style="list-style:none; margin-top:8px;">
+          <li style="font-size:15px; padding:4px 0;">&bullet; Sistematizar hallazgos</li>
+          <li style="font-size:15px; padding:4px 0;">&bullet; Priorizar mejoras</li>
+          <li style="font-size:15px; padding:4px 0;">&bullet; Iterar el configurador</li>
+          <li style="font-size:15px; padding:4px 0;">&bullet; Nueva ronda de pruebas</li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="font-size:16px; opacity:0.6; text-transform:uppercase; letter-spacing:0.04em;">Contacto</h4>
+        <p style="font-size:15px; margin-top:8px;">Ana Jaramillo &mdash; ana@asimetrix.co</p>
+        <p style="font-size:15px;">Manuela Chavarr&iacute;a &mdash; manuela@asimetrix.co</p>
+      </div>
+    </div>
+    <p class="animate animate-delay-4 mt-8" style="opacity:0.4; font-size:13px;">
+      Asimetrix &middot; Internet of Animals&trade; &middot; 2026
+    </p>
+  </div>
+  <div class="logo-corner">
+    <img class="dark-logo" src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=260&height=75" alt="Asimetrix">
+    <img class="light-logo" src="https://asimetrix.co/hs-fs/hubfs/logo-AX-Asimetrix-unlocking-the-power-of-data.webp?width=260&height=75" alt="Asimetrix">
+    <img class="dark-logo pv-logo" src="https://asimetrix.co/hubfs/AX%20-%20Pv%20con%20cerdo.png" alt="PigVision" style="height:28px;">
+    <img class="light-logo pv-logo" src="https://asimetrix.co/hubfs/AX%20-%20Pv%20con%20cerdo.png" alt="PigVision" style="height:28px;">
+  </div>
+</section>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const totalSlides = slides.length;
+const progressBar = document.getElementById('progress-bar');
+const navBullets = document.getElementById('nav-bullets');
+const fullscreenBtn = document.getElementById('fullscreen-btn');
+let currentSlide = 0;
+let isTransitioning = false;
+
+// Timer state
+const timers = {
+  1: { total: 300, remaining: 300, running: false, interval: null },
+  2: { total: 600, remaining: 600, running: false, interval: null },
+  3: { total: 300, remaining: 300, running: false, interval: null }
+};
+
+// Nav bullets
+for (let i = 0; i < totalSlides; i++) {
+  const bullet = document.createElement('div');
+  bullet.className = 'nav-bullet';
+  bullet.dataset.index = i;
+  bullet.addEventListener('click', () => goToSlide(i));
+  navBullets.appendChild(bullet);
+}
+
+function updateBullets() {
+  document.querySelectorAll('.nav-bullet').forEach((b, i) => {
+    b.className = 'nav-bullet ' + (i === currentSlide ? 'active ' : '') + slides[i].dataset.theme;
+  });
+}
+
+function goToSlide(index) {
+  if (isTransitioning || index === currentSlide || index < 0 || index >= totalSlides) return;
+  
+  // Matrix transition from slide 0 to 1
+  if (currentSlide === 0 && index === 1) {
+    triggerMatrixTransition(() => {
+      doGoToSlide(index);
+    });
+    return;
+  }
+  if (currentSlide === 1 && index === 0) return; // prevent going back during matrix
+  
+  doGoToSlide(index);
+}
+
+function doGoToSlide(index) {
+  slides.forEach(s => s.classList.remove('active'));
+  slides[index].classList.add('active');
+  currentSlide = index;
+  updateProgress();
+  updateBullets();
+  updateFullscreenBtn();
+  reanimateSlide(index);
+}
+
+function reanimateSlide(index) {
+  const els = slides[index].querySelectorAll('.animate');
+  els.forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(30px)';
+    void el.offsetWidth;
+    el.style.opacity = '';
+    el.style.transform = '';
+  });
+}
+
+function updateProgress() {
+  const pct = ((currentSlide) / (totalSlides - 1)) * 100;
+  progressBar.style.width = pct + '%';
+}
+
+function updateFullscreenBtn() {
+  const theme = slides[currentSlide].dataset.theme;
+  fullscreenBtn.className = theme;
+}
+
+// Matrix transition
+function triggerMatrixTransition(callback) {
+  if (isTransitioning) return;
+  isTransitioning = true;
+  
+  const overlay = document.getElementById('matrix-overlay');
+  const mascot = overlay.querySelector('.mascot');
+  mascot.classList.remove('scale', 'fade-out');
+  
+  overlay.style.display = 'flex';
+  overlay.style.opacity = '0';
+  void overlay.offsetWidth;
+  overlay.style.opacity = '1';
+  
+  // Phase 1: Mascot scale in (650ms)
+  setTimeout(() => mascot.classList.add('scale'), 100);
+  
+  // Phase 2: Spawn matrix columns
+  setTimeout(() => {
+    spawnMatrixRain(overlay);
+    // Add scan lines and glow
+    const scanLines = document.createElement('div');
+    scanLines.id = 'scan-lines';
+    scanLines.innerHTML = '';
+    overlay.appendChild(scanLines);
+    const scanGlow = document.createElement('div');
+    scanGlow.id = 'scan-glow';
+    overlay.appendChild(scanGlow);
+  }, 650);
+  
+  // Phase 3: Fade out (1350ms)
+  setTimeout(() => {
+    mascot.classList.remove('scale');
+    mascot.classList.add('fade-out');
+  }, 1350);
+  
+  // Phase 4: Cleanup (1900ms)
+  setTimeout(() => {
+    overlay.style.opacity = '0';
+    setTimeout(() => {
+      overlay.style.display = 'none';
+      overlay.innerHTML = '<img class="mascot" src="https://asimetrix.co/hubfs/AX%20-%20Pv%20con%20cerdo.png" alt="PigVision mascot">';
+      isTransitioning = false;
+      callback();
+    }, 400);
+  }, 1900);
+}
+
+function spawnMatrixRain(container) {
+  const cols = Math.floor(window.innerWidth / 18);
+  const chars = 'アイウエオカキクケコサシスセソタチツテト0123456789ABCDEF';
+  for (let i = 0; i < cols; i++) {
+    const col = document.createElement('div');
+    col.className = 'matrix-col';
+    col.style.left = (i * 18) + 'px';
+    col.style.opacity = (0.15 + Math.random() * 0.35).toString();
+    let text = '';
+    for (let j = 0; j < 60; j++) text += chars[Math.floor(Math.random() * chars.length)];
+    col.textContent = text;
+    container.appendChild(col);
+  }
+}
+
+// Navigation
+document.addEventListener('wheel', (e) => {
+  if (isTransitioning) return;
+  if (e.deltaY > 0) goToSlide(currentSlide + 1);
+  else goToSlide(currentSlide - 1);
+}, { passive: true });
+
+document.addEventListener('keydown', (e) => {
+  if (isTransitioning) return;
+  if (e.key === 'ArrowDown' || e.key === 'ArrowRight') goToSlide(currentSlide + 1);
+  if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') goToSlide(currentSlide - 1);
+});
+
+// Touch support
+let touchStartY = 0;
+document.addEventListener('touchstart', (e) => {
+  touchStartY = e.touches[0].clientY;
+}, { passive: true });
+document.addEventListener('touchend', (e) => {
+  const diff = touchStartY - e.changedTouches[0].clientY;
+  if (Math.abs(diff) > 50) {
+    if (diff > 0) goToSlide(currentSlide + 1);
+    else goToSlide(currentSlide - 1);
+  }
+}, { passive: true });
+
+// Fullscreen
+function toggleFullscreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen();
+  } else {
+    document.exitFullscreen();
+  }
+}
+
+// Timer functions
+function startTimer(id) {
+  const timer = timers[id];
+  if (timer.running || timer.remaining <= 0) return;
+  timer.running = true;
+  document.getElementById('timer' + id + '-start').disabled = true;
+  document.getElementById('timer' + id + '-pause').disabled = false;
+  
+  timer.interval = setInterval(() => {
+    timer.remaining--;
+    updateTimerDisplay(id);
+    if (timer.remaining <= 0) {
+      clearInterval(timer.interval);
+      timer.running = false;
+      document.getElementById('timer' + id + '-start').disabled = false;
+      document.getElementById('timer' + id + '-pause').disabled = true;
+      // Alert
+      const display = document.getElementById('timer' + id + '-display');
+      display.style.animation = 'none';
+      void display.offsetWidth;
+      display.style.animation = 'pulse 0.5s 3';
+    }
+  }, 1000);
+}
+
+function pauseTimer(id) {
+  const timer = timers[id];
+  if (!timer.running) return;
+  clearInterval(timer.interval);
+  timer.running = false;
+  document.getElementById('timer' + id + '-start').disabled = false;
+  document.getElementById('timer' + id + '-pause').disabled = true;
+}
+
+function resetTimer(id) {
+  const timer = timers[id];
+  clearInterval(timer.interval);
+  timer.running = false;
+  timer.remaining = timer.total;
+  updateTimerDisplay(id);
+  document.getElementById('timer' + id + '-start').disabled = false;
+  document.getElementById('timer' + id + '-pause').disabled = true;
+  const display = document.getElementById('timer' + id + '-display');
+  display.style.animation = 'none';
+}
+
+function updateTimerDisplay(id) {
+  const timer = timers[id];
+  const mins = Math.floor(timer.remaining / 60);
+  const secs = timer.remaining % 60;
+  document.getElementById('timer' + id + '-display').textContent =
+    String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+}
+
+// Add pulse animation
+const style = document.createElement('style');
+style.textContent = `
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+`;
+document.head.appendChild(style);
+
+// Init
+updateProgress();
+updateBullets();
+updateFullscreenBtn();
+</script>
+</body>
+</html>
