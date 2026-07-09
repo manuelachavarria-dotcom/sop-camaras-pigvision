@@ -511,6 +511,19 @@
   .fade-up.d3 { transition-delay: 0.3s; }
   .fade-up.d4 { transition-delay: 0.4s; }
 
+  @media print {
+    .back-bar, .nav-dots { display:none !important; }
+    .cover { min-height:auto; height:auto; padding:40px; }
+    .content-wrap { padding:20px 30px; }
+    .fade-up { opacity:1 !important; transform:none !important; }
+    .role-card, .card { break-inside:avoid; page-break-inside:avoid; }
+    .roles-grid { grid-template-columns:1fr 1fr 1fr; }
+    .escalation-flow { flex-wrap:nowrap; }
+    .esc-node { padding:12px 16px; }
+    section { padding:20px 0; }
+    body { font-size:10pt; }
+  }
+
   /* ===== RESPONSIVE ===== */
   @media (max-width: 900px) {
     .roles-grid, .diag-grid { grid-template-columns: 1fr; }

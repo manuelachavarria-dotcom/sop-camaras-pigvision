@@ -69,6 +69,17 @@
 
   .fade-up { opacity:0; transform:translateY(20px); transition:all 0.6s cubic-bezier(0.16,1,0.3,1); }
   .fade-up.visible { opacity:1; transform:translateY(0); }
+
+  @media print {
+    .back-bar { display:none; }
+    .page-header { padding:30px 40px 20px; }
+    .page-header h1 { font-size:24pt; }
+    .content { padding:20px 30px 30px; }
+    .fade-up { opacity:1; transform:none; }
+    .card { break-inside:avoid; page-break-inside:avoid; }
+    .divider { margin:20px 0; }
+    body { font-size:10pt; }
+  }
 </style>
 </head>
 <body>
