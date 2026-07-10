@@ -56,17 +56,20 @@
   .badge.maintenance { background:rgba(0,114,198,0.08); color:var(--secondary); }
   .badge.asimetrix { background:rgba(192,6,43,0.08); color:var(--error); }
 
-  .cases-row { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:16px; align-items:start; }
-  .cases-row .card { margin-bottom:0; display:flex; flex-direction:column; }
+  .cases-row { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:16px; align-items:stretch; }
+  .cases-row .card { margin-bottom:0; display:flex; flex-direction:column; height:100%; }
+  .cases-row .card > *:last-child { margin-top:auto; }
+  .cases-row .card-content { flex:1; display:flex; flex-direction:column; }
 
   .cases-row .step { padding:8px 12px; margin-bottom:6px; }
   .cases-row .step-num { width:24px; height:24px; font-size:9pt; }
   .cases-row .step-text .action { font-size:9.5pt; }
   .cases-row .step-text .verify { font-size:8pt; }
-  .cases-row .decision { padding:14px 16px; margin:10px 0; }
+  .cases-row .decision { padding:14px 16px; margin:10px 0 0 0; }
   .cases-row .decision .q { font-size:10pt; margin-bottom:8px; }
   .cases-row .decision .options { flex-direction:column; gap:8px; }
   .cases-row .decision .opt { padding:10px 12px; font-size:9pt; }
+  .cases-row .badge { margin-top:6px; }
 
   .divider { border:none; border-top:1px solid #E5EAF2; margin:32px 0; }
 
@@ -135,8 +138,10 @@
       <span class="emoji">⚫</span>
       <span class="title">Caso 1 — Cámara apagada</span>
     </div>
-    <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Revisar si la cámara está apagada</div><div class="verify">Presionar el botón de ON</div></div></div>
-    <div class="step"><div class="step-num">2</div><div class="step-text"><div class="action">Confirmar que no haya un problema de conexión</div><div class="verify">Cable suelto, desconectado o dañado</div></div></div>
+    <div class="card-content">
+      <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Revisar si la cámara está apagada</div><div class="verify">Presionar el botón de ON</div></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-text"><div class="action">Confirmar que no haya un problema de conexión</div><div class="verify">Cable suelto, desconectado o dañado</div></div></div>
+    </div>
     <div class="decision">
       <div class="q">¿Conexión OK?</div>
       <div class="options">
@@ -152,24 +157,26 @@
       <span class="emoji">🔴</span>
       <span class="title">Caso 2 — LED rojo (sin internet)</span>
     </div>
-    <div class="decision">
-      <div class="q">¿Cuántas cámaras están en rojo?</div>
-      <div class="options">
-        <div class="opt yes">
-          <div class="label">Solo una</div>
-          <div style="margin-top:8px;">
-            <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Apagar cámara del botón ON</div></div></div>
-            <div class="step"><div class="step-num">2</div><div class="step-text"><div class="action">Desconectar energía</div></div></div>
-            <div class="step"><div class="step-num">3</div><div class="step-text"><div class="action">Esperar 5 minutos</div></div></div>
-            <div class="step"><div class="step-num">4</div><div class="step-text"><div class="action">Conectar y encender del botón ON</div></div></div>
+    <div class="card-content">
+      <div class="decision" style="margin-top:0;">
+        <div class="q">¿Cuántas cámaras están en rojo?</div>
+        <div class="options">
+          <div class="opt yes">
+            <div class="label">Solo una</div>
+            <div style="margin-top:8px;">
+              <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Apagar cámara del botón ON</div></div></div>
+              <div class="step"><div class="step-num">2</div><div class="step-text"><div class="action">Desconectar energía</div></div></div>
+              <div class="step"><div class="step-num">3</div><div class="step-text"><div class="action">Esperar 5 minutos</div></div></div>
+              <div class="step"><div class="step-num">4</div><div class="step-text"><div class="action">Conectar y encender del botón ON</div></div></div>
+            </div>
           </div>
-        </div>
-        <div class="opt no">
-          <div class="label">Todas</div>
-          <div style="margin-top:8px;">
-            <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Escalar a <strong>Mantenimiento</strong> para revisar el router</div></div></div>
+          <div class="opt no">
+            <div class="label">Todas</div>
+            <div style="margin-top:8px;">
+              <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Escalar a <strong>Mantenimiento</strong> para revisar el router</div></div></div>
+            </div>
+            <div style="margin-top:6px;"><span class="badge maintenance">Escalar</span></div>
           </div>
-          <div style="margin-top:6px;"><span class="badge maintenance">Escalar</span></div>
         </div>
       </div>
     </div>
@@ -181,10 +188,12 @@
       <span class="emoji">🟡</span>
       <span class="title">Caso 3 — Solo LED ON</span>
     </div>
-    <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Apagar cámara del botón ON</div></div></div>
-    <div class="step"><div class="step-num">2</div><div class="step-text"><div class="action">Desconectar energía</div></div></div>
-    <div class="step"><div class="step-num">3</div><div class="step-text"><div class="action">Esperar 5 minutos</div></div></div>
-    <div class="step"><div class="step-num">4</div><div class="step-text"><div class="action">Conectar y encender del botón ON</div></div></div>
+    <div class="card-content">
+      <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Apagar cámara del botón ON</div></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-text"><div class="action">Desconectar energía</div></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-text"><div class="action">Esperar 5 minutos</div></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-text"><div class="action">Conectar y encender del botón ON</div></div></div>
+    </div>
     <div class="decision">
       <div class="q">¿Se resolvió?</div>
       <div class="options">
