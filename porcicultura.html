@@ -56,7 +56,7 @@
   .badge.maintenance { background:rgba(0,114,198,0.08); color:var(--secondary); }
   .badge.asimetrix { background:rgba(192,6,43,0.08); color:var(--error); }
 
-  .cases-row { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:16px; align-items:stretch; }
+  .cases-row { display:grid; grid-template-columns:1.5fr 2fr 1.5fr; gap:16px; margin-bottom:16px; align-items:stretch; }
   .cases-row .card { margin-bottom:0; display:flex; flex-direction:column; height:100%; }
   .cases-row .card > *:last-child { margin-top:auto; }
   .cases-row .card-content { flex:1; display:flex; flex-direction:column; }
@@ -83,7 +83,7 @@
     .content { padding:20px 30px 30px; }
     .fade-up { opacity:1; transform:none; }
     .card { break-inside:avoid; page-break-inside:avoid; }
-    .cases-row { grid-template-columns:1fr 1fr 1fr; }
+    .cases-row { grid-template-columns:1.5fr 2fr 1.5fr; }
     .divider { margin:20px 0; }
     body { font-size:10pt; }
   }
