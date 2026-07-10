@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #0072C6;
+  --primary-dark: #0B2D5C;
+  --accent: #2A8FDF;
+  --white: #FFFFFF;
+  --bg: #F5F8FC;
+  --gray: #6B7280;
+  --danger: #C0062B;
+  --border: #E5EAF2;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  color: #1F2937;
+  line-height: 1.6;
+  background: var(--white);
+}
+
+@page {
+  size: A4;
+  margin: 0;
+}
+
+/* PORTADA */
+.cover {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--accent) 100%);
+  color: white;
+  text-align: center;
+  padding: 60px 40px;
+  page-break-after: always;
+}
+
+.cover-logo {
+  width: 120px;
+  height: auto;
+  margin-bottom: 40px;
+  filter: brightness(0) invert(1);
+}
+
+.cover h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 32pt;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin-bottom: 12px;
+  line-height: 1.1;
+}
+
+.cover h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18pt;
+  font-weight: 500;
+  opacity: 0.9;
+  margin-bottom: 40px;
+}
+
+.cover-meta {
+  font-size: 10pt;
+  opacity: 0.7;
+  margin-top: 40px;
+}
+
+/* CONTENT */
+.content {
+  padding: 40px 50px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* SECTION HEADERS */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 3px solid var(--primary);
+  page-break-after: avoid;
+}
+
+.section-icon {
+  font-size: 28px;
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.section-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20pt;
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+
+.section-subtitle {
+  font-size: 9pt;
+  color: var(--gray);
+  margin-top: 2px;
+}
+
+/* ROLE CARD */
+.role-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 32px;
+  page-break-inside: avoid;
+}
+
+.role-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.role-icon {
+  font-size: 32px;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.role-name {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16pt;
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+
+.role-level {
+  display: inline-block;
+  background: var(--primary);
+  color: white;
+  font-size: 8pt;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  margin-top: 4px;
+}
+
+.role-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.skill-tag {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 8pt;
+  color: var(--gray);
+}
+
+/* ACTIVITY / DIAGNOSTIC BLOCKS */
+.block {
+  margin-bottom: 28px;
+  page-break-inside: avoid;
+}
+
+.block-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 9pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--primary);
+  margin-bottom: 4px;
+}
+
+.block-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14pt;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-bottom: 4px;
+}
+
+.block-desc {
+  font-size: 9pt;
+  color: var(--gray);
+  margin-bottom: 16px;
+}
+
+/* STEPS */
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 10px;
+  page-break-inside: avoid;
+}
+
+.step-num {
+  width: 28px;
+  height: 28px;
+  background: var(--primary);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10pt;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.step-content {
+  flex: 1;
+}
+
+.step-title {
+  font-weight: 600;
+  font-size: 10pt;
+  color: #1F2937;
+}
+
+.step-desc {
+  font-size: 8.5pt;
+  color: var(--gray);
+  margin-top: 2px;
+}
+
+/* CASE CARDS */
+.cases-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.case-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  page-break-inside: avoid;
+}
+
+.case-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--border);
+}
+
+.case-emoji {
+  font-size: 20px;
+}
+
+.case-name {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 9pt;
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+
+.case-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.case-num {
+  width: 20px;
+  height: 20px;
+  background: var(--primary);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8pt;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.case-text {
+  font-size: 8.5pt;
+  color: #1F2937;
+  line-height: 1.4;
+}
+
+.case-text small {
+  display: block;
+  color: var(--gray);
+  font-size: 7.5pt;
+  margin-top: 1px;
+}
+
+/* DECISION */
+.decision-box {
+  background: #FEF3C7;
+  border: 1px solid #F59E0B;
+  border-radius: 10px;
+  padding: 12px;
+  margin-top: 10px;
+  page-break-inside: avoid;
+}
+
+.decision-box.blue {
+  background: #DBEAFE;
+  border-color: #3B82F6;
+}
+
+.decision-q {
+  font-weight: 700;
+  font-size: 9pt;
+  color: #92400E;
+  margin-bottom: 8px;
+}
+
+.decision-box.blue .decision-q {
+  color: #1E40AF;
+}
+
+.decision-options {
+  display: flex;
+  gap: 10px;
+}
+
+.decision-opt {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 8pt;
+  font-weight: 600;
+}
+
+.opt-yes {
+  background: #D1FAE5;
+  color: #065F46;
+  border: 1px solid #34D399;
+}
+
+.opt-no {
+  background: #FEE2E2;
+  color: #991B1B;
+  border: 1px solid #F87171;
+}
+
+.badge-escalar {
+  display: inline-block;
+  background: var(--primary);
+  color: white;
+  font-size: 7pt;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-top: 4px;
+}
+
+/* CONTEXT BOX */
+.context-box {
+  background: #EFF6FF;
+  border-left: 4px solid var(--primary);
+  border-radius: 0 10px 10px 0;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  page-break-inside: avoid;
+}
+
+.context-box h4 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10pt;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-bottom: 6px;
+}
+
+.context-box p, .context-box li {
+  font-size: 9pt;
+  color: #374151;
+  margin-bottom: 4px;
+}
+
+.context-box ul {
+  padding-left: 18px;
+}
+
+.context-box .note {
+  font-size: 8pt;
+  color: var(--gray);
+  font-style: italic;
+  margin-top: 6px;
+}
+
+/* TIMELINE */
+.timeline {
+  position: relative;
+  padding-left: 40px;
+  margin-bottom: 24px;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 16px;
+  top: 8px;
+  bottom: 8px;
+  width: 3px;
+  background: linear-gradient(180deg, var(--primary), var(--accent));
+  border-radius: 2px;
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 20px;
+  page-break-inside: avoid;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -32px;
+  top: 2px;
+  width: 28px;
+  height: 28px;
+  background: var(--primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  box-shadow: 0 2px 8px rgba(0,114,198,0.3);
+}
+
+.timeline-content h4 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10pt;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-bottom: 3px;
+}
+
+.timeline-content p {
+  font-size: 8.5pt;
+  color: var(--gray);
+}
+
+/* NETWORK NOTE */
+.network-note {
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+  color: white;
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  page-break-inside: avoid;
+}
+
+.network-note .icon {
+  font-size: 20px;
+}
+
+.network-note .text {
+  font-size: 9pt;
+  font-weight: 500;
+}
+
+.network-note .text strong {
+  font-weight: 700;
+}
+
+/* ESCALATION FLOW */
+.escalation-flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 24px 0;
+  page-break-inside: avoid;
+}
+
+.esc-node {
+  background: white;
+  border: 2px solid var(--primary);
+  border-radius: 14px;
+  padding: 14px 18px;
+  text-align: center;
+  min-width: 100px;
+}
+
+.esc-node-icon {
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+
+.esc-node-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 8.5pt;
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+
+.esc-arrow {
+  font-size: 20pt;
+  color: var(--primary);
+  font-weight: 700;
+}
+
+/* WARNING */
+.warning-box {
+  background: #FEF3C7;
+  border: 1px solid #F59E0B;
+  border-radius: 10px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 16px 0;
+  page-break-inside: avoid;
+}
+
+.warning-box .icon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.warning-box p {
+  font-size: 9pt;
+  color: #92400E;
+  font-weight: 500;
+}
+
+/* CONTACT CARDS */
+.contacts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.contact-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  text-align: center;
+  page-break-inside: avoid;
+}
+
+.contact-icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.contact-name {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10pt;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-bottom: 4px;
+}
+
+.contact-phone {
+  font-size: 9pt;
+  color: var(--gray);
+}
+
+/* SECTION DIVIDER */
+.section-divider {
+  page-break-before: always;
+}
+
+/* PAGE BREAK */
+.page-break {
+  page-break-before: always;
+}
+
+/* PRINT STYLES */
+@media print {
+  .cover { height: 100vh; }
+  .section-divider { page-break-before: always; }
+  .page-break { page-break-before: always; }
+  .role-card, .case-card, .decision-box, .context-box, .timeline-item, .network-note, .warning-box, .contact-card {
+    break-inside: avoid;
+  }
+  body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+</style>
+</head>
+<body>
+
+<!-- PORTADA -->
+<div class="cover">
+  <img src="Logo-Asimetrix.webp" alt="Asimetrix" class="cover-logo">
+  <h1>Procedimiento Operativo</h1>
+  <h2>Revisión PigVision</h2>
+  <div class="cover-meta">Cámaras IoT para Granjas Porcinas<br>Asimetrix — 2026</div>
+</div>
+
+<!-- ROLES Y RESPONSABILIDADES -->
+<div class="content section-divider">
+  <div class="section-header">
+    <div class="section-icon">👥</div>
+    <div>
+      <div class="section-title">Roles y Responsabilidades</div>
+      <div class="section-subtitle">Cada equipo tiene un rol definido. Si no puede resolver, escala al siguiente nivel.</div>
+    </div>
+  </div>
+
+  <!-- PORCULTURA -->
+  <div class="role-card">
+    <div class="role-header">
+      <div class="role-icon">🐷</div>
+      <div>
+        <div class="role-name">Equipo de Porcicultura</div>
+        <div class="role-level">NIVEL 1</div>
+      </div>
+    </div>
+    <div class="role-skills">
+      <span class="skill-tag">Limpieza de cámaras</span>
+      <span class="skill-tag">Inspección visual</span>
+      <span class="skill-tag">Revisión de LEDs</span>
+      <span class="skill-tag">Reinicio básico</span>
+      <span class="skill-tag">Registro de novedades</span>
+    </div>
+  </div>
+
+  <!-- REVISIÓN PORCULTURA -->
+  <div class="block">
+    <div class="block-label">ACTIVIDAD</div>
+    <div class="block-title">Revisión</div>
+    <div class="block-desc">Pasos que el equipo de Porcicultura realiza en cada visita programada.</div>
+    <div class="step"><div class="step-num">1</div><div class="step-content"><div class="step-title">Limpiar el lente de cada cámara</div><div class="step-desc">Sin polvo, residuos ni condensación</div></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content"><div class="step-title">Limpiar el exterior de la cámara</div><div class="step-desc">Sin suciedad acumulada en carcasa</div></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content"><div class="step-title">Verificar el estado de los LEDs</div><div class="step-desc">Observar color y comportamiento de cada LED</div></div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-content"><div class="step-title">Registrar novedades</div><div class="step-desc">Anotar número de cámaras con anomalías</div></div></div>
+  </div>
+
+  <!-- DIAGNÓSTICO PORCULTURA -->
+  <div class="block">
+    <div class="block-label">DIAGNÓSTICO</div>
+    <div class="block-title">Según el estado del LED</div>
+    <div class="block-desc">Acciones a tomar según la observación de cada cámara.</div>
+
+    <div class="cases-grid">
+      <!-- CASO 1 -->
+      <div class="case-card">
+        <div class="case-header">
+          <span class="case-emoji">⚫</span>
+          <span class="case-name">Caso 1 — Cámara apagada</span>
+        </div>
+        <div class="case-step"><div class="case-num">1</div><div class="case-text">Revisar si la cámara está apagada<small>Presionar el botón de ON</small></div></div>
+        <div class="case-step"><div class="case-num">2</div><div class="case-text">Confirmar que no haya un problema de conexión<small>Cable suelto, desconectado o dañado</small></div></div>
+        <div class="decision-box blue">
+          <div class="decision-q">¿Conexión OK?</div>
+          <div class="decision-options">
+            <div class="decision-opt opt-yes">✓ Sí<br>Resuelto</div>
+            <div class="decision-opt opt-no">✗ No<br>Escalar a Mantenimiento<br><span class="badge-escalar">ESCALAR</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CASO 2 -->
+      <div class="case-card">
+        <div class="case-header">
+          <span class="case-emoji">🔴</span>
+          <span class="case-name">Caso 2 — LED rojo (sin internet)</span>
+        </div>
+        <div class="decision-box" style="margin-top:0; margin-bottom:10px;">
+          <div class="decision-q">¿Cuántas cámaras están en rojo?</div>
+        </div>
+        <div style="font-size:8.5pt; font-weight:600; color:#1F2937; margin-bottom:6px;">Solo una:</div>
+        <div class="case-step"><div class="case-num">1</div><div class="case-text">Apagar cámara del botón ON</div></div>
+        <div class="case-step"><div class="case-num">2</div><div class="case-text">Desconectar energía</div></div>
+        <div class="case-step"><div class="case-num">3</div><div class="case-text">Esperar 5 minutos</div></div>
+        <div class="case-step"><div class="case-num">4</div><div class="case-text">Conectar y encender del botón ON</div></div>
+        <div style="font-size:8.5pt; font-weight:600; color:#1F2937; margin-top:8px; margin-bottom:4px;">Todas:</div>
+        <div class="case-step"><div class="case-num">1</div><div class="case-text">Escalar a Mantenimiento para revisar el router<br><span class="badge-escalar">ESCALAR</span></div></div>
+      </div>
+
+      <!-- CASO 3 -->
+      <div class="case-card">
+        <div class="case-header">
+          <span class="case-emoji">🟡</span>
+          <span class="case-name">Caso 3 — Solo LED ON</span>
+        </div>
+        <div class="case-step"><div class="case-num">1</div><div class="case-text">Apagar cámara del botón ON</div></div>
+        <div class="case-step"><div class="case-num">2</div><div class="case-text">Desconectar energía</div></div>
+        <div class="case-step"><div class="case-num">3</div><div class="case-text">Esperar 5 minutos</div></div>
+        <div class="case-step"><div class="case-num">4</div><div class="case-text">Conectar y encender del botón ON</div></div>
+        <div class="decision-box blue">
+          <div class="decision-q">¿Se resolvió?</div>
+          <div class="decision-options">
+            <div class="decision-opt opt-yes">✓ Sí<br>Resuelto</div>
+            <div class="decision-opt opt-no">✗ No<br>Escalar a Asimetrix<br><span class="badge-escalar">ESCALAR</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MANTENIMIENTO -->
+<div class="content section-divider">
+  <!-- ROLE CARD MANTENIMIENTO -->
+  <div class="role-card">
+    <div class="role-header">
+      <div class="role-icon">🔧</div>
+      <div>
+        <div class="role-name">Equipo de Mantenimiento</div>
+        <div class="role-level">NIVEL 2</div>
+      </div>
+    </div>
+    <div class="role-skills">
+      <span class="skill-tag">Alimentación eléctrica</span>
+      <span class="skill-tag">UPS</span>
+      <span class="skill-tag">Breakers</span>
+      <span class="skill-tag">Router</span>
+      <span class="skill-tag">Cableado</span>
+    </div>
+  </div>
+
+  <!-- CONTEXTO MANTENIMIENTO -->
+  <div class="context-box">
+    <h4>CONTEXTO — Revisión</h4>
+    <p><strong>Cuándo interviene el equipo de Mantenimiento:</strong></p>
+    <ul>
+      <li>Una o varias cámaras no encienden (LED apagado).</li>
+      <li>Todas las cámaras presentan LED rojo simultáneamente.</li>
+    </ul>
+    <p class="note">Nota: Si solo una cámara tiene LED rojo, el Equipo de Porcicultura realiza el reinicio antes de escalar.</p>
+  </div>
+
+  <!-- DIAGNÓSTICO ELÉCTRICO -->
+  <div class="block">
+    <div class="block-label">DIAGNÓSTICO</div>
+    <div class="block-title">Verificaciones Eléctricas</div>
+    <div class="block-desc">Pasos a seguir en orden.</div>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot">⚡</div>
+        <div class="timeline-content">
+          <h4>Alimentación eléctrica</h4>
+          <p>Revisar que la corriente llegue a las cámaras. Debe estar presente y estable.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot">🔋</div>
+        <div class="timeline-content">
+          <h4>UPS</h4>
+          <p>Validar que la fuente de poder ininterrumpida esté encendida y funcionando.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot">⚙️</div>
+        <div class="timeline-content">
+          <h4>Breaker</h4>
+          <p>Verificar si el breaker está disparado. Restablecer y confirmar que no se vuelva a disparar.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot">📡</div>
+        <div class="timeline-content">
+          <h4>Router Asimetrix</h4>
+          <p>Confirmar que esté encendido y generando la red AsimetrixIOA.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot">🌐</div>
+        <div class="timeline-content">
+          <h4>Internet</h4>
+          <p>Validar si hay conectividad a través de la red AsimetrixIOA.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="network-note">
+      <div class="icon">📶</div>
+      <div class="text"><strong>Datos de red:</strong> Red: AsimetrixIOA — Contraseña: 4s1m4tr1x</div>
+    </div>
+  </div>
+
+  <!-- DIAGNÓSTICO ROUTER -->
+  <div class="block">
+    <div class="block-label">DIAGNÓSTICO</div>
+    <div class="block-title">Revisión del Router Asimetrix</div>
+
+    <div class="step"><div class="step-num">1</div><div class="step-content"><div class="step-title">Verificar que el router esté encendido</div></div></div>
+    <div class="decision-box" style="margin-left: 40px; margin-bottom: 12px;">
+      <div class="decision-q">¿El router enciende?</div>
+      <div class="decision-options">
+        <div class="decision-opt opt-no">✗ No<br>Revisar alimentación eléctrica del router<br>Verificar si presenta daño físico visible</div>
+        <div class="decision-opt opt-yes">✓ Sí<br>Continuar al paso siguiente</div>
+      </div>
+    </div>
+
+    <div style="font-size:8.5pt; color:var(--gray); margin-bottom:10px; margin-left:40px;">Si el router enciende:</div>
+    <div class="step"><div class="step-num">2</div><div class="step-content"><div class="step-title">Confirmar que esté generando la red AsimetrixIOA</div><div class="step-desc">Contraseña: 4s1m4tr1x</div></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content"><div class="step-title">Verificar si aparece el estado "Conectado, sin internet"</div></div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-content"><div class="step-title">Reiniciar el router</div></div></div>
+    <div class="decision-box blue" style="margin-left: 40px;">
+      <div class="decision-q">¿Después del reinicio tiene internet?</div>
+      <div class="decision-options">
+        <div class="decision-opt opt-yes">✓ Sí<br>Registrar como resuelto</div>
+        <div class="decision-opt opt-no">✗ No<br>Escalar al equipo de Tecnología<br><span class="badge-escalar">ESCALAR A TECNOLOGÍA</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TECNOLOGÍA -->
+<div class="content section-divider">
+  <!-- ROLE CARD TECNOLOGÍA -->
+  <div class="role-card">
+    <div class="role-header">
+      <div class="role-icon">💻</div>
+      <div>
+        <div class="role-name">Equipo de Tecnología</div>
+        <div class="role-level">NIVEL 3</div>
+      </div>
+    </div>
+    <div class="role-skills">
+      <span class="skill-tag">Diagnóstico avanzado</span>
+      <span class="skill-tag">Internet</span>
+      <span class="skill-tag">Redes</span>
+      <span class="skill-tag">Conectividad</span>
+      <span class="skill-tag">Incidentes especializados</span>
+    </div>
+  </div>
+
+  <!-- CONTEXTO TECNOLOGÍA -->
+  <div class="context-box">
+    <h4>Revisión</h4>
+    <p><strong>Cuándo interviene el equipo de Tecnología:</strong></p>
+    <ul>
+      <li>El Equipo de Porcicultura ya intentó el reinicio de la cámara sin éxito.</li>
+      <li>El Equipo de Mantenimiento verificó alimentación eléctrica, UPS y breaker sin encontrar fallos.</li>
+      <li>Se presentan todas las cámaras con LED rojo simultáneamente y el problema persiste tras la intervención del equipo de Mantenimiento.</li>
+    </ul>
+    <p class="note">Importante: Este nivel se activa solo cuando los niveles anteriores ya fueron realizados.</p>
+  </div>
+
+  <!-- DIAGNÓSTICO DISPOSITIVO -->
+  <div class="block">
+    <div class="block-label">DIAGNÓSTICO</div>
+    <div class="block-title">Revisión del Dispositivo</div>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot">📡</div>
+        <div class="timeline-content">
+          <h4>Router Asimetrix</h4>
+          <p>Confirmar que esté encendido y generando la red Asimetrix ioA.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot">📶</div>
+        <div class="timeline-content">
+          <h4>Estado del router</h4>
+          <p>Verificar si presenta el estado "Conectado, sin internet".</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot">🔄</div>
+        <div class="timeline-content">
+          <h4>Reiniciar el router</h4>
+          <p>Si tiene problemas de conectividad, reiniciar y verificar nuevamente.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot">📱</div>
+        <div class="timeline-content">
+          <h4>Cámara PigVision</h4>
+          <p>Verificar si la cámara está conectada a la red Asimetrix ioA.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="step"><div class="step-num">1</div><div class="step-content"><div class="step-title">Confirmar que el router Asimetrix esté encendido y generando la red</div></div></div>
+    <div class="decision-box" style="margin-left: 40px; margin-bottom: 12px;">
+      <div class="decision-q">¿El router genera la red Asimetrix ioA?</div>
+      <div class="decision-options">
+        <div class="decision-opt opt-yes">✓ Sí<br>Continuar al paso 2</div>
+        <div class="decision-opt opt-no">✗ No<br>Reiniciar el router</div>
+      </div>
+    </div>
+    <div class="step"><div class="step-num">2</div><div class="step-content"><div class="step-title">Verificar si el router presenta "Conectado, sin internet"</div></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content"><div class="step-title">Reiniciar el router</div></div></div>
+    <div class="decision-box blue" style="margin-left: 40px; margin-bottom: 12px;">
+      <div class="decision-q">¿Después del reinicio tiene internet?</div>
+      <div class="decision-options">
+        <div class="decision-opt opt-yes">✓ Sí<br>Verificar que la cámara se conecte a la red Asimetrix</div>
+        <div class="decision-opt opt-no">✗ No<br>Escalar a Asimetrix para diagnóstico remoto<br><span class="badge-escalar">ESCALAR A ASIMETRIX</span></div>
+      </div>
+    </div>
+    <div class="step"><div class="step-num">4</div><div class="step-content"><div class="step-title">Verificar que la cámara esté conectada a la red Asimetrix ioA</div></div></div>
+    <div class="step"><div class="step-num">5</div><div class="step-content"><div class="step-title">Registrar el estado actual de la cámara</div></div></div>
+  </div>
+</div>
+
+<!-- ESCALAMIENTO E INTERVENCIÓN ASIMETRIX -->
+<div class="content section-divider">
+  <div class="section-header">
+    <div class="section-icon">🏢</div>
+    <div>
+      <div class="section-title">Escalamiento</div>
+      <div class="section-subtitle">Flujo de escalamiento entre equipos.</div>
+    </div>
+  </div>
+
+  <div class="escalation-flow">
+    <div class="esc-node"><div class="esc-node-icon">🐷</div><div class="esc-node-title">Porcicultura</div></div>
+    <div class="esc-arrow">→</div>
+    <div class="esc-node"><div class="esc-node-icon">🔧</div><div class="esc-node-title">Mantenimiento</div></div>
+    <div class="esc-arrow">→</div>
+    <div class="esc-node"><div class="esc-node-icon">💻</div><div class="esc-node-title">Tecnología</div></div>
+    <div class="esc-arrow">→</div>
+    <div class="esc-node"><div class="esc-node-icon">🏢</div><div class="esc-node-title">Asimetrix</div></div>
+  </div>
+
+  <div class="warning-box">
+    <div class="icon">⚠️</div>
+    <p><strong>Nunca saltar niveles de escalamiento.</strong> Cada equipo resuelve lo que le corresponde antes de escalar.</p>
+  </div>
+
+  <!-- INTERVENCIÓN ASIMETRIX -->
+  <div class="section-header" style="margin-top:32px;">
+    <div class="section-icon">🏢</div>
+    <div>
+      <div class="section-title">Intervención Asimetrix</div>
+      <div class="section-subtitle">Cuando el problema persiste tras la intervención de los tres niveles anteriores.</div>
+    </div>
+  </div>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-dot">📞</div>
+      <div class="timeline-content">
+        <h4>Contactar a Asimetrix</h4>
+        <p>Proporcionar: número de cámara, LED observado, acciones ya realizadas, estado del router.</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot">🔧</div>
+      <div class="timeline-content">
+        <h4>Seguir las instrucciones del equipo de Asimetrix</h4>
+        <p>Puede incluir: configuración de la red, o reemplazo del dispositivo.</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot">📋</div>
+      <div class="timeline-content">
+        <h4>Registrar el resultado de la intervención</h4>
+        <p>Documentar: problema reportado, intervención realizada, resultado final.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SOPORTE -->
+<div class="content">
+  <div class="section-header">
+    <div class="section-icon">📞</div>
+    <div>
+      <div class="section-title">Soporte Asimetrix</div>
+    </div>
+  </div>
+
+  <div class="contacts-grid">
+    <div class="contact-card">
+      <div class="contact-icon">👩‍💼</div>
+      <div class="contact-name">Manuela Chavarría</div>
+      <div class="contact-phone">+57 318 220 2707</div>
+    </div>
+    <div class="contact-card">
+      <div class="contact-icon">👨‍💼</div>
+      <div class="contact-name">Damián García</div>
+      <div class="contact-phone">+57 311 207 8988</div>
+    </div>
+    <div class="contact-card">
+      <div class="contact-icon">👩‍💼</div>
+      <div class="contact-name">Glenda Fuentes</div>
+      <div class="contact-phone">+57 300 365 9210</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
