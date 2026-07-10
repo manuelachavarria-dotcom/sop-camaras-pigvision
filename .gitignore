@@ -1,1 +1,11 @@
 node_modules/
+.DS_Store
+*.pdf
+*.md
+package.json
+package-lock.json
+EggVision.html
+presentacion-taller-pigvision.html
+Soporte PigVision Asimetrix.pdf
+SOP_Camaras_IoT_Asimetrix.pdf
+SOP_Inspeccion_Camaras_IoT_Granjas_Porcinas.pdf
