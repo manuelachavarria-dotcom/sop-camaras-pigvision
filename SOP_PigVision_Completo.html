@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOP PigVision Completo</title>
+    <style>
+:root { --primary:#0B2D5C; --secondary:#0072C6; --accent:#2A8FDF; --white:#FFF; --bg:#F5F8FC; --gray:#6B7280; --error:#C0062B; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter','Montserrat',sans-serif; font-size:11pt; color:var(--primary); background:var(--white); line-height:1.6; }
+.content { max-width:900px; margin:0 auto; padding:50px 40px 60px; }
+.section-label { font-family:'Montserrat',sans-serif; font-size:8pt; font-weight:700; text-transform:uppercase; letter-spacing:3px; color:var(--secondary); margin-bottom:6px; }
+.section-title { font-family:'Montserrat',sans-serif; font-size:22pt; font-weight:800; color:var(--primary); margin-bottom:8px; }
+.section-desc { color:var(--gray); font-size:10pt; margin-bottom:24px; }
+.card { background:var(--white); border:1px solid #E5EAF2; border-radius:16px; padding:24px; margin-bottom:16px; box-shadow:0 2px 8px rgba(11,45,92,0.04); }
+.card-header { display:flex; align-items:center; gap:10px; margin-bottom:16px; }
+.card-header .emoji { font-size:24px; }
+.card-header .title { font-family:'Montserrat',sans-serif; font-weight:700; font-size:14pt; }
+.step { display:flex; gap:14px; align-items:flex-start; padding:12px 16px; border-radius:10px; margin-bottom:8px; background:var(--white); border:1px solid #E5EAF2; }
+.step-num { width:28px; height:28px; border-radius:50%; background:var(--secondary); color:white; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:10pt; flex-shrink:0; }
+.step-text { flex:1; }
+.step-text .action { font-weight:600; font-size:10.5pt; }
+.step-text .verify { font-size:9pt; color:var(--gray); margin-top:3px; }
+.decision { background:var(--white); border:2px solid var(--secondary); border-radius:14px; padding:20px 24px; margin:16px 0; }
+.decision .q { font-family:'Montserrat',sans-serif; font-weight:700; font-size:12pt; color:var(--primary); margin-bottom:12px; }
+.decision .options { display:flex; gap:16px; }
+.decision .opt { flex:1; padding:14px 18px; border-radius:12px; font-size:10pt; }
+.decision .opt.yes { background:rgba(34,197,94,0.06); border:1px solid rgba(34,197,94,0.2); }
+.decision .opt.no { background:rgba(192,6,43,0.05); border:1px solid rgba(192,6,43,0.15); }
+.decision .opt .label { font-weight:700; margin-bottom:4px; }
+.decision .opt.yes .label { color:#16A34A; }
+.decision .opt.no .label { color:var(--error); }
+.badge { display:inline-block; padding:3px 10px; border-radius:12px; font-size:8pt; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; }
+.badge.maintenance { background:rgba(0,114,198,0.08); color:var(--secondary); }
+.badge.tech { background:rgba(42,143,223,0.08); color:var(--accent); }
+.badge.asimetrix { background:rgba(192,6,43,0.08); color:var(--error); }
+.note { background:rgba(0,114,198,0.05); border-left:3px solid var(--secondary); border-radius:0 8px 8px 0; padding:12px 18px; margin:16px 0; font-size:10pt; color:var(--secondary); }
+.divider { border:none; border-top:1px solid #E5EAF2; margin:32px 0; }
+.cases-row { display:grid; grid-template-columns:1.5fr 2fr 1.5fr; gap:16px; margin-bottom:16px; align-items:stretch; }
+.cases-row .card { margin-bottom:0; display:flex; flex-direction:column; height:100%; }
+.cases-row .card > *:last-child { margin-top:auto; }
+.cases-row .card-content { flex:1; display:flex; flex-direction:column; }
+.cases-row .step { padding:8px 12px; margin-bottom:6px; }
+.cases-row .step-num { width:24px; height:24px; font-size:9pt; }
+.cases-row .step-text .action { font-size:9.5pt; }
+.cases-row .step-text .verify { font-size:8pt; }
+.cases-row .decision { padding:14px 16px; margin:10px 0 0 0; }
+.cases-row .decision .q { font-size:10pt; margin-bottom:8px; }
+.cases-row .decision .options { flex-direction:column; gap:8px; }
+.cases-row .decision .opt { padding:10px 12px; font-size:9pt; }
+.cases-row .badge { margin-top:6px; }
+.timeline { display:flex; flex-direction:column; align-items:center; gap:0; padding:20px 0; }
+.t-item { display:flex; align-items:center; gap:20px; width:100%; max-width:550px; }
+.t-icon { width:52px; height:52px; border-radius:14px; background:var(--white); border:2px solid #E5EAF2; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; box-shadow:0 2px 8px rgba(11,45,92,0.04); }
+.t-text h4 { font-family:'Montserrat',sans-serif; font-size:11pt; font-weight:700; color:var(--primary); }
+.t-text p { font-size:9pt; color:var(--gray); }
+.t-connector { width:2px; height:24px; background:linear-gradient(180deg, var(--secondary), rgba(0,114,198,0.2)); margin-left:25px; }
+.escalation-flow { display:flex; align-items:center; justify-content:center; gap:16px; margin-bottom:30px; }
+.esc-node { background:var(--white); border:2px solid #E5EAF2; border-radius:14px; padding:18px 24px; text-align:center; min-width:160px; box-shadow:0 2px 8px rgba(11,45,92,0.04); }
+.esc-node-icon { font-size:28px; margin-bottom:6px; }
+.esc-node-title { font-family:'Montserrat',sans-serif; font-size:10pt; font-weight:700; color:var(--primary); }
+.esc-arrow { font-size:24px; color:var(--secondary); }
+.warning-box { background:rgba(192,6,43,0.05); border:1px solid rgba(192,6,43,0.15); border-radius:12px; padding:18px 24px; display:flex; align-items:center; gap:14px; max-width:500px; margin:0 auto; }
+.warning-box svg { width:24px; height:24px; stroke:var(--error); flex-shrink:0; }
+.warning-box p { font-size:10pt; color:var(--error); font-weight:500; }
+.page-break { page-break-before: always; }
+@page { size: A4; margin: 0; }
+@media print {
+  .card { break-inside:avoid; page-break-inside:avoid; }
+  .cases-row .card { break-inside:avoid; page-break-inside:avoid; }
+  .divider { margin:20px 0; }
+  body { font-size:10pt; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+}
+.role-card { padding:28px; }
+.role-card .role-icon { font-size:32px; margin-bottom:8px; }
+.role-card .role-name { font-family:'Montserrat',sans-serif; font-weight:700; font-size:13pt; color:var(--primary); margin-bottom:4px; }
+.role-card .role-level { margin-bottom:12px; }
+.role-card .role-skills { list-style:none; padding:0; margin:0; }
+.role-card .role-skills li { font-size:9.5pt; color:var(--primary); padding:4px 0; }
+.role-card .role-escalate { font-size:9pt; color:var(--gray); margin-top:12px; padding-top:10px; border-top:1px solid #E5EAF2; }
+.cover { min-height:100vh; background:linear-gradient(135deg, #0B2D5C 0%, #0072C6 50%, #2A8FDF 100%); display:flex; align-items:center; justify-content:center; text-align:center; color:var(--white); }
+.cover-inner { padding:60px; }
+.cover-inner img { width:180px; margin-bottom:60px; }
+.cover-inner h1 { font-family:'Montserrat',sans-serif; font-size:36pt; font-weight:800; margin-bottom:8px; }
+.cover-inner h2 { font-family:'Montserrat',sans-serif; font-size:18pt; font-weight:600; opacity:0.9; margin-bottom:80px; }
+.cover-inner .cover-footer { font-size:9pt; opacity:0.6; letter-spacing:2px; text-transform:uppercase; }
+.page-section { page-break-before:always; }
+</style>
+</head>
+<body>
+
+<!-- ==================== COVER PAGE ==================== -->
+<div class="cover">
+    <div class="cover-inner">
+        <img src="Logo-Asimetrix.webp" alt="Asimetrix">
+        <h1>Procedimiento Operativo</h1>
+        <h2>Revisión PigVision</h2>
+        <div class="cover-footer">Asimetrix • Procedimiento Operativo</div>
+    </div>
+</div>
+
+<!-- ==================== 02 ROLES Y RESPONSABILIDADES ==================== -->
+<div class="content">
+    <div class="section-label">02</div>
+    <div class="section-title">Roles y Responsabilidades</div>
+    <div class="section-desc">Cada equipo tiene un rol definido. Si no puede resolver, escala al siguiente nivel.</div>
+
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px;">
+        <div class="card role-card">
+            <div class="role-icon">🐷</div>
+            <div class="role-name">Porcicultura</div>
+            <div class="role-level"><span class="badge maintenance">NIVEL 1</span></div>
+            <ul class="role-skills">
+                <li>Limpieza de cámaras</li>
+                <li>Inspección visual</li>
+                <li>Revisión de LEDs</li>
+                <li>Reinicio básico</li>
+                <li>Registro de novedades</li>
+            </ul>
+            <div class="role-escalate">→ Escala a Mantenimiento</div>
+        </div>
+        <div class="card role-card">
+            <div class="role-icon">🔧</div>
+            <div class="role-name">Mantenimiento</div>
+            <div class="role-level"><span class="badge maintenance">NIVEL 2</span></div>
+            <ul class="role-skills">
+                <li>Alimentación eléctrica</li>
+                <li>UPS</li>
+                <li>Breakers</li>
+                <li>Router</li>
+                <li>Cableado</li>
+            </ul>
+            <div class="role-escalate">→ Escala a Tecnología</div>
+        </div>
+        <div class="card role-card">
+            <div class="role-icon">💻</div>
+            <div class="role-name">Tecnología</div>
+            <div class="role-level"><span class="badge tech">NIVEL 3</span></div>
+            <ul class="role-skills">
+                <li>Diagnóstico avanzado</li>
+                <li>Internet</li>
+                <li>Redes</li>
+                <li>Conectividad</li>
+                <li>Incidentes especializados</li>
+            </ul>
+            <div class="role-escalate">→ Escala a Asimetrix</div>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== 03 PORCULTURA ==================== -->
+<div class="content page-section">
+    <div class="card-header">
+        <span class="emoji">🐷</span>
+        <span class="title">Equipo de Porcicultura</span>
+        <span class="badge maintenance" style="margin-left:auto;">NIVEL 1</span>
+    </div>
+
+    <div class="section-label">ACTIVIDAD</div>
+    <div style="margin-bottom:24px;">
+        <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-text">
+                <div class="action">Limpiar el lente de la cámara</div>
+                <div class="verify">Utilizar un paño suave húmedo para retirar polvo y suciedad del lente</div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-text">
+                <div class="action">Limpiar el exterior de la cámara</div>
+                <div class="verify">Retirar residuos visibles del cuerpo y soporte de la cámara</div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-text">
+                <div class="action">Verificar el estado del LED indicador</div>
+                <div class="verify">Observar el color y comportamiento del LED en la parte frontal</div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-text">
+                <div class="action">Registrar novedades</div>
+                <div class="verify">Documentar el estado actual y cualquier anomalía observada</div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="section-label">DIAGNÓSTICO</div>
+    <div style="margin-bottom:8px; font-family:'Montserrat',sans-serif; font-weight:700; font-size:12pt;">Según el estado del LED</div>
+
+    <div class="cases-row">
+        <div class="card">
+            <div class="card-content">
+                <div style="font-size:18px; margin-bottom:4px;">⚫</div>
+                <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:10pt; margin-bottom:10px;">Cámara apagada</div>
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <div class="step-text">
+                        <div class="action">Verificar conexión eléctrica</div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <div class="step-text">
+                        <div class="action">Revisar cable de alimentación</div>
+                    </div>
+                </div>
+                <div class="decision">
+                    <div class="q">¿Conexión OK?</div>
+                    <div class="options">
+                        <div class="opt yes">
+                            <div class="label">Sí</div>
+                            Resuelto
+                        </div>
+                        <div class="opt no">
+                            <div class="label">No</div>
+                            Escalar a Mantenimiento
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-content">
+                <div style="font-size:18px; margin-bottom:4px;">🔴</div>
+                <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:10pt; margin-bottom:10px;">LED rojo (sin internet)</div>
+                <div class="decision">
+                    <div class="q">¿Cuántas cámaras?</div>
+                    <div class="options">
+                        <div class="opt yes">
+                            <div class="label">Solo una</div>
+                            <div class="step">
+                                <div class="step-num">1</div>
+                                <div class="step-text"><div class="action">Limpiar lente</div></div>
+                            </div>
+                            <div class="step">
+                                <div class="step-num">2</div>
+                                <div class="step-text"><div class="action">Limpiar exterior</div></div>
+                            </div>
+                            <div class="step">
+                                <div class="step-num">3</div>
+                                <div class="step-text"><div class="action">Reiniciar cámara</div></div>
+                            </div>
+                            <div class="step">
+                                <div class="step-num">4</div>
+                                <div class="step-text"><div class="action">Esperar reconexión</div></div>
+                            </div>
+                        </div>
+                        <div class="opt no">
+                            <div class="label">Todas</div>
+                            Escalar a Mantenimiento
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-content">
+                <div style="font-size:18px; margin-bottom:4px;">🟡</div>
+                <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:10pt; margin-bottom:10px;">Solo LED ON</div>
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <div class="step-text"><div class="action">Limpiar lente</div></div>
+                </div>
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <div class="step-text"><div class="action">Limpiar exterior</div></div>
+                </div>
+                <div class="step">
+                    <div class="step-num">3</div>
+                    <div class="step-text"><div class="action">Reiniciar cámara</div></div>
+                </div>
+                <div class="step">
+                    <div class="step-num">4</div>
+                    <div class="step-text"><div class="action">Verificar WiFi</div></div>
+                </div>
+                <div class="decision">
+                    <div class="q">¿Se resolvió?</div>
+                    <div class="options">
+                        <div class="opt yes">
+                            <div class="label">Sí</div>
+                            Resuelto
+                        </div>
+                        <div class="opt no">
+                            <div class="label">No</div>
+                            Escalar a Asimetrix
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== 04 MANTENIMIENTO ==================== -->
+<div class="content page-section">
+    <div class="card-header">
+        <span class="emoji">🔧</span>
+        <span class="title">Equipo de Mantenimiento</span>
+        <span class="badge maintenance" style="margin-left:auto;">NIVEL 2</span>
+    </div>
+
+    <div class="section-label">CONTEXTO</div>
+    <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:11pt; margin-bottom:8px;">Cuándo interviene:</div>
+    <ul style="list-style:none; padding:0; margin:0 0 16px 0;">
+        <li style="padding:4px 0; font-size:10pt;">• Cuando el equipo de Porcicultura reporta una cámara con LED rojo tras reinicio</li>
+        <li style="padding:4px 0; font-size:10pt;">• Cuando hay problemas con alimentación eléctrica o UPS</li>
+        <li style="padding:4px 0; font-size:10pt;">• Cuando el router de Asimetrix presenta fallas</li>
+    </ul>
+    <div class="note">Si solo una cámara tiene LED rojo, el Equipo de Porcicultura realiza el reinicio antes de escalar.</div>
+
+    <hr class="divider">
+
+    <div class="section-label">DIAGNÓSTICO</div>
+    <div style="margin-bottom:16px; font-family:'Montserrat',sans-serif; font-weight:700; font-size:12pt;">Verificaciones Eléctricas</div>
+
+    <div class="timeline">
+        <div class="t-item">
+            <div class="t-icon">⚡</div>
+            <div class="t-text">
+                <h4>Alimentación eléctrica</h4>
+                <p>Verificar energía en el punto de la cámara</p>
+            </div>
+        </div>
+        <div class="t-connector"></div>
+        <div class="t-item">
+            <div class="t-icon">🔋</div>
+            <div class="t-text">
+                <h4>UPS</h4>
+                <p>Confirmar que la UPS está encendida y cargando</p>
+            </div>
+        </div>
+        <div class="t-connector"></div>
+        <div class="t-item">
+            <div class="t-icon">⚙️</div>
+            <div class="t-text">
+                <h4>Breaker</h4>
+                <p>Revisar estado del breaker correspondiente</p>
+            </div>
+        </div>
+        <div class="t-connector"></div>
+        <div class="t-item">
+            <div class="t-icon">📡</div>
+            <div class="t-text">
+                <h4>Router Asimetrix</h4>
+                <p>Verificar estado del router dedicado</p>
+            </div>
+        </div>
+        <div class="t-connector"></div>
+        <div class="t-item">
+            <div class="t-icon">🌐</div>
+            <div class="t-text">
+                <h4>Internet</h4>
+                <p>Confirmar conectividad a internet</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="note">Red: AsimetrixIOA — Contraseña: 4s1m4tr1x</div>
+
+    <hr class="divider">
+
+    <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:12pt; margin-bottom:12px;">Revisión del Router Asimetrix</div>
+
+    <div class="card">
+        <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-text">
+                <div class="action">Verificar que el router esté encendido</div>
+            </div>
+        </div>
+        <div class="decision">
+            <div class="q">¿El router enciende?</div>
+            <div class="options">
+                <div class="opt no">
+                    <div class="label">No</div>
+                    Revisar alimentación eléctrica del router
+                </div>
+                <div class="opt yes">
+                    <div class="label">Sí</div>
+                    Continuar con verificación
+                </div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-text">
+                <div class="action">Confirmar que la red AsimetrixIOA está visible</div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-text">
+                <div class="action">Verificar estado de los indicadores del router</div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-text">
+                <div class="action">Reiniciar el router</div>
+                <div class="verify">Apagar, esperar 30 segundos y volver a encender</div>
+            </div>
+        </div>
+        <div class="decision">
+            <div class="q">¿Después del reinicio tiene internet?</div>
+            <div class="options">
+                <div class="opt yes">
+                    <div class="label">Sí</div>
+                    Registrar y dar por resuelto
+                </div>
+                <div class="opt no">
+                    <div class="label">No</div>
+                    Escalar a Tecnología
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== 05 TECNOLOGÍA ==================== -->
+<div class="content page-section">
+    <div class="card-header">
+        <span class="emoji">💻</span>
+        <span class="title">Equipo de Tecnología</span>
+        <span class="badge tech" style="margin-left:auto;">NIVEL 3</span>
+    </div>
+
+    <div class="section-label">CONTEXTO</div>
+    <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:11pt; margin-bottom:8px;">Cuándo interviene:</div>
+    <ul style="list-style:none; padding:0; margin:0 0 16px 0;">
+        <li style="padding:4px 0; font-size:10pt;">• Cuando el router de Asimetrix no tiene internet tras reinicio</li>
+        <li style="padding:4px 0; font-size:10pt;">• Cuando hay problemas de conectividad a nivel de red</li>
+        <li style="padding:4px 0; font-size:10pt;">• Cuando se requiere visita técnica presencial</li>
+    </ul>
+    <div class="note">Importante: Este nivel se activa solo cuando los niveles anteriores ya fueron realizados.</div>
+
+    <hr class="divider">
+
+    <div class="section-label">PROCESO</div>
+    <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:12pt; margin-bottom:16px;">Diagnóstico Remoto y Visita</div>
+
+    <div class="card">
+        <div class="card-header">
+            <span class="emoji">🔍</span>
+            <span class="title" style="font-size:12pt;">Paso 1 — Diagnóstico remoto</span>
+        </div>
+        <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-text">
+                <div class="action">Revisar remotamente la conexión de internet de la granja</div>
+                <div class="verify">Validar la conectividad a internet de Aliar y el estado de la red, ya que el router de Asimetrix depende de esta conexión para acceder a internet</div>
+            </div>
+        </div>
+        <div class="decision">
+            <div class="q">¿Se detectaron anomalías?</div>
+            <div class="options">
+                <div class="opt yes">
+                    <div class="label">No</div>
+                    Resuelto
+                </div>
+                <div class="opt no">
+                    <div class="label">Sí</div>
+                    Continuar al siguiente paso
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <span class="emoji">🎫</span>
+            <span class="title" style="font-size:12pt;">Paso 2 — Crear ticket de visita</span>
+        </div>
+        <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-text">
+                <div class="action">El Equipo de Mantenimiento crea un ticket para visita de Tecnología</div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-text">
+                <div class="action">El equipo de Tecnología agenda la visita a la granja</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <span class="emoji">🔧</span>
+            <span class="title" style="font-size:12pt;">Paso 3 — Visita técnica</span>
+        </div>
+        <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-text">
+                <div class="action">Revisar a detalle la conexión del internet hacia el router de Asimetrix</div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-text">
+                <div class="action">Asegurar el funcionamiento de la conexión</div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-text">
+                <div class="action">Registrar el resultado de la visita</div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="section-label">DIAGNÓSTICO</div>
+    <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:12pt; margin-bottom:16px;">Revisión del Dispositivo</div>
+
+    <div class="timeline">
+        <div class="t-item">
+            <div class="t-icon">📡</div>
+            <div class="t-text"><h4>Router</h4><p>Verificar estado físico del router</p></div>
+        </div>
+        <div class="t-connector"></div>
+        <div class="t-item">
+            <div class="t-icon">📶</div>
+            <div class="t-text"><h4>Estado</h4><p>Revisar indicadores LED</p></div>
+        </div>
+        <div class="t-connector"></div>
+        <div class="t-item">
+            <div class="t-icon">🔄</div>
+            <div class="t-text"><h4>Reiniciar</h4><p>Reiniciar si es necesario</p></div>
+        </div>
+        <div class="t-connector"></div>
+        <div class="t-item">
+            <div class="t-icon">📱</div>
+            <div class="t-text"><h4>Cámara</h4><p>Verificar conectividad de cámara</p></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-text">
+                <div class="action">Confirmar que el router esté encendido</div>
+            </div>
+        </div>
+        <div class="decision">
+            <div class="q">¿Router genera red?</div>
+            <div class="options">
+                <div class="opt yes">
+                    <div class="label">Sí</div>
+                    Continuar
+                </div>
+                <div class="opt no">
+                    <div class="label">No</div>
+                    Reiniciar el router
+                </div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-text">
+                <div class="action">Verificar estado de los indicadores</div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-text">
+                <div class="action">Reiniciar el router</div>
+            </div>
+        </div>
+        <div class="decision">
+            <div class="q">¿Tiene internet después del reinicio?</div>
+            <div class="options">
+                <div class="opt yes">
+                    <div class="label">Sí</div>
+                    Verificar cámara
+                </div>
+                <div class="opt no">
+                    <div class="label">No</div>
+                    Escalar a Asimetrix
+                </div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-text">
+                <div class="action">Verificar cámara conectada</div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">5</div>
+            <div class="step-text">
+                <div class="action">Registrar resultado</div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="section-label">ESCALAMIENTO</div>
+    <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:12pt; margin-bottom:12px;">Escalamiento a Asimetrix</div>
+
+    <div class="card">
+        <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-text">
+                <div class="action">Contactar al equipo de soporte de Asimetrix</div>
+                <div class="verify">Utilizar los canales de comunicación establecidos</div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-text">
+                <div class="action">Seguir las instrucciones del equipo de Asimetrix</div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-text">
+                <div class="action">Registrar el resultado del escalamiento</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== 06 ESCALAMIENTO ==================== -->
+<div class="content page-section">
+    <div class="section-label">03</div>
+    <div class="section-title">Escalamiento</div>
+    <div class="section-desc">Flujo de escalamiento entre los niveles de soporte</div>
+
+    <div class="escalation-flow">
+        <div class="esc-node">
+            <div class="esc-node-icon">🐷</div>
+            <div class="esc-node-title">Porcicultura</div>
+            <div style="font-size:8pt; color:var(--gray); margin-top:2px;">Nivel 1</div>
+        </div>
+        <div class="esc-arrow">→</div>
+        <div class="esc-node">
+            <div class="esc-node-icon">🔧</div>
+            <div class="esc-node-title">Mantenimiento</div>
+            <div style="font-size:8pt; color:var(--gray); margin-top:2px;">Nivel 2</div>
+        </div>
+        <div class="esc-arrow">→</div>
+        <div class="esc-node">
+            <div class="esc-node-icon">💻</div>
+            <div class="esc-node-title">Tecnología</div>
+            <div style="font-size:8pt; color:var(--gray); margin-top:2px;">Nivel 3</div>
+        </div>
+        <div class="esc-arrow">→</div>
+        <div class="esc-node">
+            <div class="esc-node-icon">🏢</div>
+            <div class="esc-node-title">Asimetrix</div>
+            <div style="font-size:8pt; color:var(--gray); margin-top:2px;">Soporte</div>
+        </div>
+    </div>
+
+    <div class="warning-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        <p>Nunca saltar niveles de escalamiento.</p>
+    </div>
+</div>
+
+<!-- ==================== 07 SOPORTE ==================== -->
+<div class="content page-section">
+    <div class="section-label">04</div>
+    <div class="section-title">Soporte Asimetrix</div>
+    <div class="section-desc">Contactos del equipo de soporte técnico</div>
+
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px;">
+        <div class="card" style="text-align:center; padding:28px;">
+            <div style="font-size:32px; margin-bottom:8px;">👤</div>
+            <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:11pt; color:var(--primary); margin-bottom:4px;">Manuela Chavarría</div>
+            <div style="font-size:10pt; color:var(--secondary);">+57 318 220 2707</div>
+        </div>
+        <div class="card" style="text-align:center; padding:28px;">
+            <div style="font-size:32px; margin-bottom:8px;">👤</div>
+            <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:11pt; color:var(--primary); margin-bottom:4px;">Damián García</div>
+            <div style="font-size:10pt; color:var(--secondary);">+57 311 207 8988</div>
+        </div>
+        <div class="card" style="text-align:center; padding:28px;">
+            <div style="font-size:32px; margin-bottom:8px;">👤</div>
+            <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:11pt; color:var(--primary); margin-bottom:4px;">Glenda Fuentes</div>
+            <div style="font-size:10pt; color:var(--secondary);">+57 300 365 9210</div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
