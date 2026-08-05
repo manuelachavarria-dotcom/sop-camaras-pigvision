@@ -74,14 +74,21 @@
 
   .divider { border:none; border-top:1px solid #E5EAF2; margin:32px 0; }
 
-  .cases-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:20px; align-items:start; }
-  .cases-grid .card { margin-bottom:0; height:auto; }
+  .cases-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; align-items:stretch; }
+  .cases-grid .card { margin-bottom:0; }
+  .card.case1, .card.case3 { display:flex; flex-direction:column; }
+  .card.case1 .verify-title, .card.case3 .verify-title { margin-top:auto; }
+  .card.case2 { grid-column:1 / -1; }
+
+  .case2-body { display:grid; grid-template-columns:1fr 1fr; gap:16px; align-items:start; }
+  .case2-body .decision { margin-top:0; }
 
   .fade-up { opacity:0; transform:translateY(20px); transition:all 0.6s cubic-bezier(0.16,1,0.3,1); }
   .fade-up.visible { opacity:1; transform:translateY(0); }
 
   @media (max-width:900px) {
     .cases-grid { grid-template-columns:1fr; }
+    .case2-body { grid-template-columns:1fr; }
   }
   @media (max-width:600px) {
     .decision .options { flex-direction:column; }
@@ -161,7 +168,7 @@
       </div>
     </div>
 
-    <div class="sub-title"><span class="sub-ico">✅</span>Verificar el funcionamiento</div>
+    <div class="sub-title verify-title"><span class="sub-ico">✅</span>Verificar el funcionamiento</div>
     <div class="outcome resolved"><strong>✅ Problema resuelto</strong><span class="detail">La cámara enciende correctamente.</span></div>
     <div class="outcome escalate"><strong>⬆️ Escalar el caso al área de Mantenimiento</strong><span class="detail">La cámara continúa apagada.</span><br><span class="ticket">🎫 Crear ticket de escalamiento</span></div>
   </div>
@@ -176,48 +183,54 @@
 
     <div class="sub-title"><span class="sub-ico">🔍</span>Paso 1 — Identificar la cantidad de cámaras afectadas</div>
 
-    <div class="decision">
-      <div class="q">Opción A — Solo una cámara presenta el LED LEVEL en rojo</div>
-      <div class="options" style="flex-direction:column; gap:10px;">
-        <div class="opt yes" style="width:100%;">
-          <div class="label">Realizar el siguiente procedimiento:</div>
-          <div style="margin-top:10px;">
-            <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Apagar la cámara desde el botón ON</div></div></div>
-            <div class="step"><div class="step-num">2</div><div class="step-text"><div class="action">Desconectar la alimentación eléctrica</div></div></div>
-            <div class="step"><div class="step-num">3</div><div class="step-text"><div class="action">Esperar 5 minutos</div></div></div>
-            <div class="step"><div class="step-num">4</div><div class="step-text"><div class="action">Conectar nuevamente la alimentación</div></div></div>
-            <div class="step"><div class="step-num">5</div><div class="step-text"><div class="action">Encender la cámara desde el botón ON</div></div></div>
+    <div class="case2-body">
+      <div>
+        <div class="decision">
+          <div class="q">Opción A — Solo una cámara presenta el LED LEVEL en rojo</div>
+          <div class="options" style="flex-direction:column; gap:10px;">
+            <div class="opt yes" style="width:100%;">
+              <div class="label">Realizar el siguiente procedimiento:</div>
+              <div style="margin-top:10px;">
+                <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Apagar la cámara desde el botón ON</div></div></div>
+                <div class="step"><div class="step-num">2</div><div class="step-text"><div class="action">Desconectar la alimentación eléctrica</div></div></div>
+                <div class="step"><div class="step-num">3</div><div class="step-text"><div class="action">Esperar 5 minutos</div></div></div>
+                <div class="step"><div class="step-num">4</div><div class="step-text"><div class="action">Conectar nuevamente la alimentación</div></div></div>
+                <div class="step"><div class="step-num">5</div><div class="step-text"><div class="action">Encender la cámara desde el botón ON</div></div></div>
+              </div>
+            </div>
           </div>
         </div>
+
+        <div class="outcome resolved"><strong>✅ Problema resuelto</strong><span class="detail">La cámara se conecta correctamente.</span></div>
+        <div class="outcome escalate"><strong>⬆️ Escalar el caso al equipo de Asimetrix</strong><span class="detail">La cámara continúa sin conexión, para recibir indicaciones.</span></div>
       </div>
-    </div>
 
-    <div class="outcome resolved"><strong>✅ Problema resuelto</strong><span class="detail">La cámara se conecta correctamente.</span></div>
-    <div class="outcome escalate"><strong>⬆️ Escalar el caso al equipo de Asimetrix</strong><span class="detail">La cámara continúa sin conexión, para recibir indicaciones.</span></div>
-
-    <div class="decision">
-      <div class="q">Opción B — Todas las cámaras presentan el LED LEVEL en rojo</div>
-      <div class="options" style="flex-direction:column; gap:10px;">
-        <div class="opt no" style="width:100%;">
-          <div class="label">Paso 2 — Verificar el estado del router de Asimetrix</div>
-          <div style="margin-top:10px;">
-            <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Confirmar que el router esté encendido</div><div class="verify">Luces indicadoras activas.</div></div></div>
-            <div class="step"><div class="step-num">2</div><div class="step-text">
-              <div class="action">Verificar que esté generando la red Wi-Fi</div>
-              <ul>
-                <li><strong>SSID:</strong> AsimetrixIOA</li>
-                <li><strong>Contraseña:</strong> 4s1m4tr1x</li>
-              </ul>
-            </div></div>
+      <div>
+        <div class="decision">
+          <div class="q">Opción B — Todas las cámaras presentan el LED LEVEL en rojo</div>
+          <div class="options" style="flex-direction:column; gap:10px;">
+            <div class="opt no" style="width:100%;">
+              <div class="label">Paso 2 — Verificar el estado del router de Asimetrix</div>
+              <div style="margin-top:10px;">
+                <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Confirmar que el router esté encendido</div><div class="verify">Luces indicadoras activas.</div></div></div>
+                <div class="step"><div class="step-num">2</div><div class="step-text">
+                  <div class="action">Verificar que esté generando la red Wi-Fi</div>
+                  <ul>
+                    <li><strong>SSID:</strong> AsimetrixIOA</li>
+                    <li><strong>Contraseña:</strong> 4s1m4tr1x</li>
+                  </ul>
+                </div></div>
+              </div>
+            </div>
           </div>
         </div>
+
+        <div class="sub-title" style="margin-top:16px;"><span class="sub-ico">✅</span>Verificar el funcionamiento</div>
+        <div class="outcome escalate"><strong>⬆️ El router está apagado</strong><span class="detail">Escalar el caso al área de Mantenimiento.</span><br><span class="ticket">🎫 Crear ticket de escalamiento</span></div>
+        <div class="outcome escalate"><strong>⬆️ El router no genera la red Wi-Fi</strong><span class="detail">Escalar el caso al área de Mantenimiento.</span><br><span class="ticket">🎫 Crear ticket de escalamiento</span></div>
+        <div class="outcome escalate"><strong>⬆️ El router genera la red, pero no tiene acceso a internet</strong><span class="detail">Escalar el caso al área de Mantenimiento.</span><br><span class="ticket">🎫 Crear ticket de escalamiento</span></div>
       </div>
     </div>
-
-    <div class="sub-title"><span class="sub-ico">✅</span>Verificar el funcionamiento</div>
-    <div class="outcome escalate"><strong>⬆️ El router está apagado</strong><span class="detail">Escalar el caso al área de Mantenimiento.</span><br><span class="ticket">🎫 Crear ticket de escalamiento</span></div>
-    <div class="outcome escalate"><strong>⬆️ El router no genera la red Wi-Fi</strong><span class="detail">Escalar el caso al área de Mantenimiento.</span><br><span class="ticket">🎫 Crear ticket de escalamiento</span></div>
-    <div class="outcome escalate"><strong>⬆️ El router genera la red, pero no tiene acceso a internet</strong><span class="detail">Escalar el caso al área de Mantenimiento.</span><br><span class="ticket">🎫 Crear ticket de escalamiento</span></div>
   </div>
 
   <!-- CASO 3 -->
@@ -235,7 +248,7 @@
     <div class="step"><div class="step-num">4</div><div class="step-text"><div class="action">Conectar nuevamente la alimentación</div></div></div>
     <div class="step"><div class="step-num">5</div><div class="step-text"><div class="action">Encender la cámara desde el botón ON</div></div></div>
 
-    <div class="sub-title"><span class="sub-ico">✅</span>Verificar el funcionamiento</div>
+    <div class="sub-title verify-title"><span class="sub-ico">✅</span>Verificar el funcionamiento</div>
     <div class="outcome resolved"><strong>✅ Problema resuelto</strong><span class="detail">La cámara inicia correctamente.</span></div>
     <div class="outcome escalate"><strong>⬆️ Escalar el caso a Asimetrix</strong><span class="detail">La cámara continúa mostrando únicamente el LED ON encendido, para gestionar el reemplazo de la cámara.</span></div>
   </div>
