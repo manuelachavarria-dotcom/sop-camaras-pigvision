@@ -74,9 +74,15 @@
 
   .divider { border:none; border-top:1px solid #E5EAF2; margin:32px 0; }
 
+  .cases-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:20px; align-items:start; }
+  .cases-grid .card { margin-bottom:0; height:auto; }
+
   .fade-up { opacity:0; transform:translateY(20px); transition:all 0.6s cubic-bezier(0.16,1,0.3,1); }
   .fade-up.visible { opacity:1; transform:translateY(0); }
 
+  @media (max-width:900px) {
+    .cases-grid { grid-template-columns:1fr; }
+  }
   @media (max-width:600px) {
     .decision .options { flex-direction:column; }
   }
@@ -122,6 +128,8 @@
     <div class="section-title">Según el estado del LED</div>
     <p class="section-desc">Acciones a tomar según la observación de cada cámara.</p>
   </div>
+
+  <div class="cases-grid">
 
   <!-- CASO 1 -->
   <div class="card case1 fade-up">
@@ -230,6 +238,8 @@
     <div class="sub-title"><span class="sub-ico">✅</span>Verificar el funcionamiento</div>
     <div class="outcome resolved"><strong>✅ Problema resuelto</strong><span class="detail">La cámara inicia correctamente.</span></div>
     <div class="outcome escalate"><strong>⬆️ Escalar el caso a Asimetrix</strong><span class="detail">La cámara continúa mostrando únicamente el LED ON encendido, para gestionar el reemplazo de la cámara.</span></div>
+  </div>
+
   </div>
 
 </div>
