@@ -14,6 +14,7 @@
     background: linear-gradient(135deg, #0B2D5C 0%, #0E3B70 45%, #0072C6 100%);
     color: #fff; padding: 90px 56px; border-radius: 20px; margin-bottom: 40px;
     position: relative; overflow: hidden;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
   }
   .manual-cover img { height: 46px; margin-bottom: 30px; }
   .manual-cover-level {
@@ -42,6 +43,7 @@
   @media print {
     .manual-cover { border-radius: 0; margin: 0 0 24px; padding: 60px 44px; }
     .manual-cover h1 { font-size: 26pt; }
+    .manual-team { break-before: page; page-break-before: always; }
   }
 </style>
 </head>
