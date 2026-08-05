@@ -22,18 +22,25 @@
   .page-header .icon { font-size:48px; margin-bottom:16px; }
   .page-header h1 { font-family:'Montserrat',sans-serif; font-size:32pt; font-weight:800; margin-bottom:8px; position:relative; }
   .page-header .level { display:inline-block; font-size:9pt; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; background:rgba(255,255,255,0.15); padding:5px 16px; border-radius:20px; margin-bottom:16px; }
-  .page-header p { font-size:11pt; color:rgba(255,255,255,0.8); max-width:600px; }
+  .page-header p { font-size:11pt; color:rgba(255,255,255,0.8); max-width:640px; }
 
   .content { max-width:900px; margin:0 auto; padding:50px 40px 80px; }
   .section-label { font-family:'Montserrat',sans-serif; font-size:8pt; font-weight:700; text-transform:uppercase; letter-spacing:3px; color:var(--secondary); margin-bottom:6px; }
   .section-title { font-family:'Montserrat',sans-serif; font-size:22pt; font-weight:800; color:var(--primary); margin-bottom:8px; }
   .section-desc { color:var(--gray); font-size:10pt; margin-bottom:24px; }
 
-  .card { background:var(--white); border:1px solid #E5EAF2; border-radius:16px; padding:24px; margin-bottom:16px; transition:all 0.3s cubic-bezier(0.16,1,0.3,1); box-shadow:0 2px 8px rgba(11,45,92,0.04); }
+  .banner { background:rgba(42,143,223,0.08); border:1px solid rgba(42,143,223,0.2); border-radius:12px; padding:16px 20px; margin-bottom:28px; display:flex; gap:12px; align-items:flex-start; font-size:10pt; color:var(--primary); }
+  .banner .ico { font-size:20px; flex-shrink:0; }
+  .banner strong { color:var(--secondary); }
+
+  .card { background:var(--white); border:1px solid #E5EAF2; border-radius:16px; padding:24px; margin-bottom:20px; transition:all 0.3s cubic-bezier(0.16,1,0.3,1); box-shadow:0 2px 8px rgba(11,45,92,0.04); }
   .card:hover { transform:translateY(-3px); box-shadow:var(--shadow); }
-  .card-header { display:flex; align-items:center; gap:10px; margin-bottom:16px; }
-  .card-header .emoji { font-size:24px; }
-  .card-header .title { font-family:'Montserrat',sans-serif; font-weight:700; font-size:14pt; }
+  .card-header { display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap; }
+  .card-header .emoji { font-size:26px; }
+  .card-header .title { font-family:'Montserrat',sans-serif; font-weight:700; font-size:14pt; flex:1; }
+
+  .sub-title { display:flex; align-items:center; gap:8px; font-family:'Montserrat',sans-serif; font-weight:700; font-size:11pt; color:var(--primary); margin:18px 0 10px; }
+  .sub-title .sub-ico { font-size:16px; }
 
   .step { display:flex; gap:14px; align-items:flex-start; padding:12px 16px; border-radius:10px; margin-bottom:8px; background:var(--white); border:1px solid #E5EAF2; transition:all 0.3s ease; }
   .step:hover { border-color:var(--secondary); box-shadow:0 4px 15px rgba(0,114,198,0.08); }
@@ -41,6 +48,8 @@
   .step-text { flex:1; }
   .step-text .action { font-weight:600; font-size:10.5pt; }
   .step-text .verify { font-size:9pt; color:var(--gray); margin-top:3px; }
+  .step-text ul { margin-top:6px; padding-left:18px; }
+  .step-text li { font-size:9pt; color:var(--gray); }
 
   .decision { background:var(--white); border:2px solid var(--secondary); border-radius:14px; padding:20px 24px; margin:16px 0; }
   .decision .q { font-family:'Montserrat',sans-serif; font-weight:700; font-size:12pt; color:var(--primary); margin-bottom:12px; }
@@ -52,11 +61,15 @@
   .decision .opt.yes .label { color:#16A34A; }
   .decision .opt.no .label { color:var(--error); }
 
-  .badge { display:inline-block; padding:3px 10px; border-radius:12px; font-size:8pt; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; }
-  .badge.tech { background:rgba(42,143,223,0.08); color:var(--accent); }
+  .outcome { border-radius:10px; padding:12px 16px; margin-top:12px; font-size:9.5pt; }
+  .outcome.resolved { background:rgba(34,197,94,0.07); border:1px solid rgba(34,197,94,0.2); color:#16A34A; }
+  .outcome.escalate { background:rgba(192,6,43,0.05); border:1px solid rgba(192,6,43,0.15); color:var(--error); }
+  .outcome strong { display:flex; align-items:center; gap:8px; font-size:10pt; margin-bottom:2px; }
+  .outcome .detail { color:var(--gray); font-weight:500; }
+  .outcome.escalate .ticket { display:inline-block; margin-top:8px; background:rgba(192,6,43,0.1); color:var(--error); font-weight:700; font-size:8.5pt; padding:5px 12px; border-radius:20px; text-transform:uppercase; letter-spacing:0.5px; }
 
-  .timeline { display:flex; flex-direction:column; align-items:center; gap:0; padding:20px 0; }
-  .t-item { display:flex; align-items:center; gap:20px; width:100%; max-width:550px; }
+  .timeline { display:flex; flex-direction:column; align-items:center; gap:0; padding:10px 0; }
+  .t-item { display:flex; align-items:center; gap:20px; width:100%; max-width:600px; }
   .t-icon { width:52px; height:52px; border-radius:14px; background:var(--white); border:2px solid #E5EAF2; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; transition:all 0.3s ease; box-shadow:0 2px 8px rgba(11,45,92,0.04); }
   .t-item:hover .t-icon { border-color:var(--secondary); box-shadow:var(--shadow); transform:scale(1.05); }
   .t-text h4 { font-family:'Montserrat',sans-serif; font-size:11pt; font-weight:700; color:var(--primary); }
@@ -70,6 +83,9 @@
   .fade-up { opacity:0; transform:translateY(20px); transition:all 0.6s cubic-bezier(0.16,1,0.3,1); }
   .fade-up.visible { opacity:1; transform:translateY(0); }
 
+  @media (max-width:600px) {
+    .decision .options { flex-direction:column; }
+  }
   @media print {
     .back-bar { display:none; }
     .page-header { padding:30px 40px 20px; }
@@ -96,77 +112,102 @@
   <div class="icon">🔧</div>
   <span class="level">Nivel 2 — Diagnóstico Eléctrico y de Red</span>
   <h1>Equipo de Mantenimiento</h1>
-  <p>Verificaciones eléctricas, UPS, breakers, router y conectividad de red.</p>
+  <p>Verificaciones eléctricas, UPS, breakers y revisión detallada del router de Asimetrix. Siempre acompañado del equipo de Asimetrix.</p>
 </div>
 
 <div class="content">
 
-  <!-- REVISIÓN -->
-  <div class="fade-up">
-    <div class="section-label">Contexto</div>
-    <div class="section-title">Revisión</div>
-    <p class="section-desc">Cuándo interviene el equipo de Mantenimiento:</p>
-    <ul style="padding-left:20px; font-size:10pt; color:var(--gray); margin-bottom:24px;">
-      <li style="margin-bottom:4px;">Una o varias cámaras no encienden (LED apagado).</li>
-      <li>Todas las cámaras presentan LED rojo simultáneamente.</li>
-    </ul>
-    <div class="note"><strong>Nota:</strong> Si solo una cámara tiene LED rojo, el Equipo de Porcicultura realiza el reinicio antes de escalar.</div>
+  <div class="banner fade-up">
+    <div class="ico">🛡️</div>
+    <div><strong>Siempre en compañía del equipo de Asimetrix.</strong> Todo el proceso se realiza con el acompañamiento de Asimetrix. Cuando el caso se escala al área de Tecnología, el equipo de Mantenimiento debe crear el ticket antes de entregar el caso.</div>
   </div>
 
-  <hr class="divider">
-
-  <!-- DIAGNÓSTICO -->
+  <!-- VERIFICACIONES ELÉCTRICAS -->
   <div class="fade-up">
     <div class="section-label">Diagnóstico</div>
     <div class="section-title">Verificaciones Eléctricas</div>
-    <p class="section-desc">Pasos a seguir en orden.</p>
+    <p class="section-desc">Realizar las siguientes verificaciones en el orden indicado antes de iniciar el diagnóstico de las cámaras.</p>
   </div>
 
   <div class="timeline fade-up">
-    <div class="t-item"><div class="t-icon">⚡</div><div class="t-text"><h4>Alimentación eléctrica</h4><p>Revisar que la corriente llegue a las cámaras. Debe estar presente y estable.</p></div></div>
+    <div class="t-item"><div class="t-icon">⚡</div><div class="t-text"><h4>Paso 1 — Verificar la alimentación eléctrica</h4><p>Confirmar que las cámaras estén recibiendo energía y que el suministro eléctrico sea estable.</p></div></div>
     <div class="t-connector"></div>
-    <div class="t-item"><div class="t-icon">🔋</div><div class="t-text"><h4>UPS</h4><p>Validar que la fuente de poder ininterrumpida esté encendida y funcionando.</p></div></div>
+    <div class="t-item"><div class="t-icon">🔋</div><div class="t-text"><h4>Paso 2 — Verificar la UPS</h4><p>Validar que la UPS se encuentre encendida y funcionando correctamente.</p></div></div>
     <div class="t-connector"></div>
-    <div class="t-item"><div class="t-icon">⚙️</div><div class="t-text"><h4>Breaker</h4><p>Verificar si el breaker está disparado. Restablecer y confirmar que no se vuelva a disparar.</p></div></div>
+    <div class="t-item"><div class="t-icon">⚙️</div><div class="t-text"><h4>Paso 3 — Verificar el breaker</h4><p>Confirmar que el breaker no esté disparado. Si está disparado, restablecerlo y verificar que no se vuelva a disparar después del restablecimiento.</p></div></div>
     <div class="t-connector"></div>
-    <div class="t-item"><div class="t-icon">📡</div><div class="t-text"><h4>Router Asimetrix</h4><p>Confirmar que esté encendido y generando la red <strong>AsimetrixIOA</strong>.</p></div></div>
-    <div class="t-connector"></div>
-    <div class="t-item"><div class="t-icon">🌐</div><div class="t-text"><h4>Internet</h4><p>Validar si hay conectividad a través de la red <strong>AsimetrixIOA</strong>.</p></div></div>
+    <div class="t-item"><div class="t-icon">🌐</div><div class="t-text"><h4>Paso 4 — Revisión del Router Asimetrix</h4><p>Continuar con la revisión detallada del router a continuación.</p></div></div>
   </div>
-
-  <div class="note" style="margin-top:16px;"><strong>Datos de red:</strong> Red: <strong>AsimetrixIOA</strong> — Contraseña: <strong>4s1m4tr1x</strong></div>
 
   <hr class="divider">
 
-  <!-- DIAGNÓSTICO ROUTER -->
+  <!-- REVISIÓN ROUTER -->
   <div class="fade-up">
     <div class="section-label">Diagnóstico</div>
     <div class="section-title">Revisión del Router Asimetrix</div>
   </div>
 
   <div class="card fade-up">
-    <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Verificar que el router esté encendido</div></div></div>
+    <div class="sub-title"><span class="sub-ico">4.1</span>Verificar que el router esté encendido</div>
 
     <div class="decision">
       <div class="q">¿El router enciende?</div>
       <div class="options">
-        <div class="opt no"><div class="label">No</div>Revisar alimentación eléctrica del router<br>Verificar si presenta daño físico visible</div>
-        <div class="opt yes"><div class="label">Sí</div>Continuar al paso siguiente</div>
+        <div class="opt no"><div class="label">❌ No</div>
+          <div style="margin-top:8px;">
+            <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Revisar que la toma eléctrica tenga alimentación</div></div></div>
+            <div class="step"><div class="step-num">2</div><div class="step-text"><div class="action">Verificar que el cable de alimentación esté correctamente conectado</div></div></div>
+            <div class="step"><div class="step-num">3</div><div class="step-text"><div class="action">Inspeccionar si el router presenta daños físicos visibles</div></div></div>
+          </div>
+          <div class="outcome escalate"><strong>⬆️ Si el router continúa apagado</strong><span class="detail">Escalar el caso al área de Tecnología.</span><br><span class="ticket">🎫 Crear ticket de escalamiento</span></div>
+        </div>
+        <div class="opt yes"><div class="label">✅ Sí</div>Continuar con la siguiente verificación.</div>
       </div>
     </div>
 
-    <p style="font-size:10pt; font-weight:600; margin:10px 0 6px;">Si el router enciende:</p>
-    <div class="step"><div class="step-num">2</div><div class="step-text"><div class="action">Confirmar que esté generando la red <strong>AsimetrixIOA</strong></div><div class="verify">Contraseña: <strong>4s1m4tr1x</strong></div></div></div>
-    <div class="step"><div class="step-num">3</div><div class="step-text"><div class="action">Verificar si aparece el estado <strong>"Conectado, sin internet"</strong></div></div></div>
-    <div class="step"><div class="step-num">4</div><div class="step-text"><div class="action">Reiniciar el router</div></div></div>
+    <div class="sub-title"><span class="sub-ico">4.2</span>Verificar que el router genere la red Wi-Fi</div>
+    <div class="step"><div class="step-num">1</div><div class="step-text">
+      <div class="action">Confirmar que el router esté transmitiendo la siguiente red</div>
+      <ul>
+        <li><strong>SSID:</strong> AsimetrixIOA</li>
+        <li><strong>Contraseña:</strong> 4s1m4tr1x</li>
+      </ul>
+    </div></div>
 
     <div class="decision">
-      <div class="q">¿Después del reinicio tiene internet?</div>
+      <div class="q">¿La red AsimetrixIOA es visible?</div>
       <div class="options">
-        <div class="opt yes"><div class="label">Sí</div>Registrar como resuelto</div>
-        <div class="opt no"><div class="label">No</div>Escalar al equipo de <strong>Tecnología</strong><div style="margin-top:6px;"><span class="badge tech">Escalar a Tecnología</span></div></div>
+        <div class="opt no"><div class="label">❌ No</div>
+          <div style="margin-top:8px;">
+            <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Reiniciar el router desconectando la alimentación eléctrica durante 30 segundos</div></div></div>
+            <div class="step"><div class="step-num">2</div><div class="step-text"><div class="action">Conectarlo nuevamente y esperar a que complete el proceso de inicio</div></div></div>
+          </div>
+          <div class="outcome escalate"><strong>⬆️ Si la red continúa sin aparecer</strong><span class="detail">Escalar el caso al área de Tecnología.</span><br><span class="ticket">🎫 Crear ticket de escalamiento</span></div>
+        </div>
+        <div class="opt yes"><div class="label">✅ Sí</div>Continuar con la siguiente verificación.</div>
       </div>
     </div>
+
+    <div class="sub-title"><span class="sub-ico">4.3</span>Verificar el estado de la conexión</div>
+    <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Conectarse a la red AsimetrixIOA</div></div></div>
+
+    <div class="decision">
+      <div class="q">¿La red aparece como "Conectado, sin internet"?</div>
+      <div class="options">
+        <div class="opt no"><div class="label">❌ No</div>✅ Verificación del router completada correctamente.</div>
+        <div class="opt yes"><div class="label">✅ Sí</div>Continuar con el siguiente paso.</div>
+      </div>
+    </div>
+
+    <div class="sub-title"><span class="sub-ico">4.4</span>Reiniciar el router</div>
+    <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Desconectar el router de la alimentación eléctrica</div></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-text"><div class="action">Esperar 30 segundos</div></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-text"><div class="action">Conectar nuevamente el router</div></div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-text"><div class="action">Esperar a que complete el proceso de inicio</div></div></div>
+
+    <div class="sub-title"><span class="sub-ico">✅</span>Verificar el funcionamiento</div>
+    <div class="outcome resolved"><strong>✅ Problema resuelto</strong><span class="detail">El router recupera la conexión a internet.</span></div>
+    <div class="outcome escalate"><strong>⬆️ Si el router continúa sin acceso a internet</strong><span class="detail">Escalar el caso al área de Tecnología.</span><br><span class="ticket">🎫 Crear ticket de escalamiento</span></div>
   </div>
 
 </div>

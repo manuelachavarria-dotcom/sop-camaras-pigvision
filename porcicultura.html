@@ -22,18 +22,29 @@
   .page-header .icon { font-size:48px; margin-bottom:16px; }
   .page-header h1 { font-family:'Montserrat',sans-serif; font-size:32pt; font-weight:800; margin-bottom:8px; position:relative; }
   .page-header .level { display:inline-block; font-size:9pt; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; background:rgba(255,255,255,0.15); padding:5px 16px; border-radius:20px; margin-bottom:16px; }
-  .page-header p { font-size:11pt; color:rgba(255,255,255,0.8); max-width:600px; }
+  .page-header p { font-size:11pt; color:rgba(255,255,255,0.8); max-width:640px; }
 
   .content { max-width:900px; margin:0 auto; padding:50px 40px 80px; }
   .section-label { font-family:'Montserrat',sans-serif; font-size:8pt; font-weight:700; text-transform:uppercase; letter-spacing:3px; color:var(--secondary); margin-bottom:6px; }
   .section-title { font-family:'Montserrat',sans-serif; font-size:22pt; font-weight:800; color:var(--primary); margin-bottom:8px; }
   .section-desc { color:var(--gray); font-size:10pt; margin-bottom:24px; }
 
-  .card { background:var(--white); border:1px solid #E5EAF2; border-radius:16px; padding:24px; margin-bottom:16px; transition:all 0.3s cubic-bezier(0.16,1,0.3,1); box-shadow:0 2px 8px rgba(11,45,92,0.04); }
+  .banner { background:rgba(42,143,223,0.08); border:1px solid rgba(42,143,223,0.2); border-radius:12px; padding:16px 20px; margin-bottom:28px; display:flex; gap:12px; align-items:flex-start; font-size:10pt; color:var(--primary); }
+  .banner .ico { font-size:20px; flex-shrink:0; }
+  .banner strong { color:var(--secondary); }
+
+  .card { background:var(--white); border:1px solid #E5EAF2; border-radius:16px; padding:24px; margin-bottom:20px; transition:all 0.3s cubic-bezier(0.16,1,0.3,1); box-shadow:0 2px 8px rgba(11,45,92,0.04); }
   .card:hover { transform:translateY(-3px); box-shadow:var(--shadow); }
-  .card-header { display:flex; align-items:center; gap:10px; margin-bottom:16px; }
-  .card-header .emoji { font-size:24px; }
-  .card-header .title { font-family:'Montserrat',sans-serif; font-weight:700; font-size:14pt; }
+  .card-header { display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap; }
+  .card-header .emoji { font-size:26px; }
+  .card-header .title { font-family:'Montserrat',sans-serif; font-weight:700; font-size:14pt; flex:1; }
+  .case-badge { font-size:8pt; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; padding:5px 12px; border-radius:20px; }
+  .card.case1 .case-badge { background:rgba(192,6,43,0.1); color:var(--error); }
+  .card.case2 .case-badge { background:rgba(200,80,20,0.12); color:#C85014; }
+  .card.case3 .case-badge { background:rgba(0,114,198,0.1); color:var(--secondary); }
+
+  .sub-title { display:flex; align-items:center; gap:8px; font-family:'Montserrat',sans-serif; font-weight:700; font-size:11pt; color:var(--primary); margin:18px 0 10px; }
+  .sub-title .sub-ico { font-size:16px; }
 
   .step { display:flex; gap:14px; align-items:flex-start; padding:12px 16px; border-radius:10px; margin-bottom:8px; background:var(--white); border:1px solid #E5EAF2; transition:all 0.3s ease; }
   .step:hover { border-color:var(--secondary); box-shadow:0 4px 15px rgba(0,114,198,0.08); }
@@ -41,6 +52,8 @@
   .step-text { flex:1; }
   .step-text .action { font-weight:600; font-size:10.5pt; }
   .step-text .verify { font-size:9pt; color:var(--gray); margin-top:3px; }
+  .step-text ul { margin-top:6px; padding-left:18px; }
+  .step-text li { font-size:9pt; color:var(--gray); }
 
   .decision { background:var(--white); border:2px solid var(--secondary); border-radius:14px; padding:20px 24px; margin:16px 0; }
   .decision .q { font-family:'Montserrat',sans-serif; font-weight:700; font-size:12pt; color:var(--primary); margin-bottom:12px; }
@@ -52,30 +65,21 @@
   .decision .opt.yes .label { color:#16A34A; }
   .decision .opt.no .label { color:var(--error); }
 
-  .badge { display:inline-block; padding:3px 10px; border-radius:12px; font-size:8pt; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; }
-  .badge.maintenance { background:rgba(0,114,198,0.08); color:var(--secondary); }
-  .badge.asimetrix { background:rgba(192,6,43,0.08); color:var(--error); }
-
-  .cases-row { display:grid; grid-template-columns:1.5fr 2fr 1.5fr; gap:16px; margin-bottom:16px; align-items:stretch; }
-  .cases-row .card { margin-bottom:0; display:flex; flex-direction:column; height:100%; }
-  .cases-row .card > *:last-child { margin-top:auto; }
-  .cases-row .card-content { flex:1; display:flex; flex-direction:column; }
-
-  .cases-row .step { padding:8px 12px; margin-bottom:6px; }
-  .cases-row .step-num { width:24px; height:24px; font-size:9pt; }
-  .cases-row .step-text .action { font-size:9.5pt; }
-  .cases-row .step-text .verify { font-size:8pt; }
-  .cases-row .decision { padding:14px 16px; margin:10px 0 0 0; }
-  .cases-row .decision .q { font-size:10pt; margin-bottom:8px; }
-  .cases-row .decision .options { flex-direction:column; gap:8px; }
-  .cases-row .decision .opt { padding:10px 12px; font-size:9pt; }
-  .cases-row .badge { margin-top:6px; }
+  .outcome { border-radius:10px; padding:12px 16px; margin-top:12px; font-size:9.5pt; }
+  .outcome.resolved { background:rgba(34,197,94,0.07); border:1px solid rgba(34,197,94,0.2); color:#16A34A; }
+  .outcome.escalate { background:rgba(192,6,43,0.05); border:1px solid rgba(192,6,43,0.15); color:var(--error); }
+  .outcome strong { display:flex; align-items:center; gap:8px; font-size:10pt; margin-bottom:2px; }
+  .outcome .detail { color:var(--gray); font-weight:500; }
+  .outcome.escalate .ticket { display:inline-block; margin-top:8px; background:rgba(192,6,43,0.1); color:var(--error); font-weight:700; font-size:8.5pt; padding:5px 12px; border-radius:20px; text-transform:uppercase; letter-spacing:0.5px; }
 
   .divider { border:none; border-top:1px solid #E5EAF2; margin:32px 0; }
 
   .fade-up { opacity:0; transform:translateY(20px); transition:all 0.6s cubic-bezier(0.16,1,0.3,1); }
   .fade-up.visible { opacity:1; transform:translateY(0); }
 
+  @media (max-width:600px) {
+    .decision .options { flex-direction:column; }
+  }
   @media print {
     .back-bar { display:none; }
     .page-header { padding:30px 40px 20px; }
@@ -83,7 +87,6 @@
     .content { padding:20px 30px 30px; }
     .fade-up { opacity:1; transform:none; }
     .card { break-inside:avoid; page-break-inside:avoid; }
-    .cases-row { grid-template-columns:1.5fr 2fr 1.5fr; }
     .divider { margin:20px 0; }
     body { font-size:10pt; }
   }
@@ -103,26 +106,15 @@
   <div class="icon">🐷</div>
   <span class="level">Nivel 1 — Revisión Inicial</span>
   <h1>Equipo de Porcicultura</h1>
-  <p>Limpieza, inspección visual, reinicio básico y registro de novedades en cámaras PigVision.</p>
+  <p>Diagnóstico según el estado del LED, reinicio básico y registro de novedades en cámaras PigVision. Siempre acompañado del equipo de Asimetrix.</p>
 </div>
 
 <div class="content">
 
-  <!-- REVISIÓN -->
-  <div class="fade-up">
-    <div class="section-label">Actividad</div>
-    <div class="section-title">Revisión</div>
-    <p class="section-desc">Pasos que el equipo de Porcicultura realiza en cada visita programada.</p>
+  <div class="banner fade-up">
+    <div class="ico">🛡️</div>
+    <div><strong>Siempre en compañía del equipo de Asimetrix.</strong> Todo el proceso se realiza con el acompañamiento de Asimetrix. Cuando el caso se escala a Mantenimiento, el equipo de Porcicultura debe crear el ticket antes de entregar el caso.</div>
   </div>
-
-  <div class="fade-up">
-    <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Limpiar el lente de cada cámara</div><div class="verify">Sin polvo, residuos ni condensación</div></div></div>
-    <div class="step"><div class="step-num">2</div><div class="step-text"><div class="action">Limpiar el exterior de la cámara</div><div class="verify">Sin suciedad acumulada en carcasa</div></div></div>
-    <div class="step"><div class="step-num">3</div><div class="step-text"><div class="action">Verificar el estado de los LEDs</div><div class="verify">Observar color y comportamiento de cada LED</div></div></div>
-    <div class="step"><div class="step-num">4</div><div class="step-text"><div class="action">Registrar novedades</div><div class="verify">Anotar número de cámaras con anomalías</div></div></div>
-  </div>
-
-  <hr class="divider">
 
   <!-- DIAGNÓSTICO -->
   <div class="fade-up">
@@ -131,77 +123,113 @@
     <p class="section-desc">Acciones a tomar según la observación de cada cámara.</p>
   </div>
 
-  <div class="cases-row">
-  <!-- CASO 1: LED apagado -->
-  <div class="card fade-up">
+  <!-- CASO 1 -->
+  <div class="card case1 fade-up">
     <div class="card-header">
       <span class="emoji">⚫</span>
-      <span class="title">Caso 1 — Cámara apagada</span>
+      <span class="title">Caso 1 — LEDs ON, LEVEL y STATUS apagados</span>
+      <span class="case-badge">Cámara apagada</span>
     </div>
-    <div class="card-content">
-      <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Revisar si la cámara está apagada</div><div class="verify">Presionar el botón de ON</div></div></div>
-      <div class="step"><div class="step-num">2</div><div class="step-text"><div class="action">Confirmar que no haya un problema de conexión</div><div class="verify">Cable suelto, desconectado o dañado</div></div></div>
-    </div>
+
+    <div class="sub-title"><span class="sub-ico">📋</span>Paso 1 — Verificar el estado de la cámara</div>
+    <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Confirmar si la cámara está apagada</div></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-text"><div class="action">Presionar el botón <strong>ON</strong> para intentar encenderla</div></div></div>
+
+    <div class="sub-title"><span class="sub-ico">🔌</span>Paso 2 — Verificar la alimentación eléctrica</div>
+    <div class="step"><div class="step-num">1</div><div class="step-text">
+      <div class="action">Revisar que no exista ningún problema en la conexión eléctrica</div>
+      <ul>
+        <li>Cable de alimentación suelto.</li>
+        <li>Cable desconectado.</li>
+        <li>Cable dañado.</li>
+      </ul>
+    </div></div>
+
     <div class="decision">
-      <div class="q">¿Conexión OK?</div>
+      <div class="q">Paso 3 — ¿El problema ocurre en todas las cámaras?</div>
       <div class="options">
-        <div class="opt yes"><div class="label">Sí</div>Resuelto</div>
-        <div class="opt no"><div class="label">No</div>Escalar a <strong>Mantenimiento</strong><div style="margin-top:6px;"><span class="badge maintenance">Escalar</span></div></div>
+        <div class="opt no"><div class="label">Sí</div>Verificar el estado de la UPS y confirmar que esté suministrando energía correctamente.</div>
+        <div class="opt yes"><div class="label">No</div>Continuar con la verificación de la cámara afectada.</div>
       </div>
     </div>
+
+    <div class="sub-title"><span class="sub-ico">✅</span>Verificar el funcionamiento</div>
+    <div class="outcome resolved"><strong>✅ Problema resuelto</strong><span class="detail">La cámara enciende correctamente.</span></div>
+    <div class="outcome escalate"><strong>⬆️ Escalar el caso al área de Mantenimiento</strong><span class="detail">La cámara continúa apagada.</span><br><span class="ticket">🎫 Crear ticket de escalamiento</span></div>
   </div>
 
-  <!-- CASO 2: LED rojo -->
-  <div class="card fade-up">
+  <!-- CASO 2 -->
+  <div class="card case2 fade-up">
     <div class="card-header">
       <span class="emoji">🔴</span>
-      <span class="title">Caso 2 — LED rojo (sin internet)</span>
+      <span class="title">Caso 2 — LED LEVEL en rojo (Sin conexión a internet)</span>
+      <span class="case-badge">Sin internet</span>
     </div>
-    <div class="card-content">
-      <div class="decision" style="margin-top:0;">
-        <div class="q">¿Cuántas cámaras están en rojo?</div>
-        <div class="options">
-          <div class="opt yes">
-            <div class="label">Solo una</div>
-            <div style="margin-top:8px;">
-              <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Apagar cámara del botón ON</div></div></div>
-              <div class="step"><div class="step-num">2</div><div class="step-text"><div class="action">Desconectar energía</div></div></div>
-              <div class="step"><div class="step-num">3</div><div class="step-text"><div class="action">Esperar 5 minutos</div></div></div>
-              <div class="step"><div class="step-num">4</div><div class="step-text"><div class="action">Conectar y encender del botón ON</div></div></div>
-            </div>
-          </div>
-          <div class="opt no">
-            <div class="label">Todas</div>
-            <div style="margin-top:8px;">
-              <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Escalar a <strong>Mantenimiento</strong> para revisar el router</div></div></div>
-            </div>
-            <div style="margin-top:6px;"><span class="badge maintenance">Escalar</span></div>
+
+    <div class="sub-title"><span class="sub-ico">🔍</span>Paso 1 — Identificar la cantidad de cámaras afectadas</div>
+
+    <div class="decision">
+      <div class="q">Opción A — Solo una cámara presenta el LED LEVEL en rojo</div>
+      <div class="options" style="flex-direction:column; gap:10px;">
+        <div class="opt yes" style="width:100%;">
+          <div class="label">Realizar el siguiente procedimiento:</div>
+          <div style="margin-top:10px;">
+            <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Apagar la cámara desde el botón ON</div></div></div>
+            <div class="step"><div class="step-num">2</div><div class="step-text"><div class="action">Desconectar la alimentación eléctrica</div></div></div>
+            <div class="step"><div class="step-num">3</div><div class="step-text"><div class="action">Esperar 5 minutos</div></div></div>
+            <div class="step"><div class="step-num">4</div><div class="step-text"><div class="action">Conectar nuevamente la alimentación</div></div></div>
+            <div class="step"><div class="step-num">5</div><div class="step-text"><div class="action">Encender la cámara desde el botón ON</div></div></div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- CASO 3: Solo LED de ON -->
-  <div class="card fade-up">
-    <div class="card-header">
-      <span class="emoji">🟡</span>
-      <span class="title">Caso 3 — Solo LED ON</span>
-    </div>
-    <div class="card-content">
-      <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Apagar cámara del botón ON</div></div></div>
-      <div class="step"><div class="step-num">2</div><div class="step-text"><div class="action">Desconectar energía</div></div></div>
-      <div class="step"><div class="step-num">3</div><div class="step-text"><div class="action">Esperar 5 minutos</div></div></div>
-      <div class="step"><div class="step-num">4</div><div class="step-text"><div class="action">Conectar y encender del botón ON</div></div></div>
-    </div>
+    <div class="outcome resolved"><strong>✅ Problema resuelto</strong><span class="detail">La cámara se conecta correctamente.</span></div>
+    <div class="outcome escalate"><strong>⬆️ Escalar el caso al equipo de Asimetrix</strong><span class="detail">La cámara continúa sin conexión, para recibir indicaciones.</span></div>
+
     <div class="decision">
-      <div class="q">¿Se resolvió?</div>
-      <div class="options">
-        <div class="opt yes"><div class="label">Sí</div>Resuelto</div>
-        <div class="opt no"><div class="label">No</div>Escalar a <strong>Asimetrix</strong><div style="margin-top:6px;"><span class="badge asimetrix">Escalar</span></div></div>
+      <div class="q">Opción B — Todas las cámaras presentan el LED LEVEL en rojo</div>
+      <div class="options" style="flex-direction:column; gap:10px;">
+        <div class="opt no" style="width:100%;">
+          <div class="label">Paso 2 — Verificar el estado del router de Asimetrix</div>
+          <div style="margin-top:10px;">
+            <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Confirmar que el router esté encendido</div><div class="verify">Luces indicadoras activas.</div></div></div>
+            <div class="step"><div class="step-num">2</div><div class="step-text">
+              <div class="action">Verificar que esté generando la red Wi-Fi</div>
+              <ul>
+                <li><strong>SSID:</strong> AsimetrixIOA</li>
+                <li><strong>Contraseña:</strong> 4s1m4tr1x</li>
+              </ul>
+            </div></div>
+          </div>
+        </div>
       </div>
     </div>
+
+    <div class="sub-title"><span class="sub-ico">✅</span>Verificar el funcionamiento</div>
+    <div class="outcome escalate"><strong>⬆️ El router está apagado</strong><span class="detail">Escalar el caso al área de Mantenimiento.</span><br><span class="ticket">🎫 Crear ticket de escalamiento</span></div>
+    <div class="outcome escalate"><strong>⬆️ El router no genera la red Wi-Fi</strong><span class="detail">Escalar el caso al área de Mantenimiento.</span><br><span class="ticket">🎫 Crear ticket de escalamiento</span></div>
+    <div class="outcome escalate"><strong>⬆️ El router genera la red, pero no tiene acceso a internet</strong><span class="detail">Escalar el caso al área de Mantenimiento.</span><br><span class="ticket">🎫 Crear ticket de escalamiento</span></div>
   </div>
+
+  <!-- CASO 3 -->
+  <div class="card case3 fade-up">
+    <div class="card-header">
+      <span class="emoji">🟡</span>
+      <span class="title">Caso 3 — Solo LED ON encendido</span>
+      <span class="case-badge">Inicio incompleto</span>
+    </div>
+
+    <div class="sub-title"><span class="sub-ico">🔄</span>Paso 1 — Reiniciar la cámara</div>
+    <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Apagar la cámara desde el botón ON</div></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-text"><div class="action">Desconectar la alimentación eléctrica</div></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-text"><div class="action">Esperar 5 minutos</div></div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-text"><div class="action">Conectar nuevamente la alimentación</div></div></div>
+    <div class="step"><div class="step-num">5</div><div class="step-text"><div class="action">Encender la cámara desde el botón ON</div></div></div>
+
+    <div class="sub-title"><span class="sub-ico">✅</span>Verificar el funcionamiento</div>
+    <div class="outcome resolved"><strong>✅ Problema resuelto</strong><span class="detail">La cámara inicia correctamente.</span></div>
+    <div class="outcome escalate"><strong>⬆️ Escalar el caso a Asimetrix</strong><span class="detail">La cámara continúa mostrando únicamente el LED ON encendido, para gestionar el reemplazo de la cámara.</span></div>
   </div>
 
 </div>

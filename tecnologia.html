@@ -22,18 +22,26 @@
   .page-header .icon { font-size:48px; margin-bottom:16px; }
   .page-header h1 { font-family:'Montserrat',sans-serif; font-size:32pt; font-weight:800; margin-bottom:8px; position:relative; }
   .page-header .level { display:inline-block; font-size:9pt; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; background:rgba(255,255,255,0.15); padding:5px 16px; border-radius:20px; margin-bottom:16px; }
-  .page-header p { font-size:11pt; color:rgba(255,255,255,0.8); max-width:600px; }
+  .page-header p { font-size:11pt; color:rgba(255,255,255,0.8); max-width:640px; }
 
   .content { max-width:900px; margin:0 auto; padding:50px 40px 80px; }
   .section-label { font-family:'Montserrat',sans-serif; font-size:8pt; font-weight:700; text-transform:uppercase; letter-spacing:3px; color:var(--secondary); margin-bottom:6px; }
   .section-title { font-family:'Montserrat',sans-serif; font-size:22pt; font-weight:800; color:var(--primary); margin-bottom:8px; }
   .section-desc { color:var(--gray); font-size:10pt; margin-bottom:24px; }
 
-  .card { background:var(--white); border:1px solid #E5EAF2; border-radius:16px; padding:24px; margin-bottom:16px; transition:all 0.3s cubic-bezier(0.16,1,0.3,1); box-shadow:0 2px 8px rgba(11,45,92,0.04); }
+  .banner { background:rgba(42,143,223,0.08); border:1px solid rgba(42,143,223,0.2); border-radius:12px; padding:16px 20px; margin-bottom:28px; display:flex; gap:12px; align-items:flex-start; font-size:10pt; color:var(--primary); }
+  .banner .ico { font-size:20px; flex-shrink:0; }
+  .banner strong { color:var(--secondary); }
+
+  .card { background:var(--white); border:1px solid #E5EAF2; border-radius:16px; padding:24px; margin-bottom:20px; transition:all 0.3s cubic-bezier(0.16,1,0.3,1); box-shadow:0 2px 8px rgba(11,45,92,0.04); }
   .card:hover { transform:translateY(-3px); box-shadow:var(--shadow); }
-  .card-header { display:flex; align-items:center; gap:10px; margin-bottom:16px; }
-  .card-header .emoji { font-size:24px; }
-  .card-header .title { font-family:'Montserrat',sans-serif; font-weight:700; font-size:14pt; }
+  .card-header { display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap; }
+  .card-header .emoji { font-size:26px; }
+  .card-header .title { font-family:'Montserrat',sans-serif; font-weight:700; font-size:14pt; flex:1; }
+  .card-header .step-badge { font-size:8pt; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; padding:5px 12px; border-radius:20px; background:rgba(42,143,223,0.1); color:var(--accent); }
+
+  .sub-title { display:flex; align-items:center; gap:8px; font-family:'Montserrat',sans-serif; font-weight:700; font-size:11pt; color:var(--primary); margin:18px 0 10px; }
+  .sub-title .sub-ico { font-size:16px; }
 
   .step { display:flex; gap:14px; align-items:flex-start; padding:12px 16px; border-radius:10px; margin-bottom:8px; background:var(--white); border:1px solid #E5EAF2; transition:all 0.3s ease; }
   .step:hover { border-color:var(--secondary); box-shadow:0 4px 15px rgba(0,114,198,0.08); }
@@ -52,24 +60,20 @@
   .decision .opt.yes .label { color:#16A34A; }
   .decision .opt.no .label { color:var(--error); }
 
-  .badge { display:inline-block; padding:3px 10px; border-radius:12px; font-size:8pt; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; }
-  .badge.asimetrix { background:rgba(192,6,43,0.08); color:var(--error); }
-
-  .timeline { display:flex; flex-direction:column; align-items:center; gap:0; padding:20px 0; }
-  .t-item { display:flex; align-items:center; gap:20px; width:100%; max-width:550px; }
-  .t-icon { width:52px; height:52px; border-radius:14px; background:var(--white); border:2px solid #E5EAF2; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; transition:all 0.3s ease; box-shadow:0 2px 8px rgba(11,45,92,0.04); }
-  .t-item:hover .t-icon { border-color:var(--secondary); box-shadow:var(--shadow); transform:scale(1.05); }
-  .t-text h4 { font-family:'Montserrat',sans-serif; font-size:11pt; font-weight:700; color:var(--primary); }
-  .t-text p { font-size:9pt; color:var(--gray); }
-  .t-connector { width:2px; height:24px; background:linear-gradient(180deg, var(--secondary), rgba(0,114,198,0.2)); margin-left:25px; }
-
-  .note { background:rgba(0,114,198,0.05); border-left:3px solid var(--secondary); border-radius:0 8px 8px 0; padding:12px 18px; margin:16px 0; font-size:10pt; color:var(--secondary); }
+  .outcome { border-radius:10px; padding:12px 16px; margin-top:12px; font-size:9.5pt; }
+  .outcome.resolved { background:rgba(34,197,94,0.07); border:1px solid rgba(34,197,94,0.2); color:#16A34A; }
+  .outcome.escalate { background:rgba(192,6,43,0.05); border:1px solid rgba(192,6,43,0.15); color:var(--error); }
+  .outcome strong { display:flex; align-items:center; gap:8px; font-size:10pt; margin-bottom:2px; }
+  .outcome .detail { color:var(--gray); font-weight:500; }
 
   .divider { border:none; border-top:1px solid #E5EAF2; margin:32px 0; }
 
   .fade-up { opacity:0; transform:translateY(20px); transition:all 0.6s cubic-bezier(0.16,1,0.3,1); }
   .fade-up.visible { opacity:1; transform:translateY(0); }
 
+  @media (max-width:600px) {
+    .decision .options { flex-direction:column; }
+  }
   @media print {
     .back-bar { display:none; }
     .page-header { padding:30px 40px 20px; }
@@ -94,126 +98,92 @@
 
 <div class="page-header">
   <div class="icon">💻</div>
-  <span class="level">Nivel 3 — Diagnóstico del Dispositivo</span>
+  <span class="level">Nivel 3 — Atención de Incidentes</span>
   <h1>Equipo de Tecnología</h1>
-  <p>Verificación avanzada del dispositivo, configuración de red y escalación a Asimetrix.</p>
+  <p>Diagnóstico remoto, programación de visita, diagnóstico en sitio y escalamiento a Asimetrix. Siempre acompañado del equipo de Asimetrix.</p>
 </div>
 
 <div class="content">
 
-  <!-- REVISIÓN -->
-  <div class="fade-up">
-    <div class="section-label">Contexto</div>
-    <div class="section-title">Revisión</div>
-    <p class="section-desc">Cuándo interviene el equipo de Tecnología:</p>
-    <ul style="padding-left:20px; font-size:10pt; color:var(--gray); margin-bottom:24px;">
-      <li style="margin-bottom:4px;">El Equipo de Porcicultura ya intentó el reinicio de la cámara sin éxito.</li>
-      <li style="margin-bottom:4px;">El Equipo de Mantenimiento verificó alimentación eléctrica, UPS y breaker sin encontrar fallos.</li>
-      <li>Se presentan todas las cámaras con LED rojo simultáneamente y el problema persiste tras la intervención del equipo de Mantenimiento.</li>
-    </ul>
-    <div class="note"><strong>Importante:</strong> Este nivel se activa <strong>solo cuando los niveles anteriores ya fueron realizados.</strong></div>
+  <div class="banner fade-up">
+    <div class="ico">🛡️</div>
+    <div><strong>Siempre en compañía del equipo de Asimetrix.</strong> Todo el proceso se realiza con el acompañamiento de Asimetrix. Este nivel se activa solo cuando los niveles anteriores ya fueron realizados.</div>
   </div>
 
-  <hr class="divider">
-
-  <!-- PROCESO TECNOLOGÍA -->
+  <!-- PROCESO -->
   <div class="fade-up">
     <div class="section-label">Proceso</div>
-    <div class="section-title">Diagnóstico Remoto y Visita</div>
+    <div class="section-title">Procedimiento de Atención de Incidentes</div>
     <p class="section-desc">Flujo que sigue el equipo de Tecnología una vez recibe el escalamiento.</p>
   </div>
 
+  <!-- PASO 1 -->
   <div class="card fade-up">
     <div class="card-header">
       <span class="emoji">🔍</span>
       <span class="title">Paso 1 — Diagnóstico remoto</span>
+      <span class="step-badge">Fase 1</span>
     </div>
-    <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Revisar remotamente la conexión de internet de la granja</div><div class="verify">Validar la conectividad a internet de Aliar y el estado de la red, ya que el router de Asimetrix depende de esta conexión para acceder a internet</div></div></div>
+    <div class="sub-title"><span class="sub-ico">📡</span>Validar la conectividad de la granja</div>
+    <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Revisar remotamente la conexión a internet de la granja</div></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-text"><div class="action">Validar el estado de la conexión de <strong>Aliar</strong></div><div class="verify">El router de Asimetrix depende de esta red para acceder a internet.</div></div></div>
+
     <div class="decision">
-      <div class="q">¿Se detectaron anomalías?</div>
+      <div class="q">Resultado del diagnóstico — ¿Se detectaron anomalías?</div>
       <div class="options">
-        <div class="opt yes"><div class="label">No</div>Problema resuelto remotamente</div>
-        <div class="opt no"><div class="label">Sí</div>Continuar al paso 2</div>
+        <div class="opt no"><div class="label">No</div>✅ Problema resuelto remotamente.</div>
+        <div class="opt yes"><div class="label">Sí</div>Continuar con la Fase 2.</div>
       </div>
     </div>
   </div>
 
+  <!-- PASO 2 -->
   <div class="card fade-up">
     <div class="card-header">
-      <span class="emoji">🎫</span>
-      <span class="title">Paso 2 — Crear ticket de visita</span>
+      <span class="emoji">📅</span>
+      <span class="title">Paso 2 — Programación de visita técnica</span>
+      <span class="step-badge">Fase 2</span>
     </div>
-    <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">El Equipo de Mantenimiento crea un ticket para visita de Tecnología</div><div class="verify">Describir la anomalía detectada en el diagnóstico remoto</div></div></div>
-    <div class="step"><div class="step-num">2</div><div class="step-text"><div class="action">El equipo de Tecnología agenda la visita a la granja</div><div class="verify">Coordinar fecha y hora con el equipo de Mantenimiento</div></div></div>
+    <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Coordinar la fecha y hora de la visita</div></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-text"><div class="action">Confirmar la disponibilidad para el ingreso a la granja</div></div></div>
   </div>
 
+  <!-- PASO 3 -->
   <div class="card fade-up">
     <div class="card-header">
       <span class="emoji">🔧</span>
-      <span class="title">Paso 3 — Visita técnica</span>
+      <span class="title">Paso 3 — Diagnóstico en sitio</span>
+      <span class="step-badge">Fase 2</span>
     </div>
-    <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Revisar a detalle la conexión del internet hacia el router de Asimetrix</div><div class="verify">Verificar cableado, configuración y señal</div></div></div>
-    <div class="step"><div class="step-num">2</div><div class="step-text"><div class="action">Asegurar el funcionamiento de la conexión</div><div class="verify">Confirmar que las cámaras se conectan correctamente</div></div></div>
-    <div class="step"><div class="step-num">3</div><div class="step-text"><div class="action">Registrar el resultado de la visita</div><div class="verify">Documentar: problema encontrado, acción realizada, estado final</div></div></div>
+    <div class="sub-title"><span class="sub-ico">🌐</span>Revisar la conexión de internet</div>
+    <div class="step"><div class="step-num">1</div><div class="step-text">
+      <div class="action">Verificar</div>
+      <div class="verify">Cableado de red.</div>
+      <div class="verify">Conexión del internet de Aliar hacia el router de Asimetrix.</div>
+    </div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-text"><div class="action">Una vez solucionado, asegurar internet en el router de Asimetrix</div></div></div>
   </div>
 
-  <hr class="divider">
-
-  <!-- DIAGNÓSTICO DISPOSITIVO -->
-  <div class="fade-up">
-    <div class="section-label">Diagnóstico</div>
-    <div class="section-title">Revisión del Dispositivo</div>
-  </div>
-
-  <div class="timeline fade-up">
-    <div class="t-item"><div class="t-icon">📡</div><div class="t-text"><h4>Router Asimetrix</h4><p>Confirmar que esté encendido y generando la red Asimetrix ioA.</p></div></div>
-    <div class="t-connector"></div>
-    <div class="t-item"><div class="t-icon">📶</div><div class="t-text"><h4>Estado del router</h4><p>Verificar si presenta el estado "Conectado, sin internet".</p></div></div>
-    <div class="t-connector"></div>
-    <div class="t-item"><div class="t-icon">🔄</div><div class="t-text"><h4>Reiniciar el router</h4><p>Si tiene problemas de conectividad, reiniciar y verificar nuevamente.</p></div></div>
-    <div class="t-connector"></div>
-    <div class="t-item"><div class="t-icon">📱</div><div class="t-text"><h4>Cámara PigVision</h4><p>Verificar si la cámara está conectada a la red Asimetrix ioA.</p></div></div>
-  </div>
-
+  <!-- PASO 4 -->
   <div class="card fade-up">
-    <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Confirmar que el router Asimetrix esté encendido y generando la red</div></div></div>
-
-    <div class="decision">
-      <div class="q">¿El router genera la red Asimetrix ioA?</div>
-      <div class="options">
-        <div class="opt yes"><div class="label">Sí</div>Continuar al paso 2</div>
-        <div class="opt no"><div class="label">No</div>Reiniciar el router</div>
-      </div>
+    <div class="card-header">
+      <span class="emoji">📋</span>
+      <span class="title">Paso 4 — Registrar la visita</span>
+      <span class="step-badge">Fase 2</span>
     </div>
-
-    <div class="step"><div class="step-num">2</div><div class="step-text"><div class="action">Verificar si el router presenta "Conectado, sin internet"</div></div></div>
-    <div class="step"><div class="step-num">3</div><div class="step-text"><div class="action">Reiniciar el router</div></div></div>
-
-    <div class="decision">
-      <div class="q">¿Después del reinicio tiene internet?</div>
-      <div class="options">
-        <div class="opt yes"><div class="label">Sí</div>Verificar que la cámara se conecte a la red Asimetrix</div>
-        <div class="opt no"><div class="label">No</div>Escalar a <strong>Asimetrix</strong> para diagnóstico remoto<div style="margin-top:6px;"><span class="badge asimetrix">Escalar a Asimetrix</span></div></div>
-      </div>
-    </div>
-
-    <div class="step"><div class="step-num">4</div><div class="step-text"><div class="action">Verificar que la cámara esté conectada a la red Asimetrix ioA</div></div></div>
-    <div class="step"><div class="step-num">5</div><div class="step-text"><div class="action">Registrar el estado actual de la cámara</div></div></div>
+    <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Documentar</div><div class="verify">Problema encontrado.</div><div class="verify">Acciones realizadas.</div><div class="verify">Estado final del equipo.</div><div class="verify">Evidencia fotográfica (si aplica).</div></div></div>
   </div>
 
-  <hr class="divider">
-
-  <!-- ESCALAMIENTO A ASIMETRIX -->
-  <div class="fade-up">
-    <div class="section-label">Escalamiento</div>
-    <div class="section-title">Intervención Asimetrix</div>
-    <p class="section-desc">Cuando el problema persiste tras la intervención de los tres niveles anteriores.</p>
-  </div>
-
+  <!-- PASO 5 -->
   <div class="card fade-up">
-    <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Contactar a Asimetrix para diagnóstico remoto</div><div class="verify">Proporcionar: número de cámara, LED observado, acciones ya realizadas, estado del router</div></div></div>
-    <div class="step"><div class="step-num">2</div><div class="step-text"><div class="action">Seguir las instrucciones del equipo de Asimetrix</div><div class="verify">Puede incluir: configuración de la red, o reemplazo del dispositivo</div></div></div>
-    <div class="step"><div class="step-num">3</div><div class="step-text"><div class="action">Registrar el resultado de la intervención</div><div class="verify">Documentar: problema reportado, intervención realizada, resultado final</div></div></div>
+    <div class="card-header">
+      <span class="emoji">🏢</span>
+      <span class="title">Paso 5 — Escalamiento a Asimetrix</span>
+      <span class="step-badge">Fase 2</span>
+    </div>
+    <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Informar al equipo de Asimetrix para revisar el funcionamiento de los equipos</div></div></div>
+
+    <div class="outcome escalate" style="margin-top:16px;"><strong>⬆️ Nota importante</strong><span class="detail">Asimetrix siempre acompaña a cada equipo en los procesos. No se escala "a" Asimetrix como un nivel adicional: se informa y se trabaja en conjunto.</span></div>
   </div>
 
 </div>

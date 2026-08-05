@@ -225,6 +225,14 @@
   .role-card:nth-child(2) .role-escalation { background: rgba(11,45,92,0.06); color: var(--primary); }
   .role-card:nth-child(3) .role-escalation { background: rgba(42,143,223,0.06); color: var(--accent); }
 
+  .role-note {
+    font-size: 8.5pt; font-weight: 600;
+    padding: 8px 14px; border-radius: 10px;
+    display: flex; align-items: center; gap: 6px;
+    margin-bottom: 8px;
+    background: rgba(42,143,223,0.08); color: var(--secondary);
+  }
+
   /* ===== FLUJO GENERAL ===== */
   .flow-horizontal {
     display: flex; align-items: center; justify-content: center;
@@ -588,7 +596,7 @@
     <div class="fade-up">
       <div class="section-label">02</div>
       <div class="section-title">Roles y Responsabilidades</div>
-      <div class="section-subtitle">Cada equipo tiene un rol definido. Si no puede resolver, escala al siguiente nivel.</div>
+      <div class="section-subtitle">Cada equipo tiene un rol definido. Si no puede resolver, escala al siguiente nivel. Asimetrix acompaña siempre a cada equipo.</div>
     </div>
     <div class="roles-grid">
       <a href="porcicultura.html" class="role-card fade-up d1" style="text-decoration:none; color:inherit; cursor:pointer;">
@@ -602,7 +610,8 @@
           <li>Reinicio básico</li>
           <li>Registro de novedades</li>
         </ul>
-        <div class="role-escalation">→ Escala a Mantenimiento</div>
+        <div class="role-note">🛡️ Siempre en compañía de Asimetrix</div>
+        <div class="role-escalation">→ Escala a Mantenimiento · crea ticket</div>
       </a>
       <a href="mantenimiento.html" class="role-card fade-up d2" style="text-decoration:none; color:inherit; cursor:pointer;">
         <div class="role-icon">🔧</div>
@@ -615,7 +624,8 @@
           <li>Router</li>
           <li>Cableado</li>
         </ul>
-        <div class="role-escalation">→ Escala a Tecnología</div>
+        <div class="role-note">🛡️ Siempre en compañía de Asimetrix</div>
+        <div class="role-escalation">→ Escala a Tecnología · crea ticket</div>
       </a>
       <a href="tecnologia.html" class="role-card fade-up d3" style="text-decoration:none; color:inherit; cursor:pointer;">
         <div class="role-icon">💻</div>
@@ -628,6 +638,7 @@
           <li>Conectividad</li>
           <li>Incidentes especializados</li>
         </ul>
+        <div class="role-note">🛡️ Siempre en compañía de Asimetrix</div>
         <div class="role-escalation">→ Escala a Asimetrix</div>
       </a>
     </div>
@@ -648,10 +659,11 @@
       <div class="esc-node"><div class="esc-node-icon">🔧</div><div class="esc-node-title">Mantenimiento</div></div>
       <div class="esc-arrow">→</div>
       <div class="esc-node"><div class="esc-node-icon">💻</div><div class="esc-node-title">Tecnología</div></div>
-      <div class="esc-arrow">→</div>
-      <div class="esc-node"><div class="esc-node-icon">🏢</div><div class="esc-node-title">Asimetrix</div></div>
     </div>
-    <div class="warning-box fade-up">
+    <div class="note-banner fade-up">
+      <strong>Asimetrix acompaña a cada equipo</strong> durante todo el proceso. Al escalar a <strong>Mantenimiento</strong> o <strong>Tecnología</strong>, el equipo que revisa y escala debe <strong>crear el ticket</strong> correspondiente.
+    </div>
+    <div class="warning-box fade-up" style="margin-top:24px;">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
       <p><strong>Nunca saltar niveles de escalamiento.</strong> Cada equipo resuelve lo que le corresponde antes de escalar.</p>
     </div>
