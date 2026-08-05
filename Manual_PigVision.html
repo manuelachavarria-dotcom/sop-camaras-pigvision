@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Manual Operativo — Revisión PigVision</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="sop.css" rel="stylesheet">
+<style>
+  .manual-cover {
+    background: linear-gradient(135deg, #0B2D5C 0%, #0E3B70 45%, #0072C6 100%);
+    color: #fff; padding: 90px 56px; border-radius: 20px; margin-bottom: 40px;
+    position: relative; overflow: hidden;
+  }
+  .manual-cover img { height: 46px; margin-bottom: 30px; }
+  .manual-cover-level {
+    font-size: 9pt; font-weight: 700; letter-spacing: 4px; text-transform: uppercase;
+    color: #FFC24B; margin-bottom: 12px;
+  }
+  .manual-cover h1 { font-family:'Montserrat',sans-serif; font-size: 30pt; font-weight: 800; margin-bottom: 6px; }
+  .manual-cover h2 { font-family:'Montserrat',sans-serif; font-size: 17pt; font-weight: 400; color: rgba(255,255,255,0.85); margin-bottom: 18px; }
+  .manual-cover p { font-size: 10.5pt; color: rgba(255,255,255,0.8); max-width: 640px; }
+  .manual-cover-flow {
+    margin-top: 26px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap;
+    font-weight: 700; font-size: 10pt;
+  }
+  .manual-cover-flow span {
+    background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.3);
+    padding: 8px 16px; border-radius: 999px;
+  }
+  .manual-cover-soporte {
+    margin-top: 30px; display: flex; gap: 14px; flex-wrap: wrap;
+  }
+  .manual-cover-soporte div {
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 14px; padding: 14px 20px; font-size: 9.5pt; line-height: 1.5;
+  }
+  .manual-cover-soporte strong { color: #fff; }
+  @media print {
+    .manual-cover { border-radius: 0; margin: 0 0 24px; padding: 60px 44px; }
+    .manual-cover h1 { font-size: 26pt; }
+  }
+</style>
+</head>
+<body>
+<div class="content" style="max-width:940px;">
+  
+<div class="manual-cover">
+  <img src="Logo-Asimetrix.webp" alt="Asimetrix">
+  <div class="manual-cover-level">MANUAL OPERATIVO</div>
+  <h1>Procedimiento Operativo</h1>
+  <h2>Revisión de Cámaras PigVision</h2>
+  <p>Guía de procedimiento para los equipos de Porcicultura, Mantenimiento y Tecnología, con acompañamiento permanente del equipo de Asimetrix.</p>
+  <div class="manual-cover-flow">
+    <span>🐷 Porcicultura</span> → <span>🔧 Mantenimiento</span> → <span>💻 Tecnología</span>
+  </div>
+  <div class="manual-cover-soporte">
+    <div><strong>Damián García</strong><br>+57 311 207 8988</div>
+    <div><strong>Manuela Chavarría</strong><br>+57 318 220 2707</div>
+    <div><strong>Glenda Fuentes</strong><br>+57 300 365 9210</div>
+  </div>
+</div>
+  
+<div class="banner">
+  <div class="ico">🛡️</div>
+  <div><strong>Asimetrix acompaña a cada equipo</strong> durante todo el proceso. Al escalar a <strong>Mantenimiento</strong> o <strong>Tecnología</strong>, el equipo que revisa y escala debe <strong>crear el ticket</strong> correspondiente. Nunca saltar niveles de escalamiento.</div>
+</div>
+  
+<!-- ============ Equipo de Porcicultura ============ -->
+<div class="manual-team" id="porcicultura" data-team="porcicultura">
+  <div class="page-header">
+  <div class="icon">🐷</div>
+  <span class="level">Nivel 1 — Revisión Inicial</span>
+  <h1>Equipo de Porcicultura</h1>
+  <p>Diagnóstico según el estado del LED, reinicio básico y registro de novedades en cámaras PigVision. Siempre acompañado del equipo de Asimetrix.</p>
+  </div>
+  <div class="content">
+    <div class="banner ">
+    <div class="ico">🛡️</div>
+    <div><strong>Siempre en compañía del equipo de Asimetrix.</strong> Todo el proceso se realiza con el acompañamiento de Asimetrix. Cuando el caso se escala a Mantenimiento, el equipo de Porcicultura debe crear el ticket antes de entregar el caso.</div>
+  </div>
+
+  <!-- DIAGNÓSTICO -->
+  <div >
+    <div class="section-label">Diagnóstico</div>
+    <div class="section-title">Según el estado del LED</div>
+    <p class="section-desc">Acciones a tomar según la observación de cada cámara.</p>
+  </div>
+
+  <!-- CASO 1 -->
+  <div class="card ">
+    <div class="card-head">
+      <span class="emoji">⚫</span>
+      <span class="title">Caso 1 — LEDs ON, LEVEL y STATUS apagados</span>
+      <span class="badge red">Cámara apagada</span>
+    </div>
+
+    <div class="sub-title"><span class="sub-ico">📋</span>Paso 1 — Verificar el estado de la cámara</div>
+    <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Confirmar si la cámara está apagada</div></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-text"><div class="action">Presionar el botón <strong>ON</strong> para intentar encenderla</div></div></div>
+
+    <div class="sub-title"><span class="sub-ico">🔌</span>Paso 2 — Verificar la alimentación eléctrica</div>
+    <div class="step"><div class="step-num">1</div><div class="step-text">
+      <div class="action">Revisar que no exista ningún problema en la conexión eléctrica</div>
+      <ul>
+        <li>Cable de alimentación suelto.</li>
+        <li>Cable desconectado.</li>
+        <li>Cable dañado.</li>
+      </ul>
+    </div></div>
+
+    <div class="decision">
+      <div class="q">Paso 3 — ¿El problema ocurre en todas las cámaras?</div>
+      <div class="options">
+        <div class="opt no"><div class="label">Sí</div>Verificar el estado de la UPS y confirmar que esté suministrando energía correctamente.</div>
+        <div class="opt yes"><div class="label">No</div>Continuar con la verificación de la cámara afectada.</div>
+      </div>
+    </div>
+
+    <div class="sub-title"><span class="sub-ico">✅</span>Verificar el funcionamiento</div>
+    <div class="outcome resolved"><strong>✅ Problema resuelto</strong><span class="detail">La cámara enciende correctamente.</span></div>
+    <div class="outcome escalate"><strong>⬆️ Escalar el caso al área de Mantenimiento</strong><span class="detail">La cámara continúa apagada.</span><br><span class="ticket">🎫 Crear ticket de escalamiento</span></div>
+  </div>
+
+  <!-- CASO 2 -->
+  <div class="card ">
+    <div class="card-head">
+      <span class="emoji">🔴</span>
+      <span class="title">Caso 2 — LED LEVEL en rojo (Sin conexión a internet)</span>
+      <span class="badge orange">Sin internet</span>
+    </div>
+
+    <div class="sub-title"><span class="sub-ico">🔍</span>Paso 1 — Identificar la cantidad de cámaras afectadas</div>
+
+    <div class="grid-2">
+      <div>
+        <div class="decision">
+          <div class="q">Opción A — Solo una cámara presenta el LED LEVEL en rojo</div>
+          <div class="options" style="grid-template-columns:1fr;">
+            <div class="opt yes">
+              <div class="label">Realizar el siguiente procedimiento:</div>
+              <div style="margin-top:10px;">
+                <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Apagar la cámara desde el botón ON</div></div></div>
+                <div class="step"><div class="step-num">2</div><div class="step-text"><div class="action">Desconectar la alimentación eléctrica</div></div></div>
+                <div class="step"><div class="step-num">3</div><div class="step-text"><div class="action">Esperar 5 minutos</div></div></div>
+                <div class="step"><div class="step-num">4</div><div class="step-text"><div class="action">Conectar nuevamente la alimentación</div></div></div>
+                <div class="step"><div class="step-num">5</div><div class="step-text"><div class="action">Encender la cámara desde el botón ON</div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="outcome resolved"><strong>✅ Problema resuelto</strong><span class="detail">La cámara se conecta correctamente.</span></div>
+        <div class="outcome escalate"><strong>⬆️ Escalar el caso al equipo de Asimetrix</strong><span class="detail">La cámara continúa sin conexión, para recibir indicaciones.</span></div>
+      </div>
+
+      <div>
+        <div class="decision">
+          <div class="q">Opción B — Todas las cámaras presentan el LED LEVEL en rojo</div>
+          <div class="options" style="grid-template-columns:1fr;">
+            <div class="opt no">
+              <div class="label">Paso 2 — Verificar el estado del router de Asimetrix</div>
+              <div style="margin-top:10px;">
+                <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Confirmar que el router esté encendido</div><div class="verify">Luces indicadoras activas.</div></div></div>
+                <div class="step"><div class="step-num">2</div><div class="step-text">
+                  <div class="action">Verificar que esté generando la red Wi-Fi</div>
+                  <ul>
+                    <li><strong>SSID:</strong> AsimetrixIOA</li>
+                    <li><strong>Contraseña:</strong> 4s1m4tr1x</li>
+                  </ul>
+                </div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sub-title"><span class="sub-ico">✅</span>Verificar el funcionamiento</div>
+        <div class="outcome escalate"><strong>⬆️ El router está apagado</strong><span class="detail">Escalar el caso al área de Mantenimiento.</span><br><span class="ticket">🎫 Crear ticket de escalamiento</span></div>
+        <div class="outcome escalate"><strong>⬆️ El router no genera la red Wi-Fi</strong><span class="detail">Escalar el caso al área de Mantenimiento.</span><br><span class="ticket">🎫 Crear ticket de escalamiento</span></div>
+        <div class="outcome escalate"><strong>⬆️ El router genera la red, pero no tiene acceso a internet</strong><span class="detail">Escalar el caso al área de Mantenimiento.</span><br><span class="ticket">🎫 Crear ticket de escalamiento</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CASO 3 -->
+  <div class="card ">
+    <div class="card-head">
+      <span class="emoji">🟡</span>
+      <span class="title">Caso 3 — Solo LED ON encendido</span>
+      <span class="badge blue">Inicio incompleto</span>
+    </div>
+
+    <div class="sub-title"><span class="sub-ico">🔄</span>Paso 1 — Reiniciar la cámara</div>
+    <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Apagar la cámara desde el botón ON</div></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-text"><div class="action">Desconectar la alimentación eléctrica</div></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-text"><div class="action">Esperar 5 minutos</div></div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-text"><div class="action">Conectar nuevamente la alimentación</div></div></div>
+    <div class="step"><div class="step-num">5</div><div class="step-text"><div class="action">Encender la cámara desde el botón ON</div></div></div>
+
+    <div class="sub-title"><span class="sub-ico">✅</span>Verificar el funcionamiento</div>
+    <div class="outcome resolved"><strong>✅ Problema resuelto</strong><span class="detail">La cámara inicia correctamente.</span></div>
+    <div class="outcome escalate"><strong>⬆️ Escalar el caso a Asimetrix</strong><span class="detail">La cámara continúa mostrando únicamente el LED ON encendido, para gestionar el reemplazo de la cámara.</span></div>
+  </div>
+  </div>
+</div>
+
+<!-- ============ Equipo de Mantenimiento ============ -->
+<div class="manual-team" id="mantenimiento" data-team="mantenimiento">
+  <div class="page-header">
+  <div class="icon">🔧</div>
+  <span class="level">Nivel 2 — Diagnóstico Eléctrico y de Red</span>
+  <h1>Equipo de Mantenimiento</h1>
+  <p>Verificaciones eléctricas, UPS, breakers y revisión detallada del router de Asimetrix. Siempre acompañado del equipo de Asimetrix.</p>
+  </div>
+  <div class="content">
+    <div class="banner ">
+    <div class="ico">🛡️</div>
+    <div><strong>Siempre en compañía del equipo de Asimetrix.</strong> Todo el proceso se realiza con el acompañamiento de Asimetrix. Cuando el caso se escala al área de Tecnología, el equipo de Mantenimiento debe crear el ticket antes de entregar el caso.</div>
+  </div>
+
+  <!-- VERIFICACIONES ELÉCTRICAS -->
+  <div >
+    <div class="section-label">Diagnóstico</div>
+    <div class="section-title">Verificaciones Eléctricas</div>
+    <p class="section-desc">Realizar las siguientes verificaciones en el orden indicado antes de iniciar el diagnóstico de las cámaras.</p>
+  </div>
+
+  <div class="grid-2 ">
+    <div class="tile">
+      <div class="t-icon">⚡</div>
+      <div><h4>Paso 1 — Alimentación eléctrica</h4><p>Confirmar que las cámaras estén recibiendo energía y que el suministro eléctrico sea estable.</p></div>
+    </div>
+    <div class="tile">
+      <div class="t-icon">🔋</div>
+      <div><h4>Paso 2 — UPS</h4><p>Validar que la UPS se encuentre encendida y funcionando correctamente.</p></div>
+    </div>
+    <div class="tile">
+      <div class="t-icon">⚙️</div>
+      <div><h4>Paso 3 — Breaker</h4><p>Confirmar que no esté disparado. Si está disparado, restablecerlo y verificar que no se vuelva a disparar.</p></div>
+    </div>
+    <div class="tile">
+      <div class="t-icon">🌐</div>
+      <div><h4>Paso 4 — Router Asimetrix</h4><p>Continuar con la revisión detallada del router a continuación.</p></div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- REVISIÓN ROUTER -->
+  <div >
+    <div class="section-label">Diagnóstico</div>
+    <div class="section-title">Revisión del Router Asimetrix</div>
+  </div>
+
+  <div class="card ">
+
+    <div class="sub-title"><span class="sub-ico">4.1</span>Verificar que el router esté encendido</div>
+    <div class="decision">
+      <div class="q">¿El router enciende?</div>
+      <div class="options">
+        <div class="opt no"><div class="label">❌ No</div>
+          <div style="margin-top:8px;">
+            <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Revisar que la toma eléctrica tenga alimentación</div></div></div>
+            <div class="step"><div class="step-num">2</div><div class="step-text"><div class="action">Verificar que el cable de alimentación esté correctamente conectado</div></div></div>
+            <div class="step"><div class="step-num">3</div><div class="step-text"><div class="action">Inspeccionar si el router presenta daños físicos visibles</div></div></div>
+          </div>
+          <div class="outcome escalate"><strong>⬆️ Si el router continúa apagado</strong><span class="detail">Escalar el caso al área de Tecnología.</span><br><span class="ticket">🎫 Crear ticket de escalamiento</span></div>
+        </div>
+        <div class="opt yes"><div class="label">✅ Sí</div>Continuar con la siguiente verificación.</div>
+      </div>
+    </div>
+
+    <div class="sub-title"><span class="sub-ico">4.2</span>Verificar que el router genere la red Wi-Fi</div>
+    <div class="step"><div class="step-num">1</div><div class="step-text">
+      <div class="action">Confirmar que el router esté transmitiendo la siguiente red</div>
+      <ul>
+        <li><strong>SSID:</strong> AsimetrixIOA</li>
+        <li><strong>Contraseña:</strong> 4s1m4tr1x</li>
+      </ul>
+    </div></div>
+    <div class="decision">
+      <div class="q">¿La red AsimetrixIOA es visible?</div>
+      <div class="options">
+        <div class="opt no"><div class="label">❌ No</div>
+          <div style="margin-top:8px;">
+            <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Reiniciar el router desconectando la alimentación eléctrica durante 30 segundos</div></div></div>
+            <div class="step"><div class="step-num">2</div><div class="step-text"><div class="action">Conectarlo nuevamente y esperar a que complete el proceso de inicio</div></div></div>
+          </div>
+          <div class="outcome escalate"><strong>⬆️ Si la red continúa sin aparecer</strong><span class="detail">Escalar el caso al área de Tecnología.</span><br><span class="ticket">🎫 Crear ticket de escalamiento</span></div>
+        </div>
+        <div class="opt yes"><div class="label">✅ Sí</div>Continuar con la siguiente verificación.</div>
+      </div>
+    </div>
+
+    <div class="sub-title"><span class="sub-ico">4.3</span>Verificar el estado de la conexión</div>
+    <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Conectarse a la red AsimetrixIOA</div></div></div>
+    <div class="decision">
+      <div class="q">¿La red aparece como "Conectado, sin internet"?</div>
+      <div class="options">
+        <div class="opt no"><div class="label">❌ No</div>✅ Verificación del router completada correctamente.</div>
+        <div class="opt yes"><div class="label">✅ Sí</div>Continuar con el siguiente paso.</div>
+      </div>
+    </div>
+
+    <div class="sub-title"><span class="sub-ico">4.4</span>Reiniciar el router</div>
+    <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Desconectar el router de la alimentación eléctrica</div></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-text"><div class="action">Esperar 30 segundos</div></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-text"><div class="action">Conectar nuevamente el router</div></div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-text"><div class="action">Esperar a que complete el proceso de inicio</div></div></div>
+
+    <div class="sub-title"><span class="sub-ico">✅</span>Verificar el funcionamiento</div>
+    <div class="outcome resolved"><strong>✅ Problema resuelto</strong><span class="detail">El router recupera la conexión a internet.</span></div>
+    <div class="outcome escalate"><strong>⬆️ Si el router continúa sin acceso a internet</strong><span class="detail">Escalar el caso al área de Tecnología.</span><br><span class="ticket">🎫 Crear ticket de escalamiento</span></div>
+  </div>
+  </div>
+</div>
+
+<!-- ============ Equipo de Tecnología ============ -->
+<div class="manual-team" id="tecnologia" data-team="tecnologia">
+  <div class="page-header">
+  <div class="icon">💻</div>
+  <span class="level">Nivel 3 — Atención de Incidentes</span>
+  <h1>Equipo de Tecnología</h1>
+  <p>Diagnóstico remoto, programación de visita y diagnóstico en sitio. Siempre acompañado del equipo de Asimetrix.</p>
+  </div>
+  <div class="content">
+    <div class="banner ">
+    <div class="ico">🛡️</div>
+    <div><strong>Siempre en compañía del equipo de Asimetrix.</strong> Todo el proceso se realiza con el acompañamiento de Asimetrix. Este nivel se activa solo cuando los niveles anteriores ya fueron realizados.</div>
+  </div>
+
+  <!-- PROCESO -->
+  <div >
+    <div class="section-label">Proceso</div>
+    <div class="section-title">Procedimiento de Atención de Incidentes</div>
+    <p class="section-desc">Flujo que sigue el equipo de Tecnología una vez recibe el escalamiento.</p>
+  </div>
+
+  <!-- PASO 1 -->
+  <div class="card ">
+    <div class="card-head">
+      <span class="emoji">🔍</span>
+      <span class="title">Paso 1 — Diagnóstico remoto</span>
+      <span class="badge blue">Fase 1</span>
+    </div>
+    <div class="sub-title"><span class="sub-ico">📡</span>Validar la conectividad de la granja</div>
+    <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Revisar remotamente la conexión a internet de la granja</div></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-text"><div class="action">Validar el estado de la conexión de <strong>Aliar</strong></div><div class="verify">El router de Asimetrix depende de esta red para acceder a internet.</div></div></div>
+    <div class="decision">
+      <div class="q">Resultado del diagnóstico — ¿Se detectaron anomalías?</div>
+      <div class="options">
+        <div class="opt yes"><div class="label">No</div>✅ Problema resuelto remotamente.</div>
+        <div class="opt no"><div class="label">Sí</div>Continuar con la Fase 2.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PASO 2 -->
+  <div class="card ">
+    <div class="card-head">
+      <span class="emoji">📅</span>
+      <span class="title">Paso 2 — Programación de visita técnica</span>
+      <span class="badge blue">Fase 2</span>
+    </div>
+    <div class="step"><div class="step-num">1</div><div class="step-text"><div class="action">Coordinar la fecha y hora de la visita</div></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-text"><div class="action">Confirmar la disponibilidad para el ingreso a la granja</div></div></div>
+  </div>
+
+  <!-- PASO 3 -->
+  <div class="card ">
+    <div class="card-head">
+      <span class="emoji">🔧</span>
+      <span class="title">Paso 3 — Diagnóstico en sitio</span>
+      <span class="badge blue">Fase 2</span>
+    </div>
+    <div class="sub-title"><span class="sub-ico">🌐</span>Revisar la conexión de internet</div>
+    <div class="step"><div class="step-num">1</div><div class="step-text">
+      <div class="action">Verificar</div>
+      <ul>
+        <li>Cableado de red.</li>
+        <li>Conexión del internet de Aliar hacia el router de Asimetrix.</li>
+      </ul>
+    </div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-text"><div class="action">Una vez solucionado, asegurar internet en el router de Asimetrix</div></div></div>
+  </div>
+
+  <!-- PASO 4 -->
+  <div class="card ">
+    <div class="card-head">
+      <span class="emoji">📋</span>
+      <span class="title">Paso 4 — Registrar la visita</span>
+      <span class="badge blue">Fase 2</span>
+    </div>
+    <div class="step"><div class="step-num">1</div><div class="step-text">
+      <div class="action">Documentar</div>
+      <ul>
+        <li>Problema encontrado.</li>
+        <li>Acciones realizadas.</li>
+        <li>Estado final del equipo.</li>
+        <li>Evidencia fotográfica (si aplica).</li>
+      </ul>
+    </div></div>
+  </div>
+  </div>
+</div>
+</div>
+</body>
+</html>
